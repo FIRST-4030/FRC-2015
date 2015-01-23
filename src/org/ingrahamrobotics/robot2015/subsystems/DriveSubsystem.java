@@ -1,6 +1,9 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
+import static org.ingrahamrobotics.robot2015.output.Output.output;
+
 import org.ingrahamrobotics.robot2015.commands.DriveCommand;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
 
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -13,6 +16,7 @@ public class DriveSubsystem extends Subsystem {
     public DriveSubsystem() {
         leftMotor = new Jaguar(0);
         rightMotor = new Jaguar(1);
+        output(OutputLevel.INITIALIZED_SYSTEMS, "DriveSubsystem", true);
     }
 
     @Override

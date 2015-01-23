@@ -22,7 +22,7 @@ public class DriveCommand extends Command {
     protected void execute() {
         double left = leftJoystick.getAxis(AxisType.kY);
         double right = rightJoystick.getAxis(AxisType.kY);
-        drive.setSpeed(left, right);
+        drive.setSpeed(left, -right);
     }
 
     @Override

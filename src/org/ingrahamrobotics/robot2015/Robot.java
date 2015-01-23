@@ -1,6 +1,9 @@
 package org.ingrahamrobotics.robot2015;
 
+import static org.ingrahamrobotics.robot2015.output.Output.output;
+
 import org.ingrahamrobotics.robot2015.commands.ExampleCommand;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
 import org.ingrahamrobotics.robot2015.subsystems.DriveSubsystem;
 import org.ingrahamrobotics.robot2015.subsystems.ExampleSolenoid;
 
@@ -18,20 +21,21 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  */
 public class Robot extends IterativeRobot {
 
-    public static final DriveSubsystem drive = new DriveSubsystem();
-    public static final ExampleSolenoid testSolenoid = new ExampleSolenoid();
+    public static DriveSubsystem drive = new DriveSubsystem();
+    public static ExampleSolenoid testSolenoid = new ExampleSolenoid();
     public static OI oi;
-
-    Command autonomousCommand;
+    private Command autonomousCommand;
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
+        // instantiate the Output
         oi = new OI();
         // instantiate the command used for the autonomous period
         autonomousCommand = new ExampleCommand();
+        output(OutputLevel.HIGH, "RobotState", "Initialized");
     }
 
     public void disabledPeriodic() {
@@ -42,6 +46,7 @@ public class Robot extends IterativeRobot {
         // schedule the autonomous command (example)
         if (autonomousCommand != null)
             autonomousCommand.start();
+        output(OutputLevel.HIGH, "RobotState", "Autonomous");
     }
 
     /**
@@ -58,6 +63,7 @@ public class Robot extends IterativeRobot {
         // this line or comment it out.
         if (autonomousCommand != null)
             autonomousCommand.cancel();
+        output(OutputLevel.HIGH, "RobotState", "Teleop");
     }
 
     /**
@@ -65,7 +71,7 @@ public class Robot extends IterativeRobot {
      * to reset subsystems before shutting down.
      */
     public void disabledInit() {
-
+        output(OutputLevel.HIGH, "RobotState", "Disabled");
     }
 
     /**
