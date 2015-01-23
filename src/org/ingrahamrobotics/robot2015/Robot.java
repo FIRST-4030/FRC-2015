@@ -1,5 +1,6 @@
 package org.ingrahamrobotics.robot2015;
 
+import org.ingrahamrobotics.robot2015.commands.ExampleCommand;
 import org.ingrahamrobotics.robot2015.subsystems.DriveSubsystem;
 import org.ingrahamrobotics.robot2015.subsystems.ExampleSolenoid;
 
@@ -15,7 +16,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-
 public class Robot extends IterativeRobot {
 
     public static final DriveSubsystem drive = new DriveSubsystem();
