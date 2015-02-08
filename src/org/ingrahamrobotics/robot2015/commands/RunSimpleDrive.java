@@ -1,17 +1,16 @@
 package org.ingrahamrobotics.robot2015.commands;
 
-import static org.ingrahamrobotics.robot2015.Robot.drive;
-import edu.wpi.first.wpilibj.Joystick;
+import static org.ingrahamrobotics.robot2015.Subsystems.simpleDrive;
+
+import org.ingrahamrobotics.robot2015.Robot;
+
 import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class DriveCommand extends Command {
+public class RunSimpleDrive extends Command {
 
-    private Joystick leftJoystick = new Joystick(0);
-    private Joystick rightJoystick = new Joystick(1);
-
-    public DriveCommand() {
-        requires(drive);
+    public RunSimpleDrive() {
+        requires(simpleDrive);
     }
 
     @Override
@@ -20,9 +19,9 @@ public class DriveCommand extends Command {
 
     @Override
     protected void execute() {
-        double left = leftJoystick.getAxis(AxisType.kY);
-        double right = rightJoystick.getAxis(AxisType.kY);
-        drive.setSpeed(left, -right);
+        double left = Robot.oi.leftJoystick.getAxis(AxisType.kY);
+        double right = Robot.oi.rightJoystick.getAxis(AxisType.kY);
+        simpleDrive.setSpeed(left, -right);
     }
 
     @Override

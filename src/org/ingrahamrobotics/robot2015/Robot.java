@@ -2,10 +2,7 @@ package org.ingrahamrobotics.robot2015;
 
 import static org.ingrahamrobotics.robot2015.output.Output.output;
 
-import org.ingrahamrobotics.robot2015.commands.ExampleCommand;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
-import org.ingrahamrobotics.robot2015.subsystems.DriveSubsystem;
-import org.ingrahamrobotics.robot2015.subsystems.ExampleSolenoid;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -21,8 +18,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  */
 public class Robot extends IterativeRobot {
 
-    public static DriveSubsystem drive = new DriveSubsystem();
-    public static ExampleSolenoid testSolenoid = new ExampleSolenoid();
+    public static boolean rateBasedDrive = true;
     public static OI oi;
     private Command autonomousCommand;
 
@@ -31,10 +27,10 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-        // instantiate the Output
+        Subsystems.init();
         oi = new OI();
         // instantiate the command used for the autonomous period
-        autonomousCommand = new ExampleCommand();
+        autonomousCommand = null;
         output(OutputLevel.HIGH, "RobotState", "Initialized");
     }
 
