@@ -1,6 +1,10 @@
 package org.ingrahamrobotics.robot2015;
 
+import org.ingrahamrobotics.robot2015.commands.RunClawToggle;
+import org.ingrahamrobotics.robot2015.constants.JMap;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -9,7 +13,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class OI {
     public Joystick leftJoystick = new Joystick(0);
     public Joystick rightJoystick = new Joystick(1);
-
+    
     public class Axis {
 
         Joystick joy;
@@ -31,11 +35,17 @@ public class OI {
     public Axis driveX;
     public Axis driveY;
     public Axis steer;
-
+    
+    public JoystickButton leftClaw = new JoystickButton(steerJoy, JMap.Button.JoystickTop.LEFT);
+    public JoystickButton rightClaw = new JoystickButton(steerJoy, JMap.Button.JoystickTop.RIGHT);
+    
     public OI() {
         driveX = new Axis(driveJoy, 0);
         driveY = new Axis(driveJoy, 1);
         steer = new Axis(steerJoy, 0);
+        
+      leftClaw.whenPressed(new RunClawToggle(true));
+      rightClaw.whenPressed(new RunClawToggle(false));
     }
 
     // // CREATING BUTTONS

@@ -1,6 +1,7 @@
 package org.ingrahamrobotics.robot2015;
 
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.SolenoidPorts;
+import org.ingrahamrobotics.robot2015.subsystems.ClawToggle;
 import org.ingrahamrobotics.robot2015.subsystems.DriveBase;
 import org.ingrahamrobotics.robot2015.subsystems.SimpleDriveSubsystem;
 import org.ingrahamrobotics.robot2015.subsystems.SingleClawSubsystem;
@@ -13,7 +14,10 @@ public class Subsystems {
     public static SingleClawSubsystem leftClaw;
     public static SingleClawSubsystem rightClaw;
     public static VerticalClawShifter verticalClawShifter;
-
+    public static ClawToggle clawToggleLeft;
+    public static ClawToggle clawToggleRight;
+    
+    
     public static void init() {
         simpleDrive = new SimpleDriveSubsystem();
         driveBase = new DriveBase();
@@ -23,5 +27,9 @@ public class Subsystems {
                 SolenoidPorts.RIGHT_CLAW_EXTEND,
                 SolenoidPorts.RIGHT_CLAW_RETRACT);
         verticalClawShifter = new VerticalClawShifter();
+        clawToggleLeft = new ClawToggle(true);
+        clawToggleRight = new ClawToggle(false);
+        
     }
+    
 }
