@@ -1,11 +1,10 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
+import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
-
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class VerticalClawShifter extends Subsystem {
 

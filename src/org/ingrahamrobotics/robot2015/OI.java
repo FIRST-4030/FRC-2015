@@ -1,54 +1,18 @@
 package org.ingrahamrobotics.robot2015;
 
-import edu.wpi.first.wpilibj.Joystick;
+import org.ingrahamrobotics.robot2015.commands.ToggleClaw;
+import org.ingrahamrobotics.robot2015.constants.input.IButton;
 
 /**
- * This class is the glue that binds the controls on the physical operator
- * interface to the commands and command groups that allow control of the robot.
+ * This class is the glue that binds the controls on the physical operator interface to the commands and command groups
+ * that allow control of the robot.
  */
 public class OI {
-    public Joystick leftJoystick = new Joystick(0);
-    public Joystick rightJoystick = new Joystick(1);
-
-    public class Axis {
-
-        Joystick joy;
-        int axisNum;
-
-        public Axis(Joystick joy, int axisNum) {
-            this.joy = joy;
-            this.axisNum = axisNum;
-        }
-
-        public double get() {
-            return joy.getRawAxis(axisNum);
-        }
-    }
-
-    public Joystick driveJoy = new Joystick(0);
-    public Joystick steerJoy = new Joystick(1);
-
-    public Axis driveX;
-    public Axis driveY;
-    public Axis steer;
 
     public OI() {
-        driveX = new Axis(driveJoy, 0);
-        driveY = new Axis(driveJoy, 1);
-        steer = new Axis(steerJoy, 0);
+        IButton.leftClawToggle.getButton().whenPressed(new ToggleClaw(true));
+        IButton.rightClawToggle.getButton().whenPressed(new ToggleClaw(false));
     }
-
-    // // CREATING BUTTONS
-    // One type of button is a joystick button which is any button on a
-    // joystick.
-    // You create one by telling it which joystick it's on and which button
-    // number it is.
-    // Joystick stick = new Joystick(port);
-    // Button button = new JoystickButton(stick, buttonNumber);
-
-    // There are a few additional built in buttons you can use. Additionally,
-    // by subclassing Button you can create custom triggers and bind those to
-    // commands the same as any other Button.
 
     // // TRIGGERING COMMANDS WITH BUTTONS
     // Once you have a button, it's trivial to bind it to a button in one of

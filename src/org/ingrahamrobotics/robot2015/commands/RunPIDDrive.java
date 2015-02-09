@@ -1,10 +1,8 @@
 package org.ingrahamrobotics.robot2015.commands;
 
-import static org.ingrahamrobotics.robot2015.Robot.oi;
-
-import org.ingrahamrobotics.robot2015.Subsystems;
-
 import edu.wpi.first.wpilibj.command.Command;
+import org.ingrahamrobotics.robot2015.Subsystems;
+import org.ingrahamrobotics.robot2015.constants.input.IAxis;
 
 /**
  *
@@ -30,9 +28,9 @@ public class RunPIDDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        double x = oi.driveX.get();
-        double y = oi.driveY.get();
-        double RCW = oi.steer.get();
+        double x = IAxis.driveX.get();
+        double y = IAxis.driveY.get();
+        double RCW = IAxis.steer.get();
 
         double fieldAngle = Math.PI / 2;
 
@@ -61,5 +59,4 @@ public class RunPIDDrive extends Command {
     protected void interrupted() {
         Subsystems.driveBase.stop();
     }
-
 }

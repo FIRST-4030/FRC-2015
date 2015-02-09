@@ -2,7 +2,6 @@ package org.ingrahamrobotics.robot2015.output;
 
 import java.io.IOException;
 import java.util.EnumMap;
-
 import org.ingrahamrobotics.robottables.RobotTables;
 import org.ingrahamrobotics.robottables.api.RobotTable;
 import org.ingrahamrobotics.robottables.api.RobotTablesClient;

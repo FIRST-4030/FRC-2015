@@ -2,15 +2,14 @@ package org.ingrahamrobotics.robot2015.constants;
 
 /**
  * This class contains all public static final integer variables.
- * <p/>
- * It stores what buttons/axis on the Logitech Joysticks correspond to what
- * numbers in getButton or getRawAxis.
+ * <p>
+ * It stores what buttons/axis on the Logitech Joysticks correspond to what numbers in getButton or getRawAxis.
  */
 public class JMap {
 
-    public static final int SHOOTER_JOYSTICK = 0;
-    public static final int DRIVE_JOYSTICK1 = 1;
-    public static final int DRIVE_JOYSTICK2 = 2;
+    public static final int DRIVE_JOYSTICK = 0;
+    public static final int STEERING_JOYSTICK = 1;
+    public static final int SECONDARY_JOYSTICK = 2;
 
     public static class Axis {
 

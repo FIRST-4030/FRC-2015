@@ -1,17 +1,22 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
-import org.ingrahamrobotics.robot2015.Robot;
-import org.ingrahamrobotics.robot2015.constants.HardwarePorts.SwerveSpecific;
-import org.ingrahamrobotics.robot2015.output.Output;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.DRIVE_ENCODERS_A;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.DRIVE_ENCODERS_B;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_A;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_B;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.DRIVE_MOTORS;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.STEER_MOTORS;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.ingrahamrobotics.robot2015.Robot;
+import org.ingrahamrobotics.robot2015.output.Output;
 
 /**
  * Oversees the PIDDrive and PIDSteer Subsystems.
- * 
+ * <p>
  * Commands should point to this class rather than PIDDrive or PIDSteer.
  */
 public class DriveBase extends Subsystem {
@@ -31,10 +36,10 @@ public class DriveBase extends Subsystem {
     // here. Call these from Commands.
 
     public void stop() {
-        driveSystem = new PIDDrive[] { new PIDDrive(1), new PIDDrive(2),
-                new PIDDrive(3), new PIDDrive(4) };
-        steerSystem = new PIDSteer[] { new PIDSteer(1), new PIDSteer(2),
-                new PIDSteer(3), new PIDSteer(4) };
+        driveSystem = new PIDDrive[]{new PIDDrive(1), new PIDDrive(2),
+                new PIDDrive(3), new PIDDrive(4)};
+        steerSystem = new PIDSteer[]{new PIDSteer(1), new PIDSteer(2),
+                new PIDSteer(3), new PIDSteer(4)};
     }
 
     public void drive(double fwd, double str, double rcw) {
@@ -81,7 +86,7 @@ public class DriveBase extends Subsystem {
             ws4 /= max;
         }
 
-        return new double[] { ws1, ws2, ws3, ws4 };
+        return new double[]{ws1, ws2, ws3, ws4};
     }
 
     private double[] getWheelAngles(double a, double b, double c, double d) {
@@ -91,7 +96,7 @@ public class DriveBase extends Subsystem {
         double wa3 = Math.atan2(a, d);
         double wa4 = Math.atan2(a, c);
 
-        return new double[] { wa1, wa2, wa3, wa4 };
+        return new double[]{wa1, wa2, wa3, wa4};
     }
 
     public void initDefaultCommand() {
@@ -115,9 +120,8 @@ class PIDDrive extends PIDSubsystem {
         // to
         // enable() - Enables the PID controller.
 
-        driveMotor = new Talon(SwerveSpecific.driveMotors[wheelNum - 1]);
-        driveEncoder = new Encoder(SwerveSpecific.driveEncoders[wheelNum * 2],
-                SwerveSpecific.driveEncoders[wheelNum * 2 + 1]);
+        driveMotor = new Talon(DRIVE_MOTORS[wheelNum - 1]);
+        driveEncoder = new Encoder(DRIVE_ENCODERS_A[wheelNum - 1], DRIVE_ENCODERS_B[wheelNum - 1]);
 
         setSetpoint(0.0);
         enable();
@@ -133,8 +137,7 @@ class PIDDrive extends PIDSubsystem {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return rateBasedDrive ? driveEncoder.getRate() : driveEncoder
-                .getDistance();
+        return rateBasedDrive ? driveEncoder.getRate() : driveEncoder.getDistance();
     }
 
     protected void usePIDOutput(double output) {
@@ -160,9 +163,8 @@ class PIDSteer extends PIDSubsystem {
         // setSetpoint() - Sets where the PID controller should move the system
         // to
         // enable() - Enables the PID controller.
-        steerMotor = new Talon(SwerveSpecific.steerMotors[wheelNum - 1]);
-        steerEncoder = new Encoder(SwerveSpecific.steerEncoders[wheelNum * 2],
-                SwerveSpecific.steerEncoders[wheelNum * 2 + 1]);
+        steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
+        steerEncoder = new Encoder(STEER_ENCODERS_A[wheelNum - 1], STEER_ENCODERS_B[wheelNum - 1]);
 
         setSetpoint(0.0);
         enable();

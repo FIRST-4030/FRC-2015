@@ -11,12 +11,13 @@ Items which are created and fully functional should be marked with ✓. Items wh
 
 Subsystems:
 
-- SpoolIndexer
+- VerticalIndexerControl ✓
   - Controls the single spool motor.
-- VerticalClawShifter
+- VerticalClawShifter ✓
   - Controls the motor to vertically shift the claw.
-- ClawSolenoids
-  - Controls the two claw solenoids.
+- SingleClawSubsystem
+  - Controls one of the two claws (left/right).
+  - There should be two instances of this in Subsystems.
 - DriveBase
   - Controls the swerve drive.
   - Should be able to switch between accepting `(speedX, speedY, turnSpeed)` and `(distanceX, distanceY, turnDistance)`, so as to allow for precise autonomous control as well as speed-based general control.

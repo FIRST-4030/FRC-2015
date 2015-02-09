@@ -2,10 +2,9 @@ package org.ingrahamrobotics.robot2015.commands;
 
 import static org.ingrahamrobotics.robot2015.Subsystems.simpleDrive;
 
-import org.ingrahamrobotics.robot2015.Robot;
-
 import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.command.Command;
+import org.ingrahamrobotics.robot2015.Robot;
 
 public class RunSimpleDrive extends Command {
 
@@ -39,5 +38,4 @@ public class RunSimpleDrive extends Command {
     protected void interrupted() {
         // TODO Auto-generated method stub
     }
-
 }

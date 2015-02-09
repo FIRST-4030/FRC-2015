@@ -1,11 +1,11 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
-import org.ingrahamrobotics.robot2015.output.Output;
-
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.ingrahamrobotics.robot2015.output.Output;
 
 public class BuiltinSensors extends Subsystem {
+
     private BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
 
     public BuiltinSensors() {
@@ -27,5 +27,4 @@ public class BuiltinSensors extends Subsystem {
     public double getZ() {
         return accelerometer.getZ();
     }
-
 }

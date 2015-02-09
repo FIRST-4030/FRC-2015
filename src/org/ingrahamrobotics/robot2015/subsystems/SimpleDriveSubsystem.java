@@ -1,13 +1,10 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
-import static org.ingrahamrobotics.robot2015.output.Output.output;
-
-import org.ingrahamrobotics.robot2015.commands.RunSimpleDrive;
-import org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts;
-import org.ingrahamrobotics.robot2015.output.OutputLevel;
-
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.ingrahamrobotics.robot2015.commands.RunSimpleDrive;
+import org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts;
+import org.ingrahamrobotics.robot2015.output.Output;
 
 public class SimpleDriveSubsystem extends Subsystem {
 
@@ -17,7 +14,7 @@ public class SimpleDriveSubsystem extends Subsystem {
     public SimpleDriveSubsystem() {
         leftMotor = new Jaguar(MotorPorts.SIMPLE_DRIVE_LEFT);
         rightMotor = new Jaguar(MotorPorts.SIMPLE_DRIVE_RIGHT);
-        output(OutputLevel.INITIALIZED_SYSTEMS, "SimpleDrive", true);
+        Output.initialized("SimpleDrive");
     }
 
     @Override
