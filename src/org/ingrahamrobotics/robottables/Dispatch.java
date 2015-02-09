@@ -8,23 +8,25 @@ public class Dispatch implements Runnable {
     private final Queue queue;
     private Message msg;
     private long timestamp;
-    private final DistpachEvents[] handlers = new DistpachEvents[Type.HIGHEST + 1];
+    private final DistpachEvents[] handlers = new DistpachEvents[Type.HIGHEST.networkValue + 1];
 
     public Dispatch(Queue queue) {
         this.queue = queue;
         setAllHandlers(null);
     }
 
-    public final void setHandler(DistpachEvents handler, int type) {
-        if (type < Type.LOWEST || type > Type.HIGHEST) {
+    public final void setHandler(DistpachEvents handler, Type type) {
+        if (type == null || type == Type.INVALID) {
             throw new IllegalArgumentException("Invalid type: " + type);
         }
-        handlers[type] = handler;
+        handlers[type.networkValue] = handler;
     }
 
     public final void setAllHandlers(DistpachEvents handler) {
-        for (int i = Type.LOWEST; i < Type.HIGHEST; i++) {
-            setHandler(handler, i);
+        for (Type type : Type.values()) {
+            if (type != Type.INVALID) {
+                setHandler(handler, type);
+            }
         }
     }
 
@@ -42,9 +44,9 @@ public class Dispatch implements Runnable {
             msg = queue.get();
 
             // Dispatch if we have a handler
-            if (handlers[msg.getType()] != null) {
+            if (handlers[msg.getType().networkValue] != null) {
                 timestamp = System.currentTimeMillis();
-                handlers[msg.getType()].dispatch(msg);
+                handlers[msg.getType().networkValue].dispatch(msg);
             } else {
                 System.err.println("Unhandled message:\n" + msg.displayStr());
             }

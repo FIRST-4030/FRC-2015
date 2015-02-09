@@ -1,7 +1,6 @@
 package org.ingrahamrobotics.robottables;
 
 import java.io.IOException;
-
 import org.ingrahamrobotics.robottables.api.RobotTablesClient;
 import org.ingrahamrobotics.robottables.network.IO;
 import org.ingrahamrobotics.robottables.network.Queue;
@@ -9,8 +8,7 @@ import org.ingrahamrobotics.robottables.network.Queue.QueueEvents;
 
 public class RobotTables implements QueueEvents {
 
-    // Make IO a package-level variable (instead of a local variable) so that it
-    // is accessible from the outside
+    // Make IO a package-level variable (instead of a local variable) so that it is accessible from the outside
     IO io;
     private Dispatch dispatch;
     private ProtocolHandler protocolHandler;
@@ -42,8 +40,7 @@ public class RobotTables implements QueueEvents {
 
     public void queueError(int size, boolean draining, int targetSize) {
         if (!draining) {
-            System.err.println("Queue Warning: Large message queue size: "
-                    + size);
+            System.err.println("Queue Warning: Large message queue size: " + size);
         } else {
             System.err.println("Queue Error: Drained to size: " + targetSize);
         }
@@ -51,10 +48,8 @@ public class RobotTables implements QueueEvents {
             System.err.println("\tNo dispatch handler running");
         } else {
             long now = System.currentTimeMillis();
-            System.err.println("\tDispatch time: "
-                    + (now - dispatch.dispatchTime()) + " ms ago");
-            System.err.println("\tDispatch message:\n"
-                    + dispatch.currentMessage().displayStr());
+            System.err.println("\tDispatch time: " + (now - dispatch.dispatchTime()) + " ms ago");
+            System.err.println("\tDispatch message:\n" + dispatch.currentMessage().displayStr());
         }
     }
 

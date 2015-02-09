@@ -1,9 +1,12 @@
 package org.ingrahamrobotics.robottables;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.ingrahamrobotics.robottables.api.TableType;
 import org.ingrahamrobotics.robottables.interfaces.InternalTableHandler;
+import org.ingrahamrobotics.robottables.interfaces.ProtocolTable;
 import org.ingrahamrobotics.robottables.interfaces.RobotProtocol;
 import org.ingrahamrobotics.robottables.network.IO;
 
@@ -20,8 +23,44 @@ public class ProtocolHandler implements RobotProtocol {
         sendMessage(new Message(Message.Type.QUERY, tableName, "PUBLISH", "_"));
     }
 
-    public void sendFullUpdate(final String tableName, final Map<String, String> tableValues) {
+    public void sendFullUpdate(final ProtocolTable table) {
+        int generationCount;
+        String generationString = table.getAdmin("GENERATION_COUNT");
+        if (generationString == null) {
+            generationCount = 0;
+        } else {
+            try {
+                generationCount = Integer.parseInt(generationString);
+            } catch (NumberFormatException e) {
+                System.err.printf("Warning: GENERATION_COUNT of %s is not an integer! Resetting...%n", table.getName());
+                generationCount = 0;
+            }
+        }
+        generationCount += 1;
+        table.setAdmin("GENERATION_COUNT", String.valueOf(generationCount));
 
+        // Clone in order to avoid ConcurrentModificationExceptions
+        List<Map.Entry<String, String>> userValues = new ArrayList<Map.Entry<String, String>>(table.getUserValues().entrySet());
+
+        sendMessage(new Message(Message.Type.UPDATE, table.getName(), "USER", Integer.toString(userValues.size())));
+        for (Map.Entry<String, String> entry : userValues) {
+            sendKeyUpdate(table.getName(), entry.getKey(), entry.getValue());
+        }
+
+        // Clone in order to avoid ConcurrentModificationExceptions
+        List<Map.Entry<String, String>> adminValues = new ArrayList<Map.Entry<String, String>>(table.getAdminValues().entrySet());
+
+        sendMessage(new Message(Message.Type.UPDATE, table.getName(), "ADMIN", Integer.toString(adminValues.size())));
+        for (Map.Entry<String, String> entry : userValues) {
+            sendAdminKeyUpdate(table.getName(), entry.getKey(), entry.getValue());
+        }
+
+        sendMessage(new Message(Message.Type.UPDATE, table.getName(), "END", Integer.toString(userValues.size() + adminValues.size())));
+    }
+
+    public void sendFullUpdateRequest(final String tableName) {
+        // TODO: Should there be any key/value values in a REQUEST message?
+        sendMessage(new Message(Message.Type.REQUEST, tableName, "_", "_"));
     }
 
     public void sendKeyUpdate(final String tableName, final String key, final String value) {
@@ -41,8 +80,9 @@ public class ProtocolHandler implements RobotProtocol {
     }
 
     public void sendMessage(final Message message) {
-        System.out.println("[Raw] Sending: " + message.toString().replace("\0", "\\0"));
-        System.out.println("Sending:\n" + message.displayStr());
+//        System.out.println("[Raw] Sending: " + message.toString().replace("\0", "\\0"));
+//        System.out.println("Sending:\n" + message.displayStr());
+        System.out.println("[Sending] " + message.singleLineDisplayStr());
         try {
             io.send(message.toString());
         } catch (IOException e) {
@@ -53,9 +93,12 @@ public class ProtocolHandler implements RobotProtocol {
 
     public void dispatch(final Message msg) {
         // Message received, perform action
-        TableType tableType = handler.getTableType(msg.getTable());
+        ProtocolTable table = handler.getTable(msg.getTable());
+        TableType tableType = table.getType();
+//        System.out.println("[Raw] Received: " + msg.toString().replace("\0", "\\0"));
+        System.out.println("[Received]" + msg.singleLineDisplayStr());
         switch (msg.getType()) {
-            case Message.Type.QUERY:
+            case QUERY:
                 boolean isPublish = msg.getKey().equals("PUBLISH");
                 if (!isPublish && !msg.getKey().equals("EXISTS")) {
                     System.err.println("Invalid message received: " + msg.displayStr());
@@ -69,37 +112,47 @@ public class ProtocolHandler implements RobotProtocol {
                     handler.externalPublishedTable(msg.getTable());
                 }
                 break;
-            case Message.Type.ACK:
+            case ACK:
                 if (msg.getKey().equals("GENERATION_COUNT") && tableType == TableType.LOCAL) {
-                    // TODO: Something should happen here
+                    // TODO: We should use the GENERATION_COUNT value in this message, and use generation count for stale as well as time.
+                    table.subscriberRepliedNow();
                 } else if (msg.getKey().equals("EXISTS")) {
                     if (tableType == null) {
                         handler.externalPublishedTable(msg.getTable()); // We didn't know this existed before, now we do.
                     } else if (tableType == TableType.LOCAL) {
+                        handler.externalPublishedTable(msg.getTable());
                         // TODO: Something should happen here
+                    } else { // Table is remote
+                        if (table.getLastUpdateTime() == -1) {
+                            // If we were unsure if this existed on the network
+                            table.existenceConfirmed();
+                        }
+                        // TODO: Do we want to do something else here?
                     }
                 }
                 break;
-            case Message.Type.NAK:
+            case NAK:
                 if (tableType == TableType.LOCAL || tableType == null) {
                     handler.externalPublishedTable(msg.getTable());
                 }
                 break;
-            case Message.Type.PUBLISH_ADMIN:
+            case PUBLISH_ADMIN:
                 handler.externalAdminKeyUpdated(msg.getTable(), msg.getKey(), msg.getValue());
                 break;
-            case Message.Type.DELETE_ADMIN:
+            case DELETE_ADMIN:
                 handler.externalAdminKeyRemoved(msg.getTable(), msg.getKey());
                 break;
-            case Message.Type.PUBLISH_USER:
+            case PUBLISH_USER:
                 handler.externalKeyUpdated(msg.getTable(), msg.getKey(), msg.getValue());
                 break;
-            case Message.Type.DELETE_USER:
+            case DELETE_USER:
                 handler.externalKeyRemoved(msg.getTable(), msg.getKey());
                 break;
+            case REQUEST:
+                // TODO: Should we rate limit this in some way?
+                sendFullUpdate(table);
+                break;
         }
-        System.out.println("[Raw] Received: " + msg.toString().replace("\0", "\\0"));
-        System.out.println("Received:\n" + msg.displayStr());
     }
 
     public void setInternalHandler(final InternalTableHandler handler) {

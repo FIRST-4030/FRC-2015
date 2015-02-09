@@ -11,7 +11,6 @@ public class IO {
 
     public IO(String address) throws IOException {
         socket = new Socket(address, COMMUNICATIONS_PORT);
-
     }
 
     public void send(String data) throws IOException {

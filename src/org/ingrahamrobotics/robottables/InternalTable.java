@@ -19,7 +19,13 @@ public class InternalTable implements RobotTable, ProtocolTable {
     private final List<TableUpdateListener> listeners = new ArrayList<TableUpdateListener>(); // List of TableUpdateListener
     private TableType type;
     private final String name;
-    private long lastUpdate;
+    private long lastUpdate = -1; // -1 for not confirmed existing on network. 0 for confirmed existing on network, but never updated.
+    /**
+     * Last time a subscriber replied to a table update message.
+     * <p>
+     * TODO: Handle subsriber last generation count for stale as well, not only time.
+     */
+    private long lastSubscriberReply;
     /**
      * Whether this table is confirmed to be owned by us. This is only used internally.
      */
@@ -47,12 +53,32 @@ public class InternalTable implements RobotTable, ProtocolTable {
         }
     }
 
+    public long getLastSubscriberReply() {
+        if (type == TableType.LOCAL) {
+            return lastSubscriberReply;
+        } else {
+            return System.currentTimeMillis();
+        }
+    }
+
     public String getName() {
         return name;
     }
 
     public void updatedNow() {
         lastUpdate = System.currentTimeMillis();
+        // TODO: Fire stale event here
+    }
+
+    public void subscriberRepliedNow() {
+        lastSubscriberReply = System.currentTimeMillis();
+        // TODO: Fire stale event here
+    }
+
+    public void existenceConfirmed() {
+        if (lastUpdate == -1) {
+            lastUpdate = 0;
+        }
     }
 
     public void setReadyToPublish(final boolean readyToPublish) {
@@ -104,7 +130,7 @@ public class InternalTable implements RobotTable, ProtocolTable {
     }
 
     public double getDouble(final String key) {
-        String str = (String) valueMap.get(key);
+        String str = valueMap.get(key);
         try {
             return Double.parseDouble(str);
         } catch (NumberFormatException ex) {
@@ -113,7 +139,7 @@ public class InternalTable implements RobotTable, ProtocolTable {
     }
 
     public double getDouble(final String key, final double defaultValue) {
-        String str = (String) valueMap.get(key);
+        String str = valueMap.get(key);
         try {
             return Double.parseDouble(str);
         } catch (NumberFormatException ex) {
@@ -291,11 +317,12 @@ public class InternalTable implements RobotTable, ProtocolTable {
         }
     }
 
-    /**
-     * Gets the internal value set, for internal use only.
-     */
-    public Map<String, String> getInternalValues() {
+    public Map<String, String> getUserValues() {
         return valueMap;
+    }
+
+    public Map<String, String> getAdminValues() {
+        return adminMap;
     }
 
     private void sendUpdateEvent(final String key, final String value, final UpdateAction action) {

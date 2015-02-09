@@ -31,9 +31,8 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
             if (airTable.getType() == TableType.LOCAL) {
                 // If we are already publishing the table, clear all values, and change the type
                 airTable.internalClear();
-                TableType oldType = airTable.getType();
                 airTable.setType(TableType.REMOTE);
-                fireTableTypeChangeEvent(airTable, oldType, TableType.REMOTE);
+                fireTableTypeChangeEvent(airTable, TableType.LOCAL, TableType.REMOTE);
             } else {
                 throw new IllegalStateException("externalPublishedTable called when external table already known");
                 // TODO: Should we clear all values when a already remote table is re-published?
@@ -54,10 +53,10 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
         // Assuming that the other client is publishing when we recieve a message from them could lead
         // to a condition where both clients end up thinking that the other is publishing
         // this will also need to be fixed in externalAdminKeyUpdated
-        InternalTable table = (InternalTable) tableMap.get(tableName);
+        InternalTable table = tableMap.get(tableName);
         if (table == null) {
             externalPublishedTable(tableName);
-            table = (InternalTable) tableMap.get(tableName);
+            table = tableMap.get(tableName);
         }
         table.internalSet(key, newValue);
     }
@@ -116,7 +115,7 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
     public void internalTableCleared(InternalTable table) {
         if (table.isReadyToPublish()) {
             // Just trigger a full update - to show that all values have been removed - the values will have already been cleared
-            protocolHandler.sendFullUpdate(table.getName(), table.getInternalValues());
+            protocolHandler.sendFullUpdate(table);
         }
     }
 
@@ -132,17 +131,12 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
         }
     }
 
-    public RobotTable getTable(final String tableName) {
+    public InternalTable getTable(final String tableName) {
         return tableMap.get(tableName);
     }
 
     public boolean exists(final String tableName) {
         return tableMap.containsKey(tableName);
-    }
-
-    public TableType getTableType(final String tableName) {
-        InternalTable table = tableMap.get(tableName);
-        return table == null ? null : table.getType();
     }
 
     public RobotTable publishTable(final String tableName) {
@@ -160,13 +154,17 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
                         System.err.println("Warning: Table '" + tableName + "' used to exist, but doesn't anymore.");
                     } else {
                         table.setReadyToPublish(true);
-                        protocolHandler.sendFullUpdate(table.getName(), table.getInternalValues());
+                        protocolHandler.sendFullUpdate(table);
                     }
                 }
             }, TimeConstants.PUBLISH_WAIT_TIME);
         }
         // Return the table we had before, or published
         return table;
+    }
+
+    public RobotTable subscribeToTable(final String tableName) {
+        return null;
     }
 
     public void addClientListener(final ClientUpdateListener listener) {

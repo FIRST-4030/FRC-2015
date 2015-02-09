@@ -1,33 +1,58 @@
 package org.ingrahamrobotics.robottables;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Message {
 
-    public class Type {
+    public enum Type {
+        INVALID(0),
+        QUERY(1),
+        ACK(2),
+        NAK(3),
+        PUBLISH_ADMIN(4),
+        DELETE_ADMIN(5),
+        PUBLISH_USER(6),
+        DELETE_USER(7),
+        UPDATE(8),
+        REQUEST(9),
+        // REQUEST
+        HIGHEST(9),
+        // QUERY
+        LOWEST(1);
 
-        public final static int INVALID = 0;
-        public final static int QUERY = 1;
-        public final static int ACK = 2;
-        public final static int NAK = 3;
-        public final static int PUBLISH_ADMIN = 4;
-        public final static int DELETE_ADMIN = 5;
-        public final static int PUBLISH_USER = 6;
-        public final static int DELETE_USER = 7;
-        public final static int UPDATE = 8;
-        public final static int REQUEST = 9;
+        private static final Map<Integer, Type> intToType = new HashMap<Integer, Type>();
 
-        public final static int HIGHEST = REQUEST;
-        public final static int LOWEST = QUERY;
+        public final int networkValue;
+
+        private Type(int networkValue) {
+            this.networkValue = networkValue;
+        }
+
+        public static Type fromInt(int networkValue) {
+            Type type = intToType.get(networkValue);
+            if (type == null) {
+                type = Type.INVALID;
+            }
+            return type;
+        }
+
+        static {
+            for (Type type : Type.values()) {
+                intToType.put(type.networkValue, type);
+            }
+        }
     }
 
     public final static char DELIMITER = '\0';
 
-    private int type;
+    private Type type;
     private String table;
     private String key;
     private String value;
 
-    public Message(int type, String table, String key, String value) {
-        if (type < Type.LOWEST || type > Type.HIGHEST) {
+    public Message(Type type, String table, String key, String value) {
+        if (type == Type.INVALID) {
             throw new IllegalArgumentException("Invalid message type");
         }
         if (table == null || table.length() < 1) {
@@ -66,7 +91,7 @@ public class Message {
 
         // Extraction
         try {
-            type = Integer.parseInt(raw.substring(0, tableOffset - 1));
+            type = Type.fromInt(Integer.parseInt(raw.substring(0, tableOffset - 1)));
         } catch (NumberFormatException ex) {
             type = Type.INVALID;
         }
@@ -75,7 +100,7 @@ public class Message {
         value = raw.substring(valueOffset);
 
         // Validation
-        if (type < Type.LOWEST || type > Type.HIGHEST) {
+        if (type == Type.INVALID) {
             throw new IllegalArgumentException("Invalid message: Bad type");
         }
         if (table.length() < 1) {
@@ -90,7 +115,11 @@ public class Message {
         return "\tTable: " + getTable() + " [Type: " + getType() + "]\n" + "\t" + getKey() + " => " + getValue();
     }
 
-    public int getType() {
+    public String singleLineDisplayStr() {
+        return "[Table: " + getTable() + "][Type:" + getType() + "][Key:" + getKey() + "] " + getValue();
+    }
+
+    public Type getType() {
         return type;
     }
 

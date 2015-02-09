@@ -14,12 +14,25 @@ public interface RobotTable {
 
     /**
      * Gets the time of the last remote update of this table in milliseconds since epoch. Note that if this table is
-     * LOCAL, the returned value is always equal to System.currentTimeMillis().
+     * LOCAL, the returned value is always equal to System.currentTimeMillis(). If this is a remote table which hasn't
+     * been confirmed existing on the network, this will return -1.
+     * <p>
+     * TODO: Is having a state for not knowing if the table exists (-1) separate from not being every updated (0)
+     * useful?
      *
      * @return System.currentTimeMillis() if {@code getType() == LOCAL}. Last update time if {@code getType() ==
      * REMOTE}.
      */
     public long getLastUpdateTime();
+
+    /**
+     * Gets the time of the last reply from a subscriber to the table update in milliseconds since epoch. If this table
+     * is REMOTE, the returned value is always equal to System.currentTimeMillis().
+     *
+     * @return System.currentTimeMillis() if {@code getType() == REMOTE}. Last update time if {@code getType() ==
+     * LOCAL}.
+     */
+    public long getLastSubscriberReply();
 
     /**
      * Adds a TableUpdateListener to this table. The listener will continue to recieve updates until {@code
