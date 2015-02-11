@@ -13,7 +13,6 @@ public class Subsystems {
     public static SingleClawSubsystem leftClaw;
     public static SingleClawSubsystem rightClaw;
     public static VerticalClawShifter verticalClawShifter;
-    public static BuiltinSensors builtinSensors;
     public static VerticalIndexerControl verticalIndexerControl;
 
     public static void init() {
@@ -22,6 +21,5 @@ public class Subsystems {
         rightClaw = new SingleClawSubsystem("Right", SolenoidPorts.RIGHT_CLAW_EXTEND, SolenoidPorts.RIGHT_CLAW_RETRACT);
         verticalClawShifter = new VerticalClawShifter();
         verticalIndexerControl = new VerticalIndexerControl();
-        builtinSensors = new BuiltinSensors();
     }
 }
