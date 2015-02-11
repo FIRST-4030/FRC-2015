@@ -21,6 +21,8 @@ Subsystems:
 - [x] DriveBase
   - Controls the swerve drive.
   - Should be able to switch between accepting `(speedX, speedY, turnSpeed)` and `(distanceX, distanceY, turnDistance)`, so as to allow for precise autonomous control as well as speed-based general control.
+- [ ] ToggleSwitches
+  - Retrieves input from the various on/off input switches on the robot.
 
 Commands:
 
@@ -52,7 +54,7 @@ Variable Stores:
 
 - [x] HardwarePorts
   - Contains all hardware motor, solenoid and sensor ports.
-- [ ] InputSettings
+- [x] InputSettings
   - Contains settings for where all buttons are located.
   - Might want to make this an enum with a method to directly obtain the JoystickButton. That would allow for statements like `InputSettings.CLAW_TOGGLE_LEFT.get().onPressed(...)` instead of `clawToggleButton = new JoystickButton(InputSettings.CLAW_TOGGLE_LEFT)` and then `clawToggleButton.onPressed(...)`
 - [ ] ManualControlState
