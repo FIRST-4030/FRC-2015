@@ -21,15 +21,18 @@ Subsystems:
 - [x] DriveBase
   - Controls the swerve drive.
   - Should be able to switch between accepting `(speedX, speedY, turnSpeed)` and `(distanceX, distanceY, turnDistance)`, so as to allow for precise autonomous control as well as speed-based general control.
+- [x] ToggleSwitches
+  - Gives access to the output from various digital input switches on the robot.
 
 Commands:
 
 - [ ] AutonomousRoutine
   - Runs during autonomous mode. Function currently undetermined.
 - [ ] FixedIndexerShift
-  - Shifts the indexer up/down a specific amount.
-  - Should be able to be set to shift up or down via a constructor parameter.
-- [ ] ResetIndexer
+  - [x] Shifts the indexer up/down a specific amount.
+  - [x] Should be able to be set to shift up or down via a constructor parameter.
+  - [ ] Use an encoder perhaps?
+- [x] FullIndexerCollapse
   - Shifts the indexer all the way down, collapsing all crates.
 - [ ] VerticalClawMaxOut
   - Vertically shifts the claw all the way up/down.
@@ -51,7 +54,7 @@ Variable Stores:
 
 - [x] HardwarePorts
   - Contains all hardware motor, solenoid and sensor ports.
-- [ ] InputSettings
+- [x] InputSettings
   - Contains settings for where all buttons are located.
   - Might want to make this an enum with a method to directly obtain the JoystickButton. That would allow for statements like `InputSettings.CLAW_TOGGLE_LEFT.get().onPressed(...)` instead of `clawToggleButton = new JoystickButton(InputSettings.CLAW_TOGGLE_LEFT)` and then `clawToggleButton.onPressed(...)`
 - [ ] ManualControlState

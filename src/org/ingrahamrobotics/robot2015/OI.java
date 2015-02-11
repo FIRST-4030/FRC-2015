@@ -1,5 +1,7 @@
 package org.ingrahamrobotics.robot2015;
 
+import org.ingrahamrobotics.robot2015.commands.FixedIndexerShift;
+import org.ingrahamrobotics.robot2015.commands.FullIndexerCollapse;
 import org.ingrahamrobotics.robot2015.commands.ToggleClaw;
 import org.ingrahamrobotics.robot2015.constants.input.IButton;
 
@@ -12,6 +14,9 @@ public class OI {
     public OI() {
         IButton.leftClawToggle.getButton().whenPressed(new ToggleClaw(true));
         IButton.rightClawToggle.getButton().whenPressed(new ToggleClaw(false));
+        IButton.indexerUpOneLevel.getButton().whenPressed(new FixedIndexerShift(true));
+        IButton.indexerDownOneLevel.getButton().whenPressed(new FixedIndexerShift(false));
+        IButton.indexerCollapseAll.getButton().whenPressed(new FullIndexerCollapse());
     }
 
     // // TRIGGERING COMMANDS WITH BUTTONS

@@ -55,6 +55,10 @@ public class HardwarePorts {
         public static final int BACK_LEFT_STEER_ENCODER_B = 13;
         public static final int BACK_RIGHT_STEER_ENCODER_A = 14;
         public static final int BACK_RIGHT_STEER_ENCODER_B = 15;
+        public static final int BOTTOM_INDEXER_SWITCH = 16;
+        public static final int TOP_INDEXER_SWITCH = 17;
+        public static final int BOTTOM_VERTICAL_CLAW_SWITCH = 18;
+        public static final int TOP_VERTICAL_CLAW_SWITCH = 19;
 
         // For swerve organization
         public static final int[] DRIVE_ENCODERS_A = {
