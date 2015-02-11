@@ -23,7 +23,9 @@ public abstract class TimedCommand extends Command {
         if (next) {
             lastSwitch = System.currentTimeMillis();
             currentState += 1;
-            startState(currentState);
+            if (currentState < states.length) {
+                startState(currentState);
+            }
         }
     }
 
@@ -33,11 +35,8 @@ public abstract class TimedCommand extends Command {
     }
 
     @Override
-    protected void end() {
-    }
-
-    @Override
     protected void interrupted() {
+        end();
     }
 
     protected abstract boolean executeState(int state);

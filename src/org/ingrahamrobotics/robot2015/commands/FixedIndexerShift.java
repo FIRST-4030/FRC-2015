@@ -21,15 +21,8 @@ public class FixedIndexerShift extends TimedCommand {
     }
 
     @Override
-    /**
-     * Runs when the command starts with state=0, and when the command ends with state=1.
-     */
     protected void startState(final int state) {
-        if (state == 0) {
-            Subsystems.verticalClawShifter.setSpeed(directionIsUp ? 1 : -1);
-        } else {
-            Subsystems.verticalClawShifter.setSpeed(0);
-        }
+        Subsystems.verticalClawShifter.setSpeed(directionIsUp ? 1 : -1);
     }
 
     @Override
@@ -37,5 +30,10 @@ public class FixedIndexerShift extends TimedCommand {
         return new long[]{
                 5000l // TODO: Configure this, or encoder
         };
+    }
+
+    @Override
+    protected void end() {
+        Subsystems.verticalClawShifter.setSpeed(0);
     }
 }
