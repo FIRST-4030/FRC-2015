@@ -5,6 +5,7 @@ import org.ingrahamrobotics.robot2015.subsystems.BuiltinSensors;
 import org.ingrahamrobotics.robot2015.subsystems.DriveBase;
 import org.ingrahamrobotics.robot2015.subsystems.SingleClawSubsystem;
 import org.ingrahamrobotics.robot2015.subsystems.VerticalClawShifter;
+import org.ingrahamrobotics.robot2015.subsystems.VerticalIndexerControl;
 
 public class Subsystems {
 
@@ -13,12 +14,14 @@ public class Subsystems {
     public static SingleClawSubsystem rightClaw;
     public static VerticalClawShifter verticalClawShifter;
     public static BuiltinSensors builtinSensors;
+    public static VerticalIndexerControl verticalIndexerControl;
 
     public static void init() {
         driveBase = new DriveBase();
         leftClaw = new SingleClawSubsystem("Left", SolenoidPorts.LEFT_CLAW_EXTEND, SolenoidPorts.LEFT_CLAW_RETRACT);
         rightClaw = new SingleClawSubsystem("Right", SolenoidPorts.RIGHT_CLAW_EXTEND, SolenoidPorts.RIGHT_CLAW_RETRACT);
         verticalClawShifter = new VerticalClawShifter();
+        verticalIndexerControl = new VerticalIndexerControl();
         builtinSensors = new BuiltinSensors();
     }
 }

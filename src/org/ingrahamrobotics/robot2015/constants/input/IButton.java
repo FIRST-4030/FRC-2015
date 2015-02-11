@@ -6,7 +6,9 @@ import org.ingrahamrobotics.robot2015.constants.JMap;
 
 public enum IButton {
     leftClawToggle(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.LEFT),
-    rightClawToggle(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.RIGHT);
+    rightClawToggle(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.RIGHT),
+    indexerUpOneLevel(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.MIDDLE),
+    indexerDownOneLevel(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.BOTTOM);
 
     private Button button;
 

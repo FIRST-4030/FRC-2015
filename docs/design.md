@@ -27,8 +27,9 @@ Commands:
 - [ ] AutonomousRoutine
   - Runs during autonomous mode. Function currently undetermined.
 - [ ] FixedIndexerShift
-  - Shifts the indexer up/down a specific amount.
-  - Should be able to be set to shift up or down via a constructor parameter.
+  - [x] Shifts the indexer up/down a specific amount.
+  - [x] Should be able to be set to shift up or down via a constructor parameter.
+  - [ ] Use an encoder perhaps?
 - [ ] ResetIndexer
   - Shifts the indexer all the way down, collapsing all crates.
 - [ ] VerticalClawMaxOut
