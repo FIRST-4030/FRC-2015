@@ -1,9 +1,9 @@
 package org.ingrahamrobotics.robot2015;
 
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.SolenoidPorts;
-import org.ingrahamrobotics.robot2015.subsystems.BuiltinSensors;
 import org.ingrahamrobotics.robot2015.subsystems.DriveBase;
 import org.ingrahamrobotics.robot2015.subsystems.SingleClawSubsystem;
+import org.ingrahamrobotics.robot2015.subsystems.ToggleSwitches;
 import org.ingrahamrobotics.robot2015.subsystems.VerticalClawShifter;
 import org.ingrahamrobotics.robot2015.subsystems.VerticalIndexerControl;
 
@@ -14,6 +14,7 @@ public class Subsystems {
     public static SingleClawSubsystem rightClaw;
     public static VerticalClawShifter verticalClawShifter;
     public static VerticalIndexerControl verticalIndexerControl;
+    public static ToggleSwitches toggleSwitches;
 
     public static void init() {
         driveBase = new DriveBase();
@@ -21,5 +22,6 @@ public class Subsystems {
         rightClaw = new SingleClawSubsystem("Right", SolenoidPorts.RIGHT_CLAW_EXTEND, SolenoidPorts.RIGHT_CLAW_RETRACT);
         verticalClawShifter = new VerticalClawShifter();
         verticalIndexerControl = new VerticalIndexerControl();
+        toggleSwitches = new ToggleSwitches();
     }
 }
