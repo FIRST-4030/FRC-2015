@@ -33,7 +33,7 @@ public interface ClientUpdateListener {
      *
      * @param table Table who's subscribers are stale
      */
-    public void onAllSubscribersStaleChange(RobotTable table);
+    public void onAllSubscribersStaleChange(RobotTable table, boolean nowStale);
 
     /**
      * Fired when a new table is created. Note that this is fired for both local and remote tables.

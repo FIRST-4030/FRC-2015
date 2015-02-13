@@ -34,7 +34,7 @@ public interface RobotTablesClient {
 
     /**
      * Subscribes to a given table on the network. If we already know about this table name (remote or local), this will
-     * return that table. Otherwise this will return a REMOTE table which *is stable*. The table returned isn't
+     * return that table. Otherwise this will return a REMOTE table *which is stale*. The table returned isn't
      * guaranteed to exist on the network, until the table is declared no longer stale.
      * <p>
      * TODO: Is the stale timer how we do want to handle tables we don't know exist on the network yet?

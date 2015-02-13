@@ -15,6 +15,7 @@ public enum TableType {
         this.stringValue = stringValue;
     }
 
+    @Override
     public String toString() {
         return stringValue;
     }
