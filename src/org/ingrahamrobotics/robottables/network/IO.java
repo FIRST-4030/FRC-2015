@@ -1,6 +1,7 @@
 package org.ingrahamrobotics.robottables.network;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 public class IO {
 
@@ -9,7 +10,7 @@ public class IO {
     private ListenEvents eventClass;
     private Socket socket;
 
-    public IO(String address) throws IOException {
+    public IO(InetAddress address) throws IOException {
         socket = new Socket(address, COMMUNICATIONS_PORT);
     }
 

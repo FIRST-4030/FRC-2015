@@ -20,8 +20,8 @@ public class Socket {
     private final int port;
     private final HashSet<String> lAddrs = new HashSet<String>();
 
-    public Socket(String addr, int port) throws IOException {
-        this.addr = InetAddress.getByName(addr);
+    public Socket(InetAddress addr, int port) throws IOException {
+        this.addr = addr;
         this.port = port;
         try {
             conn = new DatagramSocket(port);

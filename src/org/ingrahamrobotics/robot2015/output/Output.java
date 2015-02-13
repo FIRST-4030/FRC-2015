@@ -1,24 +1,40 @@
 package org.ingrahamrobotics.robot2015.output;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.Enumeration;
 import org.ingrahamrobotics.robottables.RobotTables;
 import org.ingrahamrobotics.robottables.api.RobotTable;
 import org.ingrahamrobotics.robottables.api.RobotTablesClient;
 
 public class Output {
 
-    // this address is temporary, at best. We need to find a more portable
-    // address that still works with the robot router.
-    private static final String ADDRESS = "10.40.30.255";
-    private static final Object instanceLock = new Object();
     private static Output instance;
     private RobotTablesClient client;
     private EnumMap<OutputLevel, RobotTable> levelMap;
     private boolean successfullyInitialized;
 
-    public Output(String address) {
+    public Output() {
         RobotTables robotTables = new RobotTables();
+        InetAddress address;
+        try {
+            address = findValidBroadcastAddress();
+        } catch (SocketException e) {
+            e.printStackTrace();
+            successfullyInitialized = false;
+            return;
+        }
+        if (address == null) {
+            System.err.println("Failed to find valid broadcast address!");
+            successfullyInitialized = false;
+            return;
+        }
+        System.out.printf("Using broadcast address: %s%n", address);
         try {
             robotTables.run(address);
         } catch (IOException e) {
@@ -28,31 +44,46 @@ public class Output {
         }
         client = robotTables.getClientInterface();
 
-        levelMap = new EnumMap<OutputLevel, RobotTable>(OutputLevel.class);
+        levelMap = new EnumMap<>(OutputLevel.class);
         for (OutputLevel level : OutputLevel.values()) {
             levelMap.put(level, client.publishTable(level.name));
         }
         successfullyInitialized = true;
     }
 
+    private InetAddress findValidBroadcastAddress() throws SocketException {
+        Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+        for (NetworkInterface iface : Collections.list(ifaces)) {
+            for (InterfaceAddress interfaceAddress : iface.getInterfaceAddresses()) {
+                InetAddress inetAddress = interfaceAddress.getAddress();
+                if (inetAddress.isLoopbackAddress() || inetAddress.isAnyLocalAddress()) {
+                    continue;
+                }
+                InetAddress broadcastAddress = interfaceAddress.getBroadcast();
+                // this might be null (only for IPv6 addresses?)
+                if (broadcastAddress != null) {
+                    return interfaceAddress.getBroadcast();
+                }
+            }
+        }
+        return null;
+    }
+
     public void log(OutputLevel level, String key, String value) {
         if (successfullyInitialized) {
             levelMap.get(level).set(key, value);
         } else {
-            System.out.printf("Backup logging: [%s][%s] %s%n", level, key,
-                    value);
+            System.out.printf("Backup logging: [%s][%s] %s%n", level, key, value);
         }
     }
 
-    public static void initInstance(String address) {
-        instance = new Output(address);
+    public static void initInstance() {
+        instance = new Output();
     }
 
     public static void output(OutputLevel level, String key, String value) {
-        synchronized (instanceLock) {
-            if (instance == null) {
-                initInstance(ADDRESS);
-            }
+        if (instance == null) {
+            throw new IllegalStateException("RobotTables not initialized");
         }
         instance.log(level, key, value);
     }
@@ -75,5 +106,12 @@ public class Output {
 
     public static void initialized(String system) {
         output(OutputLevel.INITIALIZED_SYSTEMS, system, true);
+    }
+
+    public static RobotTablesClient getRobotTables() {
+        if (instance == null) {
+            throw new IllegalStateException("RobotTables not initialized");
+        }
+        return instance.client;
     }
 }

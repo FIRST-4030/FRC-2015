@@ -164,7 +164,11 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
     }
 
     public RobotTable subscribeToTable(final String tableName) {
-        return null;
+        InternalTable table = tableMap.get(tableName);
+        if (table == null) {
+            table = new InternalTable(this, tableName, TableType.REMOTE);
+        }
+        return table;
     }
 
     public void addClientListener(final ClientUpdateListener listener) {

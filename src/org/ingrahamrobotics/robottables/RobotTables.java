@@ -1,6 +1,7 @@
 package org.ingrahamrobotics.robottables;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import org.ingrahamrobotics.robottables.api.RobotTablesClient;
 import org.ingrahamrobotics.robottables.network.IO;
 import org.ingrahamrobotics.robottables.network.Queue;
@@ -14,7 +15,7 @@ public class RobotTables implements QueueEvents {
     private ProtocolHandler protocolHandler;
     private TablesInterfaceHandler tablesInterfaceHandler;
 
-    public void run(String targetAddress) throws IOException {
+    public void run(InetAddress targetAddress) throws IOException {
         // Message queue between listener and dispatch
         Queue queue = new Queue(this);
 
