@@ -20,7 +20,6 @@ public class Output {
     private boolean successfullyInitialized;
 
     public Output() {
-        RobotTables robotTables = new RobotTables();
         InetAddress address;
         try {
             address = findValidBroadcastAddress();
@@ -35,19 +34,23 @@ public class Output {
             return;
         }
         System.out.printf("Using broadcast address: %s%n", address);
+        RobotTables robotTables;
         try {
-            robotTables.run(address);
+            robotTables = new RobotTables(address);
         } catch (IOException e) {
             e.printStackTrace();
             successfullyInitialized = false;
             return;
         }
         client = robotTables.getClientInterface();
+        RobotTable levelTable = client.publishTable("__output_display_names");
 
         levelMap = new EnumMap<>(OutputLevel.class);
         for (OutputLevel level : OutputLevel.values()) {
-            levelMap.put(level, client.publishTable(level.name));
+            levelMap.put(level, client.publishTable(level.networkName));
+            levelTable.set(level.networkName, level.name);
         }
+        robotTables.run();
         successfullyInitialized = true;
     }
 

@@ -52,6 +52,16 @@ public interface RobotTablesClient {
     public void addClientListener(ClientUpdateListener listener);
 
     /**
+     * Adds a ClientUpdateListener to this client. The listener will continue to recieve updates until {@code
+     * removeClientListener()} is called with the listener. If {@code initialUpdate == true} the listener will
+     * immidietly recieve a new table event for each of the tables which is already known.
+     *
+     * @param listener      The listener to add
+     * @param initialUpdate Whether or not to send an initial update
+     */
+    public void addClientListener(ClientUpdateListener listener, boolean initialUpdate);
+
+    /**
      * Removes a ClientUpdateListener from this client. This will do nothing if the listener hasn't been added with
      * {@code addClientListener()}. The listener will not recieve updates from this client unless {@code
      * addClientListener()} is called again with the listener.

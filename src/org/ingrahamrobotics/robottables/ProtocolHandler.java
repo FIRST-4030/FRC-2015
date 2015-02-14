@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.ingrahamrobotics.robottables.api.TableType;
 import org.ingrahamrobotics.robottables.interfaces.InternalTableHandler;
 import org.ingrahamrobotics.robottables.interfaces.ProtocolTable;
@@ -13,14 +15,25 @@ import org.ingrahamrobotics.robottables.network.IO;
 public class ProtocolHandler implements RobotProtocol {
 
     private InternalTableHandler handler;
+    private final Timer timer = new Timer();
     private final IO io;
 
     public ProtocolHandler(IO io) throws IOException {
         this.io = io;
     }
 
-    public void sendPublishRequest(final String tableName) {
-        sendMessage(new Message(Message.Type.QUERY, tableName, "PUBLISH", "_"));
+    public void sendPublishRequestAndStartTimer(final ProtocolTable table) {
+        sendMessage(new Message(Message.Type.QUERY, table.getName(), "PUBLISH", "_"));
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (table.getType() == TableType.LOCAL) {
+                    table.setReadyToPublish(true);
+                    sendFullUpdate(table);
+                }
+            }
+        }, TimeConstants.PUBLISH_WAIT_TIME);
     }
 
     public void sendFullUpdate(final ProtocolTable table) {
@@ -51,11 +64,15 @@ public class ProtocolHandler implements RobotProtocol {
         List<Map.Entry<String, String>> adminValues = new ArrayList<Map.Entry<String, String>>(table.getAdminValues().entrySet());
 
         sendMessage(new Message(Message.Type.UPDATE, table.getName(), "ADMIN", Integer.toString(adminValues.size())));
-        for (Map.Entry<String, String> entry : userValues) {
+        for (Map.Entry<String, String> entry : adminValues) {
             sendAdminKeyUpdate(table.getName(), entry.getKey(), entry.getValue());
         }
 
         sendMessage(new Message(Message.Type.UPDATE, table.getName(), "END", Integer.toString(userValues.size() + adminValues.size())));
+    }
+
+    public void sendExistsQuestionRequest(final String tableName) {
+        sendMessage(new Message(Message.Type.QUERY, tableName, "EXISTS", "_"));
     }
 
     public void sendFullUpdateRequest(final String tableName) {
@@ -94,8 +111,7 @@ public class ProtocolHandler implements RobotProtocol {
     public void dispatch(final Message msg) {
         // Message received, perform action
         ProtocolTable table = handler.getTable(msg.getTable());
-        TableType tableType = table.getType();
-//        System.out.println("[Raw] Received: " + msg.toString().replace("\0", "\\0"));
+        TableType tableType = table == null ? null : table.getType();
         System.out.println("[Received]" + msg.singleLineDisplayStr());
         switch (msg.getType()) {
             case QUERY:
@@ -109,7 +125,7 @@ public class ProtocolHandler implements RobotProtocol {
                     // Currently we won't send externalPublishedTable if we know the table is remote already,
                     // perhaps we should change this? In the current setup, the table is only reset when the new
                     // published sends the first full update.
-                    handler.externalPublishedTable(msg.getTable());
+                    newRemoteTableResponse(msg.getTable());
                 }
                 break;
             case ACK:
@@ -118,14 +134,15 @@ public class ProtocolHandler implements RobotProtocol {
                     table.subscriberRepliedNow();
                 } else if (msg.getKey().equals("EXISTS")) {
                     if (tableType == null) {
-                        handler.externalPublishedTable(msg.getTable()); // We didn't know this existed before, now we do.
+                        newRemoteTableResponse(msg.getTable()); // We didn't know this existed before, now we do.
                     } else if (tableType == TableType.LOCAL) {
-                        handler.externalPublishedTable(msg.getTable());
+                        newRemoteTableResponse(msg.getTable());
                         // TODO: Something should happen here
                     } else { // Table is remote
                         if (table.getLastUpdateTime() == -1) {
                             // If we were unsure if this existed on the network
                             table.existenceConfirmed();
+                            sendFullUpdateRequest(table.getName());
                         }
                         // TODO: Do we want to do something else here?
                     }
@@ -133,26 +150,47 @@ public class ProtocolHandler implements RobotProtocol {
                 break;
             case NAK:
                 if (tableType == TableType.LOCAL || tableType == null) {
-                    handler.externalPublishedTable(msg.getTable());
+                    newRemoteTableResponse(msg.getTable());
                 }
                 break;
             case PUBLISH_ADMIN:
+                if (table == null) {
+                    newRemoteTableResponse(msg.getTable());
+                }
                 handler.externalAdminKeyUpdated(msg.getTable(), msg.getKey(), msg.getValue());
                 break;
             case DELETE_ADMIN:
-                handler.externalAdminKeyRemoved(msg.getTable(), msg.getKey());
+                if (table == null) {
+                    newRemoteTableResponse(msg.getTable());
+                } else {
+                    handler.externalAdminKeyRemoved(msg.getTable(), msg.getKey());
+                }
                 break;
             case PUBLISH_USER:
+                if (table == null) {
+                    newRemoteTableResponse(msg.getTable());
+                }
                 handler.externalKeyUpdated(msg.getTable(), msg.getKey(), msg.getValue());
                 break;
             case DELETE_USER:
-                handler.externalKeyRemoved(msg.getTable(), msg.getKey());
+                if (table == null) {
+                    newRemoteTableResponse(msg.getTable());
+                } else {
+                    handler.externalKeyRemoved(msg.getTable(), msg.getKey());
+                }
                 break;
             case REQUEST:
                 // TODO: Should we rate limit this in some way?
-                sendFullUpdate(table);
+                if (tableType == TableType.LOCAL) {
+                    sendFullUpdate(table);
+                }
                 break;
         }
+    }
+
+    private void newRemoteTableResponse(String tableName) {
+        handler.externalPublishedTable(tableName);
+        sendFullUpdateRequest(tableName);
     }
 
     public void setInternalHandler(final InternalTableHandler handler) {

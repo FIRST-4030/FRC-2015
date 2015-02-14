@@ -1,6 +1,7 @@
 package org.ingrahamrobotics.robottables;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +93,17 @@ public class InternalTable implements RobotTable, ProtocolTable {
     public void addUpdateListener(final TableUpdateListener listener) {
         if (!listeners.contains(listener)) {
             listeners.add(listener);
+        }
+    }
+    public void addUpdateListener(final TableUpdateListener listener, boolean initialUpdate) {
+        addUpdateListener(listener);
+        if (initialUpdate) {
+            for (Map.Entry<String, String> entry : valueMap.entrySet()) {
+                listener.onUpdate(this, entry.getKey(), entry.getValue(), UpdateAction.NEW);
+            }
+            for (Map.Entry<String, String> entry : adminMap.entrySet()) {
+                listener.onUpdateAdmin(this, entry.getKey(), entry.getValue(), UpdateAction.NEW);
+            }
         }
     }
 
@@ -252,6 +264,14 @@ public class InternalTable implements RobotTable, ProtocolTable {
 
     public boolean containsAdmin(final String key) {
         return adminMap.containsKey(key);
+    }
+
+    public List<String> getKeys() {
+        if (valueMap.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return new ArrayList<String>(valueMap.keySet());
+        }
     }
 
     public void clear() {

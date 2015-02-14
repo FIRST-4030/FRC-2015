@@ -114,8 +114,8 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         if (client == null) {
             return;
         }
-        client.addClientListener(this);
-        driverSettings.addUpdateListener(this);
+        client.addClientListener(this, true);
+        driverSettings.addUpdateListener(this, true);
         for (Key key : Key.values()) {
             defaultSettings.set(key.name, key.defaultValue);
         }

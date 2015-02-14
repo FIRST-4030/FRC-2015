@@ -1,5 +1,6 @@
 package org.ingrahamrobotics.robottables.api;
 
+import java.util.List;
 import org.ingrahamrobotics.robottables.api.listeners.TableUpdateListener;
 
 public interface RobotTable {
@@ -41,6 +42,15 @@ public interface RobotTable {
      * @param listener The listener to add
      */
     public void addUpdateListener(TableUpdateListener listener);
+
+    /**
+     * Adds a TableUpdateListener to this table. The listener will continue to recieve updates until {@code
+     * removeUpdateListener()} is called with the listener. If {@code initialUpdate == true} the listener will
+     * immidietly recieve a new key event for each of the keys which is already known.
+     *
+     * @param listener The listener to add
+     */
+    public void addUpdateListener(TableUpdateListener listener, boolean initialUpdate);
 
     /**
      * Removes a TableUpdateListener from this table. This will do nothing if the listener hasn't been added with {@code
@@ -223,6 +233,13 @@ public interface RobotTable {
      * @return True if the key exists in this table, false otherwise
      */
     public boolean containsAdmin(String key);
+
+    /**
+     * Gets a copy of all keys
+     *
+     * @return A new list
+     */
+    public List<String> getKeys();
 
     /**
      * Clears all values from this RobotTable.

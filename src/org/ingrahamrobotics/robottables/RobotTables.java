@@ -10,31 +10,30 @@ import org.ingrahamrobotics.robottables.network.Queue.QueueEvents;
 public class RobotTables implements QueueEvents {
 
     // Make IO a package-level variable (instead of a local variable) so that it is accessible from the outside
-    IO io;
+    private final IO io;
+    private final ProtocolHandler protocolHandler;
+    private final TablesInterfaceHandler tablesInterfaceHandler;
     private Dispatch dispatch;
-    private ProtocolHandler protocolHandler;
-    private TablesInterfaceHandler tablesInterfaceHandler;
 
-    public void run(InetAddress targetAddress) throws IOException {
-        // Message queue between listener and dispatch
-        Queue queue = new Queue(this);
-
+    public RobotTables(InetAddress targetAddress) throws IOException {
         io = new IO(targetAddress);
+        protocolHandler = new ProtocolHandler(io);
+        tablesInterfaceHandler = new TablesInterfaceHandler(protocolHandler);
+        // Set the internal handler on the protocol handler
+        protocolHandler.setInternalHandler(tablesInterfaceHandler);
+    }
 
+    public void run() {
+        // Message queue between listener and dispatch
+
+        Queue queue = new Queue(this);
         // Listen for and queue incoming messages
         io.listen(queue);
 
         dispatch = new Dispatch(queue);
 
-        protocolHandler = new ProtocolHandler(io);
-
         // Dispatch all messages from the queue to the protocol handler
         dispatch.setAllHandlers(protocolHandler);
-
-        tablesInterfaceHandler = new TablesInterfaceHandler(protocolHandler);
-
-        // Set the internal handler on the protocol handler
-        protocolHandler.setInternalHandler(tablesInterfaceHandler);
 
         (new Thread(dispatch)).start();
     }
