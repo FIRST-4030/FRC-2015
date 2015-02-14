@@ -25,7 +25,6 @@ public class SingleClawSubsystem extends Subsystem {
     public void set(boolean extended) {
         extendSolenoid.set(extended);
         retractSolenoid.set(!extended);
-        Output.output(OutputLevel.RAW_MOTORS, "ClawSolenoid:" + name,
-                extended ? "extended" : "retracted");
+        Output.output(OutputLevel.RAW_MOTORS, "ClawSolenoid:" + name, extended ? "extended" : "retracted");
     }
 }

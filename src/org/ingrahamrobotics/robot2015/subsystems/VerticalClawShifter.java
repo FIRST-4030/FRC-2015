@@ -19,7 +19,6 @@ public class VerticalClawShifter extends Subsystem {
 
     public void setSpeed(double value) {
         motor.set(value);
-        Output.output(OutputLevel.RAW_MOTORS, "VerticalClawShifter:Speed",
-                value);
+        Output.output(OutputLevel.RAW_MOTORS, "VerticalClawShifter:Speed", value);
     }
 }
