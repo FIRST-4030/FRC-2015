@@ -59,6 +59,7 @@ Variable Stores:
 - [x] InputSettings
   - Contains settings for where all buttons are located.
   - Might want to make this an enum with a method to directly obtain the JoystickButton. That would allow for statements like `InputSettings.CLAW_TOGGLE_LEFT.get().onPressed(...)` instead of `clawToggleButton = new JoystickButton(InputSettings.CLAW_TOGGLE_LEFT)` and then `clawToggleButton.onPressed(...)`
-- [ ] ManualControlState
-  - Contains whether or not ManualIndexerControl is running.
-  - Should just have a method to get/set the boolean state, and nothing else.
+- [x] ManualControlState
+  - Contains whether or not ManualIndexerControl and ManualClawControl are running.
+  - Should just have a method to get/set the boolean state.
+  - Should publish which manual control has priority on the dashboard.
