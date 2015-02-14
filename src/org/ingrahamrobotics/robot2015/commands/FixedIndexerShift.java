@@ -10,7 +10,7 @@ public class FixedIndexerShift extends TimedCommand {
     private long currentTargetEncoderValue;
 
     public FixedIndexerShift(boolean directionIsUp) {
-        requires(Subsystems.verticalClawShifter);
+        requires(Subsystems.verticalIndexerControl);
         this.directionIsUp = directionIsUp;
     }
 

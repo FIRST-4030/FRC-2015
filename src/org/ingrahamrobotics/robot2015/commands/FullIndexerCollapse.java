@@ -16,7 +16,7 @@ public class FullIndexerCollapse extends Command {
 
     @Override
     protected void execute() {
-        Subsystems.verticalClawShifter.setSpeed(-Settings.Key.INDEXER_FIXED_SPEED.getDouble());
+        Subsystems.verticalIndexerControl.setSpeed(-Settings.Key.INDEXER_FIXED_SPEED.getDouble());
     }
 
     @Override
@@ -30,7 +30,7 @@ public class FullIndexerCollapse extends Command {
             // If this ended at the bottom, reset the indexer encoder! (as apposed to if it was interrupted)
             Subsystems.indexerEncoder.reset();
         }
-        Subsystems.verticalClawShifter.setSpeed(0);
+        Subsystems.verticalIndexerControl.setSpeed(0);
     }
 
     @Override
