@@ -18,7 +18,10 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
      * Possible keys for input settings
      */
     public static enum Key {
-        INDEXER_SHIFT_WAIT("Indexer one-up count", "5000");
+        INDEXER_LEVEL_MAX_WAIT_TIME("Indexer one-up max time", "5000"),
+        INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y"),
+        INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "5000"),
+        INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1");
         public final String name;
         public final String defaultValue;
         private String value;
@@ -52,7 +55,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         }
 
         public boolean getBoolean() {
-            return ((value != null) && value.equalsIgnoreCase("true"));
+            return ((value != null) && (value.startsWith("y") || value.startsWith("t")));
         }
 
         public long getLong() {

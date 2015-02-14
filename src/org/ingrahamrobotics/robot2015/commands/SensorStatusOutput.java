@@ -5,9 +5,9 @@ import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
 
-public class SwitchStatusOutput extends Command {
+public class SensorStatusOutput extends Command {
 
-    public SwitchStatusOutput() {
+    public SensorStatusOutput() {
         requires(Subsystems.toggleSwitches); // Purely for initDefaultCommand in ToggleSwitches
     }
 
@@ -22,6 +22,7 @@ public class SwitchStatusOutput extends Command {
         Output.output(OutputLevel.RAW_SENSORS, "Switches:IndexerTop", Subsystems.toggleSwitches.getIndexerTop());
         Output.output(OutputLevel.RAW_SENSORS, "Switches:ClawBottom", Subsystems.toggleSwitches.getVerticalClawBottom());
         Output.output(OutputLevel.RAW_SENSORS, "Switches:ClawTop", Subsystems.toggleSwitches.getVerticalClawTop());
+        Output.output(OutputLevel.RAW_SENSORS, "IndexerEncoder", Subsystems.indexerEncoder.get());
     }
 
     @Override

@@ -2,7 +2,7 @@ package org.ingrahamrobotics.robot2015.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.ingrahamrobotics.robot2015.commands.SwitchStatusOutput;
+import org.ingrahamrobotics.robot2015.commands.SensorStatusOutput;
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts;
 
 public class ToggleSwitches extends Subsystem {
@@ -14,7 +14,7 @@ public class ToggleSwitches extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new SwitchStatusOutput());
+        setDefaultCommand(new SensorStatusOutput());
     }
 
     public boolean getIndexerBottom() {

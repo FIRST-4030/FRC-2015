@@ -61,6 +61,9 @@ public class HardwarePorts {
         public static final int BOTTOM_VERTICAL_CLAW_SWITCH = 18;
         public static final int TOP_VERTICAL_CLAW_SWITCH = 19;
 
+        public static final int INDEXER_ENCODER_A = 20;
+        public static final int INDEXER_ENCODER_B = 21;
+
         // For swerve organization
         public static final int[] DRIVE_ENCODERS_A = {
                 FRONT_LEFT_DRIVE_ENCODER_A,
