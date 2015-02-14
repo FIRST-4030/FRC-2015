@@ -18,8 +18,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
      * Possible keys for input settings
      */
     public static enum Key {
-
-        ;
+        INDEXER_SHIFT_WAIT("Indexer one-up count", "5000");
         public final String name;
         public final String defaultValue;
         private String value;
@@ -127,6 +126,11 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
             return;
         }
         Key keyObject = keyMap.get(key);
+        if (keyObject == null) {
+            // They are sending an update to a value we don't know about
+            // TODO: Something to prevent this
+            return;
+        }
         switch (action) {
             case NEW:
             case UPDATE:

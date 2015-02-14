@@ -1,6 +1,7 @@
 package org.ingrahamrobotics.robot2015.commands;
 
 import org.ingrahamrobotics.robot2015.Subsystems;
+import org.ingrahamrobotics.robot2015.output.Settings;
 import org.ingrahamrobotics.robot2015.utils.TimedCommand;
 
 public class FixedIndexerShift extends TimedCommand {
@@ -28,7 +29,7 @@ public class FixedIndexerShift extends TimedCommand {
     @Override
     protected long[] getWaitTimes() {
         return new long[]{
-                5000l // TODO: Configure this, or encoder
+                Settings.Key.INDEXER_SHIFT_WAIT.getLong() // TODO: encoder?
         };
     }
 
