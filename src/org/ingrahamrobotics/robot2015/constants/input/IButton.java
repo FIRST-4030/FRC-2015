@@ -8,6 +8,7 @@ public enum IButton {
     leftClawToggle(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.LEFT),
     rightClawToggle(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.RIGHT),
     manualClawHold(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.LEFT_TOP),
+    manualIndexerHold(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.LEFT_BOTTOM),
     indexerUpOneLevel(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.MIDDLE),
     indexerDownOneLevel(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.BOTTOM),
     indexerCollapseAll(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.TRIGGER);

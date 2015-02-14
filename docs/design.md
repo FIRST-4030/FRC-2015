@@ -39,14 +39,16 @@ Commands:
   - Should be able to be set to shift up or down via a constructor parameter.
 - [x] ToggleClaw
   - Toggles one of two claws (left/right).
-- [ ] ManualClawControl
+- [x] ManualClawControl
   - Controls the VerticalClawShifter manually via the non-drive joystick continuously.
-  - Should discard any input while ManualIndexerControl is running (check via ManualControlState).
-  - Should be controlled via a `.runWhilePressed()` on the manual claw control button.
-- [ ] ManualIndexerControl
-  - Controls the SpoolIndexer manually via the non-drive joystick continuously.
   - Should update ManualControlState on `initialize()`, `end()` and `canceled()`.
+  - Should be controlled via a `.runWhilePressed()` on the manual claw control button.
+  - Should stop running up/down if the up/down vertical claw toggle switches are activate.
+- [x] ManualIndexerControl
+  - Controls the SpoolIndexer manually via the non-drive joystick continuously.
+  - Should discard any input while ManualClawControl is running (check via ManualControlState).
   - Should be controlled via a `.runWhilePressed()` on the manual indexer control button.
+  - Should stop running up/down if the up/down indexer toggle switches are activate.
 - [x] RunPIDDrive
   - Should take joystick input from the drive joysticks and/or drive turnknob, and control DriveBase.
 

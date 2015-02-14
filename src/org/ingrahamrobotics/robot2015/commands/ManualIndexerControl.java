@@ -3,38 +3,39 @@ package org.ingrahamrobotics.robot2015.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.constants.input.IAxis;
+import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.state.ManualControlState;
 
-public class ManualClawControl extends Command {
+public class ManualIndexerControl extends Command {
 
     private static final double threshold = 0.05;
 
-    public ManualClawControl() {
-        requires(Subsystems.verticalClawShifter);
-        ManualControlState.setManualClawRunning(false);
+    public ManualIndexerControl() {
+        requires(Subsystems.verticalIndexerControl);
+        ManualControlState.setManualIndexerRunning(false);
     }
 
     @Override
     protected void initialize() {
-        ManualControlState.setManualClawRunning(true);
+        ManualControlState.setManualIndexerRunning(true);
     }
 
     @Override
     protected void execute() {
         double y = IAxis.manualControl.get();
 
-        if (y > 0 && Subsystems.toggleSwitches.getVerticalClawTop()) {
+        if (y > 0 && Subsystems.toggleSwitches.getIndexerTop()) {
             return;
         }
-        if (y < 0 && Subsystems.toggleSwitches.getVerticalClawBottom()) {
+        if (y < 0 && Subsystems.toggleSwitches.getIndexerBottom()) {
             return;
         }
 
-        if (Math.abs(y) > threshold)
-            Subsystems.verticalClawShifter.setSpeed(y);
+        if (Math.abs(y) > threshold && !ManualControlState.isManualClawRunning()) {
+            Subsystems.verticalIndexerControl.setSpeed(y);
+        }
     }
 
-    //No purpose for this command, will return false
     @Override
     protected boolean isFinished() {
         return false;
@@ -42,8 +43,8 @@ public class ManualClawControl extends Command {
 
     @Override
     protected void end() {
-        Subsystems.verticalClawShifter.setSpeed(0);
-        ManualControlState.setManualClawRunning(false);
+        Subsystems.verticalIndexerControl.setSpeed(0);
+        ManualControlState.setManualIndexerRunning(false);
     }
 
     //Should always be called, but will redirect to end for form
