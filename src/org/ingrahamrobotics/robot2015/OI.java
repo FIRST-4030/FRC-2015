@@ -5,6 +5,7 @@ import org.ingrahamrobotics.robot2015.commands.FullIndexerCollapse;
 import org.ingrahamrobotics.robot2015.commands.ManualClawControl;
 import org.ingrahamrobotics.robot2015.commands.ManualIndexerControl;
 import org.ingrahamrobotics.robot2015.commands.ToggleClaw;
+import org.ingrahamrobotics.robot2015.commands.VerticalClawMax;
 import org.ingrahamrobotics.robot2015.constants.input.IButton;
 
 /**
@@ -21,6 +22,8 @@ public class OI {
         IButton.indexerCollapseAll.getButton().whenPressed(new FullIndexerCollapse());
         IButton.manualClawHold.getButton().whileHeld(new ManualClawControl());
         IButton.manualIndexerHold.getButton().whileHeld(new ManualIndexerControl());
+        IButton.clawVerticalMaxUp.getButton().whenPressed(new VerticalClawMax(true));
+        IButton.clawVerticalMaxDown.getButton().whenPressed(new VerticalClawMax(false));
     }
 
     // // TRIGGERING COMMANDS WITH BUTTONS

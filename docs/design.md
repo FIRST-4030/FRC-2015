@@ -34,7 +34,7 @@ Commands:
   - [x] Setting to use encoder or not use encoder
 - [x] FullIndexerCollapse
   - Shifts the indexer all the way down, collapsing all crates.
-- [ ] VerticalClawMaxOut
+- [x] VerticalClawMaxOut
   - Vertically shifts the claw all the way up/down.
   - Should be able to be set to shift up or down via a constructor parameter.
 - [x] ToggleClaw

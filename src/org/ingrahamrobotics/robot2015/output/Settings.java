@@ -21,7 +21,8 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         INDEXER_LEVEL_MAX_WAIT_TIME("Indexer one-up max time", "5000"),
         INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y"),
         INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "5000"),
-        INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1");
+        INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1"),
+        VERTICAL_CLAW_MAX_CMD_SPEED("ClawVerticalMax speed", "1");
         public final String name;
         public final String defaultValue;
         private String value;

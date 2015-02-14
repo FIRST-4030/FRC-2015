@@ -11,7 +11,9 @@ public enum IButton {
     manualIndexerHold(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.LEFT_BOTTOM),
     indexerUpOneLevel(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.MIDDLE),
     indexerDownOneLevel(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.BOTTOM),
-    indexerCollapseAll(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.TRIGGER);
+    indexerCollapseAll(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.TRIGGER),
+    clawVerticalMaxUp(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.RIGHT_TOP),
+    clawVerticalMaxDown(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.RIGHT_BOTTOM),;
 
     private Button button;
 
