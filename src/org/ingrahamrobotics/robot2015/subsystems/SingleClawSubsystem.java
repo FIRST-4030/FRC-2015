@@ -16,6 +16,7 @@ public class SingleClawSubsystem extends Subsystem {
         this.extendSolenoid = new Solenoid(extendPort);
         this.retractSolenoid = new Solenoid(retractPort);
         Output.initialized("ClawSolenoid:" + name);
+        set(true); // TODO: Extend or retract by default
     }
 
     @Override

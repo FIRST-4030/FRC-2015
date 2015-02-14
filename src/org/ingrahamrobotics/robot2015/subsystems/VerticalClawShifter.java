@@ -12,6 +12,7 @@ public class VerticalClawShifter extends Subsystem {
 
     public VerticalClawShifter() {
         Output.initialized("VerticalClawShifter");
+        setSpeed(0);
     }
 
     public void initDefaultCommand() {

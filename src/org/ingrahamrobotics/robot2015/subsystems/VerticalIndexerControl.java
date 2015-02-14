@@ -15,6 +15,7 @@ public class VerticalIndexerControl extends Subsystem {
 
     public VerticalIndexerControl() {
         Output.initialized("VerticalIndexerControl");
+        setSpeed(0);
     }
 
     @Override
