@@ -95,6 +95,7 @@ public class InternalTable implements RobotTable, ProtocolTable {
             listeners.add(listener);
         }
     }
+
     public void addUpdateListener(final TableUpdateListener listener, boolean initialUpdate) {
         addUpdateListener(listener);
         if (initialUpdate) {

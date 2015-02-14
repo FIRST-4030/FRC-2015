@@ -39,6 +39,7 @@ public class HardwarePorts {
     }
 
     public static class DigitalIoPorts {
+
         public static final int FRONT_LEFT_DRIVE_ENCODER_A = 0;
         public static final int FRONT_LEFT_DRIVE_ENCODER_B = 1;
         public static final int FRONT_RIGHT_DRIVE_ENCODER_A = 2;
