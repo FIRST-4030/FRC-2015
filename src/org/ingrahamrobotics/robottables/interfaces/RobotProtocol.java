@@ -32,6 +32,13 @@ public interface RobotProtocol extends DistpachEvents {
      */
     public void sendFullUpdateRequest(String tableName);
 
+    /**
+     * Sends a confirmation after a successful table update has been received.
+     *
+     * @param table Remote table that was updated
+     */
+    public void sendFullUpdateSuccessConfirmation(final ProtocolTable table);
+
     public void sendKeyUpdate(String tableName, String key, String value);
 
     public void sendKeyDelete(String tableName, String keyName);

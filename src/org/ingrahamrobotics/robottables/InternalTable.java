@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.ingrahamrobotics.robottables.api.RobotTable;
 import org.ingrahamrobotics.robottables.api.TableType;
 import org.ingrahamrobotics.robottables.api.UpdateAction;
 import org.ingrahamrobotics.robottables.api.listeners.TableUpdateListener;
 import org.ingrahamrobotics.robottables.interfaces.InternalTableHandler;
 import org.ingrahamrobotics.robottables.interfaces.ProtocolTable;
+import org.ingrahamrobotics.robottables.util.UpdateableDelayedRunnable;
 
 public class InternalTable implements RobotTable, ProtocolTable {
 
@@ -20,22 +22,47 @@ public class InternalTable implements RobotTable, ProtocolTable {
     private final List<TableUpdateListener> listeners = new ArrayList<TableUpdateListener>(); // List of TableUpdateListener
     private TableType type;
     private final String name;
-    private long lastUpdate = -1; // -1 for not confirmed existing on network. 0 for confirmed existing on network, but never updated.
+    //*** Variables used by the ProtocolHandler
+    private final ProtocolTableData protocolTableData;
+    //*** Variables relating to stale tracking
+    /**
+     * -1 for not confirmed existing on network. 0 for confirmed existing on network, but never updated.
+     */
+    private long lastUpdate = -1;
+    private boolean currentlyPubliclyStale = true;
+    private boolean currentlySubscriberPubliclyStale = true;
+    private UpdateableDelayedRunnable staleRunnable;
+    private UpdateableDelayedRunnable subscriberStaleRunnable;
     /**
      * Last time a subscriber replied to a table update message.
      * <p>
      * TODO: Handle subsriber last generation count for stale as well, not only time.
      */
     private long lastSubscriberReply;
-    /**
-     * Whether this table is confirmed to be owned by us. This is only used internally.
-     */
-    private boolean readyToPublish;
 
     public InternalTable(final InternalTableHandler tables, final String name, final TableType initialType) {
         robotTables = tables;
         this.type = initialType;
         this.name = name;
+        internalSetAdmin("UPDATE_INTERVAL", String.valueOf(TimeConstants.UPDATE_INTERVAL));
+        // TODO: Maybe using synchronising, handle the case where an updateabledelayedrunnable runs at the exact same time the table is updated.
+        staleRunnable = new UpdateableDelayedRunnable(new Runnable() {
+            public void run() {
+                if (type == TableType.REMOTE) {
+                    currentlyPubliclyStale = true;
+                    robotTables.fireStaleEvent(InternalTable.this, true);
+                }
+            }
+        });
+        subscriberStaleRunnable = new UpdateableDelayedRunnable(new Runnable() {
+            public void run() {
+                if (type == TableType.LOCAL) {
+                    currentlySubscriberPubliclyStale = true;
+                    robotTables.fireSubscriberStaleEvent(InternalTable.this, true);
+                }
+            }
+        });
+        protocolTableData = new ProtocolTableData(tables.getProtocolHandler(), this);
     }
 
     public TableType getType() {
@@ -68,26 +95,28 @@ public class InternalTable implements RobotTable, ProtocolTable {
 
     public void updatedNow() {
         lastUpdate = System.currentTimeMillis();
-        // TODO: Fire stale event here
+        double updateInterval = Double.parseDouble(getAdmin("UPDATE_INTERVAL"));
+        staleRunnable.delayUntil(System.currentTimeMillis() + (int) (updateInterval * 2.1));
+        if (currentlyPubliclyStale) {
+            currentlyPubliclyStale = false;
+            robotTables.fireStaleEvent(this, false);
+        }
     }
 
     public void subscriberRepliedNow() {
         lastSubscriberReply = System.currentTimeMillis();
-        // TODO: Fire stale event here
+        double updateInterval = Double.parseDouble(getAdmin("UPDATE_INTERVAL"));
+        subscriberStaleRunnable.delayUntil(System.currentTimeMillis() + (int) (updateInterval * 2.1));
+        if (currentlySubscriberPubliclyStale) {
+            currentlySubscriberPubliclyStale = false;
+            robotTables.fireSubscriberStaleEvent(this, false);
+        }
     }
 
     public void existenceConfirmed() {
         if (lastUpdate == -1) {
             lastUpdate = 0;
         }
-    }
-
-    public void setReadyToPublish(final boolean readyToPublish) {
-        this.readyToPublish = readyToPublish;
-    }
-
-    public boolean isReadyToPublish() {
-        return readyToPublish;
     }
 
     public void addUpdateListener(final TableUpdateListener listener) {
@@ -195,6 +224,7 @@ public class InternalTable implements RobotTable, ProtocolTable {
     public boolean isInt(final String key) {
         String str = valueMap.get(key);
         try {
+            //noinspection ResultOfMethodCallIgnored
             Integer.parseInt(str);
             return true;
         } catch (NumberFormatException ex) {
@@ -205,6 +235,7 @@ public class InternalTable implements RobotTable, ProtocolTable {
     public boolean isDouble(final String key) {
         String str = valueMap.get(key);
         try {
+            //noinspection ResultOfMethodCallIgnored
             Double.parseDouble(str);
             return true;
         } catch (NumberFormatException ex) {
@@ -272,6 +303,30 @@ public class InternalTable implements RobotTable, ProtocolTable {
             return Collections.emptyList();
         } else {
             return new ArrayList<String>(valueMap.keySet());
+        }
+    }
+
+    public Set<String> getKeySet() {
+        if (valueMap.isEmpty()) {
+            return Collections.emptySet();
+        } else {
+            return Collections.unmodifiableSet(valueMap.keySet());
+        }
+    }
+
+    public List<String> getAdminKeys() {
+        if (adminMap.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return new ArrayList<String>(adminMap.keySet());
+        }
+    }
+
+    public Set<String> getAdminKeySet() {
+        if (adminMap.isEmpty()) {
+            return Collections.emptySet();
+        } else {
+            return Collections.unmodifiableSet(adminMap.keySet());
         }
     }
 
@@ -344,6 +399,10 @@ public class InternalTable implements RobotTable, ProtocolTable {
 
     public Map<String, String> getAdminValues() {
         return adminMap;
+    }
+
+    public ProtocolTableData getProtocolData() {
+        return protocolTableData;
     }
 
     private void sendUpdateEvent(final String key, final String value, final UpdateAction action) {

@@ -1,13 +1,10 @@
 package org.ingrahamrobotics.robottables.interfaces;
 
 import java.util.Map;
+import org.ingrahamrobotics.robottables.ProtocolTableData;
 import org.ingrahamrobotics.robottables.api.RobotTable;
 
 public interface ProtocolTable extends RobotTable {
-
-    public void setReadyToPublish(boolean readyToPublish);
-
-    public boolean isReadyToPublish();
 
     /**
      * This remote table has just been updated.
@@ -37,4 +34,6 @@ public interface ProtocolTable extends RobotTable {
      * This returns the actual internal map, code that iterates over values should clone/copy the map first.
      */
     public Map<String, String> getAdminValues();
+
+    public ProtocolTableData getProtocolData();
 }

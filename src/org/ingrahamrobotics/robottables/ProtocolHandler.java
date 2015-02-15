@@ -29,7 +29,7 @@ public class ProtocolHandler implements RobotProtocol {
             @Override
             public void run() {
                 if (table.getType() == TableType.LOCAL) {
-                    table.setReadyToPublish(true);
+                    table.getProtocolData().setReadyToPublish(true);
                     sendFullUpdate(table);
                 }
             }
@@ -37,6 +37,7 @@ public class ProtocolHandler implements RobotProtocol {
     }
 
     public void sendFullUpdate(final ProtocolTable table) {
+        table.getProtocolData().getFullUpdateRunnable().delayUntil(System.currentTimeMillis() + TimeConstants.UPDATE_INTERVAL);
         int generationCount;
         String generationString = table.getAdmin("GENERATION_COUNT");
         if (generationString == null) {
@@ -76,8 +77,11 @@ public class ProtocolHandler implements RobotProtocol {
     }
 
     public void sendFullUpdateRequest(final String tableName) {
-        // TODO: Should there be any key/value values in a REQUEST message?
         sendMessage(new Message(Message.Type.REQUEST, tableName, "_", "_"));
+    }
+
+    public void sendFullUpdateSuccessConfirmation(final ProtocolTable table) {
+        sendMessage(new Message(Message.Type.ACK, table.getName(), "GENERATION_COUNT", table.getAdmin("GENERATION_COUNT")));
     }
 
     public void sendKeyUpdate(final String tableName, final String key, final String value) {
@@ -97,8 +101,6 @@ public class ProtocolHandler implements RobotProtocol {
     }
 
     public void sendMessage(final Message message) {
-//        System.out.println("[Raw] Sending: " + message.toString().replace("\0", "\\0"));
-//        System.out.println("Sending:\n" + message.displayStr());
         System.out.println("[Sending] " + message.singleLineDisplayStr());
         try {
             io.send(message.toString());
@@ -125,7 +127,7 @@ public class ProtocolHandler implements RobotProtocol {
                     // Currently we won't send externalPublishedTable if we know the table is remote already,
                     // perhaps we should change this? In the current setup, the table is only reset when the new
                     // published sends the first full update.
-                    newRemoteTableResponse(msg.getTable());
+                    handler.externalPublishedTable(msg.getTable());
                 }
                 break;
             case ACK:
@@ -149,7 +151,7 @@ public class ProtocolHandler implements RobotProtocol {
                 }
                 break;
             case NAK:
-                if (tableType == TableType.LOCAL || tableType == null) {
+                if (tableType != TableType.REMOTE) {
                     newRemoteTableResponse(msg.getTable());
                 }
                 break;
@@ -185,6 +187,32 @@ public class ProtocolHandler implements RobotProtocol {
                     sendFullUpdate(table);
                 }
                 break;
+            case UPDATE:
+                if (tableType != TableType.REMOTE) {
+                    handler.externalPublishedTable(msg.getTable());
+                    table = handler.getTable(msg.getTable());
+                }
+                int keyCount;
+                try {
+                    keyCount = Integer.parseInt(msg.getValue());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    System.out.printf("Warning! UPDATE message received with invalid non-integer value: %s%n", msg.getValue());
+                    return;
+                }
+                ProtocolTableData tableData = table.getProtocolData();
+                if (msg.getKey().equals("USER")) {
+                    tableData.userUpdateStarted(keyCount);
+                } else if (msg.getKey().equals("ADMIN")) {
+                    tableData.adminUpdateStarted(keyCount);
+                } else if (msg.getKey().equals("END")) {
+                    tableData.endMessageReceived(keyCount);
+                } else {
+                    System.out.printf("Warning! UPDATE message received with invalid value: %s%n", msg.getKey());
+                }
+                break;
+            default:
+                System.out.println("Warning! Unhandled message!");
         }
     }
 
