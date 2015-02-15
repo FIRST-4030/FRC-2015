@@ -1,6 +1,7 @@
 package org.ingrahamrobotics.robottables.api;
 
 import java.util.List;
+import java.util.Set;
 import org.ingrahamrobotics.robottables.api.listeners.TableUpdateListener;
 
 public interface RobotTable {
@@ -237,9 +238,30 @@ public interface RobotTable {
     /**
      * Gets a copy of all keys
      *
-     * @return A new list
+     * @return A new list, or Collections.EMPTY_LIST if empty
      */
     public List<String> getKeys();
+
+    /**
+     * Gets an unmodifiable view on the current key set.
+     *
+     * @return The internal set (unmodifiable), or Collections.EMPTY_SET if empty
+     */
+    public Set<String> getKeySet();
+
+    /**
+     * Gets a copy of all admin keys
+     *
+     * @return A new list, or Collections.EMPTY_LIST if empty
+     */
+    public List<String> getAdminKeys();
+
+    /**
+     * Gets an unmoifiable view on the current admin key set.
+     *
+     * @return The internal set (unmodifiable), or Collections.EMPTY_SET if empty
+     */
+    public Set<String> getAdminKeySet();
 
     /**
      * Clears all values from this RobotTable.

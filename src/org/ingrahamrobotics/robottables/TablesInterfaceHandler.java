@@ -56,6 +56,7 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
             table = tableMap.get(tableName);
         }
         table.internalSet(key, newValue);
+        table.getProtocolData().internalUserUpdated(key);
     }
 
     public void externalKeyRemoved(final String tableName, final String key) {
@@ -74,6 +75,7 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
             table = tableMap.get(tableName);
         }
         table.internalSetAdmin(key, newValue);
+        table.getProtocolData().internalAdminUpdated(key);
     }
 
     public void externalAdminKeyRemoved(final String tableName, final String key) {
@@ -86,31 +88,31 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
     }
 
     public void internalKeyUpdated(InternalTable table, String key, String newValue) {
-        if (table.isReadyToPublish()) {
+        if (table.getProtocolData().isReadyToPublish()) {
             protocolHandler.sendKeyUpdate(table.getName(), key, newValue);
         }
     }
 
     public void internalAdminKeyUpdated(InternalTable table, String key, String newValue) {
-        if (table.isReadyToPublish()) {
+        if (table.getProtocolData().isReadyToPublish()) {
             protocolHandler.sendAdminKeyUpdate(table.getName(), key, newValue);
         }
     }
 
     public void internalKeyRemoved(InternalTable table, String key) {
-        if (table.isReadyToPublish()) {
+        if (table.getProtocolData().isReadyToPublish()) {
             protocolHandler.sendKeyDelete(table.getName(), key);
         }
     }
 
     public void internalAdminKeyRemoved(InternalTable table, String key) {
-        if (table.isReadyToPublish()) {
+        if (table.getProtocolData().isReadyToPublish()) {
             protocolHandler.sendAdminKeyDelete(table.getName(), key);
         }
     }
 
     public void internalTableCleared(InternalTable table) {
-        if (table.isReadyToPublish()) {
+        if (table.getProtocolData().isReadyToPublish()) {
             // Just trigger a full update - to show that all values have been removed - the values will have already been cleared
             protocolHandler.sendFullUpdate(table);
         }
@@ -128,8 +130,24 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
         }
     }
 
+    public void fireStaleEvent(final RobotTable table, final boolean nowStale) {
+        for (final ClientUpdateListener listener : listeners) {
+            listener.onTableStaleChange(table, nowStale);
+        }
+    }
+
+    public void fireSubscriberStaleEvent(final RobotTable table, final boolean nowStale) {
+        for (final ClientUpdateListener listener : listeners) {
+            listener.onAllSubscribersStaleChange(table, nowStale);
+        }
+    }
+
     public InternalTable getTable(final String tableName) {
         return tableMap.get(tableName);
+    }
+
+    public RobotProtocol getProtocolHandler() {
+        return protocolHandler;
     }
 
     public boolean exists(final String tableName) {

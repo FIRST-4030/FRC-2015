@@ -48,8 +48,8 @@ public class RobotTables implements QueueEvents {
             System.err.println("\tNo dispatch handler running");
         } else {
             long now = System.currentTimeMillis();
-            System.err.println("\tDispatch time: " + (now - dispatch.dispatchTime()) + " ms ago");
-            System.err.println("\tDispatch message:\n" + dispatch.currentMessage().displayStr());
+            System.err.printf("\tDispatch: [time: %d ms ago] [message: %s]%n", now - dispatch.dispatchTime(),
+                    dispatch.currentMessage().singleLineDisplayStr());
         }
     }
 

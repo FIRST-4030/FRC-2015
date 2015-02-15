@@ -1,6 +1,7 @@
 package org.ingrahamrobotics.robottables.interfaces;
 
 import org.ingrahamrobotics.robottables.InternalTable;
+import org.ingrahamrobotics.robottables.api.RobotTable;
 import org.ingrahamrobotics.robottables.api.RobotTablesClient;
 
 public interface InternalTableHandler extends RobotTablesClient {
@@ -25,5 +26,11 @@ public interface InternalTableHandler extends RobotTablesClient {
 
     public void externalAdminKeyRemoved(String tableName, String key);
 
+    public void fireStaleEvent(final RobotTable table, final boolean nowStale);
+
+    public void fireSubscriberStaleEvent(final RobotTable table, final boolean nowStale);
+
     public ProtocolTable getTable(String tableName);
+
+    public RobotProtocol getProtocolHandler();
 }

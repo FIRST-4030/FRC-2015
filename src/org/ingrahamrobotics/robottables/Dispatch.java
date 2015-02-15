@@ -59,7 +59,7 @@ public class Dispatch implements Runnable {
     public interface DistpachEvents {
 
         /**
-         * Called when a message is recieved.
+         * Called when a message is received.
          */
         public void dispatch(Message msg);
     }
