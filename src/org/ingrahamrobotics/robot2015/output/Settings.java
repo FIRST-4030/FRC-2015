@@ -70,6 +70,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
 
         public boolean isInt() {
             try {
+                //noinspection ResultOfMethodCallIgnored
                 Integer.parseInt(value);
                 return true;
             } catch (NumberFormatException ex) {
@@ -79,6 +80,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
 
         public boolean isDouble() {
             try {
+                //noinspection ResultOfMethodCallIgnored
                 Double.parseDouble(value);
                 return true;
             } catch (NumberFormatException ex) {
