@@ -89,6 +89,14 @@ public class InternalTable implements RobotTable, ProtocolTable {
         }
     }
 
+    public boolean isStale() {
+        return type != TableType.LOCAL && currentlyPubliclyStale;
+    }
+
+    public boolean isSubcriberStale() {
+        return type != TableType.REMOTE && currentlySubscriberPubliclyStale;
+    }
+
     public String getName() {
         return name;
     }

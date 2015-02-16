@@ -18,7 +18,7 @@ public class ProtocolHandler implements RobotProtocol {
     private final Timer timer = new Timer();
     private final IO io;
 
-    public ProtocolHandler(IO io) throws IOException {
+    public ProtocolHandler(IO io) {
         this.io = io;
     }
 

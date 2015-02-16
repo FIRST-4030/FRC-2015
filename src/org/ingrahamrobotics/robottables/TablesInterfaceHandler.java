@@ -160,6 +160,7 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
             // If we don't know about this table yet, publish it
             table = new InternalTable(this, tableName, TableType.LOCAL);
             tableMap.put(tableName, table);
+            fireNewTableEvent(table);
 
             protocolHandler.sendPublishRequestAndStartTimer(table);
         }
@@ -172,6 +173,7 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
         if (table == null) {
             table = new InternalTable(this, tableName, TableType.REMOTE);
             tableMap.put(tableName, table);
+            fireNewTableEvent(table);
             protocolHandler.sendExistsQuestionRequest(tableName);
         }
         return table;

@@ -12,5 +12,5 @@ public enum UpdateAction {
     /**
      * Used when a key is deleted
      */
-    DELETE;
+    DELETE,
 }
