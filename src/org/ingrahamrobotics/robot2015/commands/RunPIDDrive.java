@@ -3,6 +3,7 @@ package org.ingrahamrobotics.robot2015.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.constants.input.IAxis;
+import org.ingrahamrobotics.robot2015.output.Settings;
 
 /**
  *

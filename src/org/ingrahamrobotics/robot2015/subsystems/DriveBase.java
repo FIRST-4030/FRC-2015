@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.ingrahamrobotics.robot2015.Robot;
 import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
 import org.ingrahamrobotics.robot2015.output.Output;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
 
 /**
  * Oversees the PIDDrive and PIDSteer Subsystems.
@@ -39,6 +40,12 @@ public class DriveBase extends Subsystem {
             steerSystem[i] = new PIDSteer(i + 1);
         }
         Output.initialized("DriveBase");
+    }
+
+    public void setPID(double p, double i, double d) {
+        for (PIDSteer steer : steerSystem) {
+            steer.setPID(p, i, d);
+        }
     }
 
     // Put methods for controlling this subsystem
@@ -204,8 +211,16 @@ class PIDSteer extends PIDSubsystem {
         // e.g. yourMotor.set(output);
         steerMotor.set(output);
     }
-    public void setPID(double p, double i, double d){
-         super.setPID(p, i, d);
+
+    public void setPID(double p, double i, double d) {
+        getPIDController().setPID(p, i, d);
+    }
+
+    @Override
+    public void setSetpoint(final double setpoint) {
+        double setpointTicks = setpoint / degreesPerTick;
+        Output.output(OutputLevel.DEBUG, getName() + ":Setpoint", setpointTicks);
+        super.setSetpoint(setpointTicks);
     }
 
     public double getAngle() {
