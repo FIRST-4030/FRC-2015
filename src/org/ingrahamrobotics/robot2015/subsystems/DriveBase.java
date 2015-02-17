@@ -31,8 +31,8 @@ public class DriveBase extends Subsystem {
     private final PIDSteer[] steerSystem;
     private final SpeedDrive[] driveSystem;
 
-    private final int trackWidth = 24;
-    private final int wheelBase = 43;
+    private final int trackWidth = 37;
+    private final int wheelBase = 21;
     private final double radius = Math.sqrt(trackWidth ^ 2 + wheelBase ^ 2);
 
     public DriveBase() {
