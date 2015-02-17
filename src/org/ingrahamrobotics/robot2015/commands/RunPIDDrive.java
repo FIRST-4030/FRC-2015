@@ -31,9 +31,10 @@ public class RunPIDDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        double x = IAxis.driveX.get();
-        double y = IAxis.driveY.get();
-        double RCW = IAxis.steer.get();
+        double multiplier = Settings.Key.DRIVE_SPEED_MULTIPLIER.getDouble();
+        double x = IAxis.driveX.get() * multiplier;
+        double y = IAxis.driveY.get() * multiplier;
+        double RCW = IAxis.steer.get() * multiplier;
         Output.output(OutputLevel.SWERVE_DEBUG, "input-x", x);
         Output.output(OutputLevel.SWERVE_DEBUG, "input-y", y);
         Output.output(OutputLevel.SWERVE_DEBUG, "input-steer", RCW);
