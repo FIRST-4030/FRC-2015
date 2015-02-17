@@ -71,9 +71,10 @@ public class DriveBase extends Subsystem {
 
         // This should work...?
         for (int i = 0; i < wheelAngles.length; i++) {
+            // Angles are -PI/2 to PI/2
             double pAngle = steerSystem[i].getAngle();
             double travel = Math.abs(wheelAngles[i] - pAngle);
-            if (travel > 90 && travel < 270)
+            if (travel > -(Math.PI/4) && travel < Math.PI/4)
                 wheelSpeeds[i] *= -1;
         }
 
