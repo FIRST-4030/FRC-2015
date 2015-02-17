@@ -7,10 +7,6 @@ import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPo
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.DRIVE_MOTORS;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.STEER_MOTORS;
 
-import org.ingrahamrobotics.robot2015.Robot;
-import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
-import org.ingrahamrobotics.robot2015.output.Output;
-
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
@@ -78,7 +74,7 @@ public class DriveBase extends Subsystem {
             // Angles are -PI/2 to PI/2
             double pAngle = steerSystem[i].getAngle();
             double travel = Math.abs(wheelAngles[i] - pAngle);
-            if (travel > -(Math.PI/4) && travel < Math.PI/4)
+            if (travel > -(Math.PI / 4) && travel < Math.PI / 4)
                 wheelSpeeds[i] *= -1;
         }
 
@@ -127,17 +123,17 @@ public class DriveBase extends Subsystem {
         // setDefaultCommand(new MySpecialCommand());
         setDefaultCommand(new RunPIDDrive());
     }
-    
-    public void setSteerPID(double p, double i, double d){
-    	for(PIDSteer steer: steerSystem){
-    		steer.setPID(p, i, d);
-    	}
+
+    public void setSteerPID(double p, double i, double d) {
+        for (PIDSteer steer : steerSystem) {
+            steer.setPID(p, i, d);
+        }
     }
     /**
      * public void setDrivePID(double p, double i, double d){
      * 		for(PIDDrive drive: driveSystem){
      * 			drive.setPID(p, i, d);
-     * 		}
+     *        }
      * }
      * */
 }
@@ -258,5 +254,4 @@ class PIDSteer extends PIDSubsystem {
 
         return steerEncoder.getDistance() / ticksPerDegree;
     }
-
 }
