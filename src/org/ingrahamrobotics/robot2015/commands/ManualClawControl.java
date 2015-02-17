@@ -12,6 +12,7 @@ public class ManualClawControl extends Command {
     public ManualClawControl() {
         requires(Subsystems.verticalClawShifter);
         ManualControlState.setManualClawRunning(false);
+        Subsystems.verticalClawShifter.setSpeed(0);
     }
 
     @Override

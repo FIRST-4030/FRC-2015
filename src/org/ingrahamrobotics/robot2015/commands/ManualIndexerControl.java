@@ -12,6 +12,7 @@ public class ManualIndexerControl extends Command {
     public ManualIndexerControl() {
         requires(Subsystems.verticalIndexerControl);
         ManualControlState.setManualIndexerRunning(false);
+        Subsystems.verticalIndexerControl.setSpeed(0);
     }
 
     @Override
