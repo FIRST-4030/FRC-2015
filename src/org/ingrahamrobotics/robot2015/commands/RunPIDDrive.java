@@ -20,7 +20,7 @@ public class RunPIDDrive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        Subsystems.driveBase.stop();
+//        Subsystems.driveBase.stop();
 
         FWD = 0;
         STR = 0;
@@ -51,12 +51,12 @@ public class RunPIDDrive extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-        Subsystems.driveBase.stop();
+//        Subsystems.driveBase.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        Subsystems.driveBase.stop();
+//        Subsystems.driveBase.stop();
     }
 }

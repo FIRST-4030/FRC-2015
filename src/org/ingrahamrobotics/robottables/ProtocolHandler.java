@@ -101,7 +101,7 @@ public class ProtocolHandler implements RobotProtocol {
     }
 
     public void sendMessage(final Message message) {
-        System.out.println("[Sending] " + message.singleLineDisplayStr());
+//        System.out.println("[Sending] " + message.singleLineDisplayStr());
         try {
             io.send(message.toString());
         } catch (IOException e) {
@@ -114,7 +114,7 @@ public class ProtocolHandler implements RobotProtocol {
         // Message received, perform action
         ProtocolTable table = handler.getTable(msg.getTable());
         TableType tableType = table == null ? null : table.getType();
-        System.out.println("[Received]" + msg.singleLineDisplayStr());
+//        System.out.println("[Received]" + msg.singleLineDisplayStr());
         switch (msg.getType()) {
             case QUERY:
                 boolean isPublish = msg.getKey().equals("PUBLISH");
