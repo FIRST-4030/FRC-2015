@@ -15,6 +15,7 @@ import org.ingrahamrobotics.robot2015.Robot;
 import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
+import org.ingrahamrobotics.robot2015.output.Settings;
 
 /**
  * Oversees the PIDDrive and PIDSteer Subsystems.
@@ -51,7 +52,15 @@ public class DriveBase extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
+    /**
+     * @param fwd Forward movement, -1 to 1
+     * @param str Strafing movement, -1 to 1
+     * @param rcw Rotating mvoement, -1 to 1
+     */
     public void drive(double fwd, double str, double rcw) {
+        Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
+        Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
+        Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
         double a = str - rcw * (wheelBase / radius);
         double b = str + rcw * (wheelBase / radius);
         double c = fwd - rcw * (trackWidth / radius);
@@ -176,7 +185,7 @@ class PIDDrive extends PIDSubsystem {
 
 class PIDSteer extends PIDSubsystem {
 
-    private static final double degreesPerTick = (497.0 + 66.0 / 56.0) / 360.0;
+    //        private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
     Talon steerMotor;
     Encoder steerEncoder;
 
@@ -218,12 +227,17 @@ class PIDSteer extends PIDSubsystem {
 
     @Override
     public void setSetpoint(final double setpoint) {
-        double setpointTicks = setpoint / degreesPerTick;
-        Output.output(OutputLevel.DEBUG, getName() + ":Setpoint", setpointTicks);
+        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_DEGREE1.getDouble() / Settings.Key.STEER_PID_TICKS_PER_DEGREE2.getDouble();
+
+        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint-raw", setpoint);
+        double setpointTicks = setpoint * ticksPerDegree;
+        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint", setpointTicks);
         super.setSetpoint(setpointTicks);
     }
 
     public double getAngle() {
-        return steerEncoder.getDistance() * degreesPerTick;
+        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_DEGREE1.getDouble() / Settings.Key.STEER_PID_TICKS_PER_DEGREE2.getDouble();
+
+        return steerEncoder.getDistance() / ticksPerDegree;
     }
 }
