@@ -75,8 +75,19 @@ public class ProtocolTableData {
             }
             this.currentUserUpdatedKeys = new HashSet<String>(expectedUserKeys);
             this.currentExpectedUserKeys = expectedUserKeys;
-            this.userUpdateState = UpdateState.RUNNING;
-            tableUpdateTimeout.delayUntil(System.currentTimeMillis() + TimeConstants.MAX_INTERVAL_DURING_UPDATE);
+            if (expectedUserKeys <= 0) {
+                // If we don't expect any keys, then this part is already complete
+                this.userUpdateState = UpdateState.ENDED_WAITING;
+                if (adminUpdateState == UpdateState.ENDED_WAITING) {
+                    updateEndedSuccessfully();
+                }
+            } else {
+                this.userUpdateState = UpdateState.RUNNING;
+            }
+            // There is a posibility that we are already done at this point, so check just to be sure.
+            if (userUpdateState != UpdateState.COMPLETE) {
+                tableUpdateTimeout.delayUntil(System.currentTimeMillis() + TimeConstants.MAX_INTERVAL_DURING_UPDATE);
+            }
         }
     }
 
@@ -87,8 +98,19 @@ public class ProtocolTableData {
             }
             this.currentAdminUpdatedKeys = new HashSet<String>(expectedAdminKeys);
             this.currentExpectedAdminKeys = expectedAdminKeys;
-            this.adminUpdateState = UpdateState.RUNNING;
-            tableUpdateTimeout.delayUntil(System.currentTimeMillis() + TimeConstants.MAX_INTERVAL_DURING_UPDATE);
+            if (expectedAdminKeys <= 0) {
+                // If we don't expect any keys, then this part is already complete
+                this.adminUpdateState = UpdateState.ENDED_WAITING;
+                if (userUpdateState == UpdateState.ENDED_WAITING) {
+                    updateEndedSuccessfully();
+                }
+            } else {
+                this.adminUpdateState = UpdateState.RUNNING;
+            }
+            // There is a posibility that we are already done at this point, so check just to be sure.
+            if (adminUpdateState != UpdateState.COMPLETE) {
+                tableUpdateTimeout.delayUntil(System.currentTimeMillis() + TimeConstants.MAX_INTERVAL_DURING_UPDATE);
+            }
         }
     }
 
@@ -206,7 +228,8 @@ public class ProtocolTableData {
          */
         ENDED_WAITING,
         /**
-         * Update complete, updateEndedSuccessfully() or resetUpdateValues() has been fired since this update started and finished.
+         * Update complete, updateEndedSuccessfully() or resetUpdateValues() has been fired since this update started
+         * and finished.
          */
         COMPLETE,
     }

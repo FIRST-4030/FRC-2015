@@ -37,6 +37,16 @@ public interface RobotTable {
     public long getLastSubscriberReply();
 
     /**
+     * Returns whether or not this remote table is stale. Will always return false for a local table.
+     */
+    public boolean isStale();
+
+    /**
+     * Returns whether or not this local's tables subscribers are stale. Will always return false for a remote table.
+     */
+    public boolean isSubcriberStale();
+
+    /**
      * Adds a TableUpdateListener to this table. The listener will continue to recieve updates until {@code
      * removeUpdateListener()} is called with the listener.
      *
