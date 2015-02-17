@@ -4,6 +4,7 @@ public class HardwarePorts {
 
     public static class SolenoidPorts {
 
+        // All solenoid ports are unconfirmed.
         public static final int LEFT_CLAW_EXTEND = 0;
         public static final int LEFT_CLAW_RETRACT = 1;
         public static final int RIGHT_CLAW_EXTEND = 2;
@@ -12,16 +13,17 @@ public class HardwarePorts {
 
     public static class MotorPorts {
 
-        public static final int INDEXER_SPOOL_MOTOR = 0;
-        public static final int CLAW_VERTICAL_SHIFTER = 1;
+        // All motor ports are confirmed
         public static final int FRONT_LEFT_DRIVE = 0;
-        public static final int FRONT_RIGHT_DRIVE = 0;
-        public static final int BACK_LEFT_DRIVE = 0;
-        public static final int BACK_RIGHT_DRIVE = 0;
-        public static final int FRONT_LEFT_STEER = 0;
-        public static final int FRONT_RIGHT_STEER = 0;
-        public static final int BACK_LEFT_STEER = 0;
-        public static final int BACK_RIGHT_STEER = 0;
+        public static final int BACK_LEFT_DRIVE = 1;
+        public static final int FRONT_RIGHT_DRIVE = 2;
+        public static final int BACK_RIGHT_DRIVE = 3;
+        public static final int FRONT_LEFT_STEER = 4;
+        public static final int BACK_LEFT_STEER = 5;
+        public static final int FRONT_RIGHT_STEER = 6;
+        public static final int BACK_RIGHT_STEER = 7;
+        public static final int INDEXER_SPOOL_MOTOR = 8;
+        public static final int CLAW_VERTICAL_SHIFTER = 9;
 
         // For swerve organization
         public static final int[] DRIVE_MOTORS = {
@@ -40,22 +42,24 @@ public class HardwarePorts {
 
     public static class DigitalIoPorts {
 
-        public static final int FRONT_LEFT_DRIVE_ENCODER_A = 0;
-        public static final int FRONT_LEFT_DRIVE_ENCODER_B = 1;
-        public static final int FRONT_RIGHT_DRIVE_ENCODER_A = 2;
-        public static final int FRONT_RIGHT_DRIVE_ENCODER_B = 3;
-        public static final int BACK_LEFT_DRIVE_ENCODER_A = 4;
-        public static final int BACK_LEFT_DRIVE_ENCODER_B = 5;
-        public static final int BACK_RIGHT_DRIVE_ENCODER_A = 6;
-        public static final int BACK_RIGHT_DRIVE_ENCODER_B = 7;
-        public static final int FRONT_LEFT_STEER_ENCODER_A = 8;
-        public static final int FRONT_LEFT_STEER_ENCODER_B = 9;
-        public static final int FRONT_RIGHT_STEER_ENCODER_A = 10;
-        public static final int FRONT_RIGHT_STEER_ENCODER_B = 11;
-        public static final int BACK_LEFT_STEER_ENCODER_A = 12;
-        public static final int BACK_LEFT_STEER_ENCODER_B = 13;
-        public static final int BACK_RIGHT_STEER_ENCODER_A = 14;
-        public static final int BACK_RIGHT_STEER_ENCODER_B = 15;
+        // STEER encoder ports are confirmed
+        public static final int FRONT_LEFT_STEER_ENCODER_A = 0;
+        public static final int FRONT_LEFT_STEER_ENCODER_B = 1;
+        public static final int BACK_LEFT_STEER_ENCODER_A = 2;
+        public static final int BACK_LEFT_STEER_ENCODER_B = 3;
+        public static final int FRONT_RIGHT_STEER_ENCODER_A = 4;
+        public static final int FRONT_RIGHT_STEER_ENCODER_B = 5;
+        public static final int BACK_RIGHT_STEER_ENCODER_A = 6;
+        public static final int BACK_RIGHT_STEER_ENCODER_B = 7;
+        // Values below this line are unconfirmed.
+        public static final int FRONT_LEFT_DRIVE_ENCODER_A = 8;
+        public static final int FRONT_LEFT_DRIVE_ENCODER_B = 9;
+        public static final int BACK_LEFT_DRIVE_ENCODER_A = 10;
+        public static final int BACK_LEFT_DRIVE_ENCODER_B = 11;
+        public static final int FRONT_RIGHT_DRIVE_ENCODER_A = 12;
+        public static final int FRONT_RIGHT_DRIVE_ENCODER_B = 13;
+        public static final int BACK_RIGHT_DRIVE_ENCODER_A = 14;
+        public static final int BACK_RIGHT_DRIVE_ENCODER_B = 15;
         public static final int BOTTOM_INDEXER_SWITCH = 16;
         public static final int TOP_INDEXER_SWITCH = 17;
         public static final int BOTTOM_VERTICAL_CLAW_SWITCH = 18;
