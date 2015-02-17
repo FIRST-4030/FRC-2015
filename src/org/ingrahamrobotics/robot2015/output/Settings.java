@@ -26,6 +26,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         STEER_PID_P("Steer PID - P", "0"),
         STEER_PID_I("Steer PID - I", "0"),
         STEER_PID_D("Steer PID - D", "0");
+
         public final String name;
         public final String defaultValue;
         private String value;

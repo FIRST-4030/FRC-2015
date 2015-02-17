@@ -47,7 +47,7 @@ public class RunPIDDrive extends Command {
         STR = -1 * FWD * Math.sin(fieldAngle) + STR * Math.cos(fieldAngle);
         FWD = temp;
         
-        Subsystems.driveBase.setPID(p, i, d);
+        Subsystems.driveBase.setSteerPID(p, i, d);
 
         Subsystems.driveBase.drive(FWD, STR, RCW);
     }
