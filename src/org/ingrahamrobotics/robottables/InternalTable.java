@@ -415,19 +415,31 @@ public class InternalTable implements RobotTable, ProtocolTable {
 
     private void sendUpdateEvent(final String key, final String value, final UpdateAction action) {
         for (TableUpdateListener listener : listeners) {
-            listener.onUpdate(this, key, value, action);
+            try {
+                listener.onUpdate(this, key, value, action);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void sendUpdateAdminEvent(final String key, final String value, final UpdateAction action) {
         for (TableUpdateListener listener : listeners) {
-            listener.onUpdateAdmin(this, key, value, action);
+            try {
+                listener.onUpdateAdmin(this, key, value, action);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void sendClearTableEvent() {
         for (TableUpdateListener listener : listeners) {
-            listener.onTableCleared(this);
+            try {
+                listener.onTableCleared(this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

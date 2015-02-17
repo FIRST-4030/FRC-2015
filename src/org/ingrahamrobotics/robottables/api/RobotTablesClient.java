@@ -1,5 +1,6 @@
 package org.ingrahamrobotics.robottables.api;
 
+import java.util.Collection;
 import org.ingrahamrobotics.robottables.api.listeners.ClientUpdateListener;
 
 public interface RobotTablesClient {
@@ -12,6 +13,11 @@ public interface RobotTablesClient {
      * @return The table, or null if unknown
      */
     public RobotTable getTable(String tableName);
+
+    /**
+     * Gets an unmodifiable version of the internal list of all tables known to this client.
+     */
+    public Collection<? extends RobotTable> getTableSet();
 
     /**
      * Checks whether or not this client knows about a given table known to this client.
