@@ -247,7 +247,7 @@ class PIDSteer extends PIDSubsystem {
     public void setSetpoint(final double setpoint) {
         double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_DEGREE1.getDouble() / Settings.Key.STEER_PID_TICKS_PER_DEGREE2.getDouble();
 
-        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint-raw", setpoint);
+        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint-raw", setpoint * 180 / Math.PI);
         double setpointTicks = setpoint * ticksPerDegree;
         Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint", setpointTicks);
         super.setSetpoint(setpointTicks);
