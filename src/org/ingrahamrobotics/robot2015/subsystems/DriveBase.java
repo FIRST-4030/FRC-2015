@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.ingrahamrobotics.robot2015.Robot;
 import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
 import org.ingrahamrobotics.robot2015.output.Output;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
+import org.ingrahamrobotics.robot2015.output.Settings;
 
 /**
  * Oversees the PIDDrive and PIDSteer Subsystems.
@@ -25,8 +27,8 @@ public class DriveBase extends Subsystem {
     private final PIDSteer[] steerSystem;
     private final SpeedDrive[] driveSystem;
 
-    private final int trackWidth = 24;
-    private final int wheelBase = 43;
+    private final int trackWidth = 37;
+    private final int wheelBase = 21;
     private final double radius = Math.sqrt(trackWidth ^ 2 + wheelBase ^ 2);
 
     public DriveBase() {
@@ -41,10 +43,24 @@ public class DriveBase extends Subsystem {
         Output.initialized("DriveBase");
     }
 
+    public void setPID(double p, double i, double d) {
+        for (PIDSteer steer : steerSystem) {
+            steer.setPID(p, i, d);
+        }
+    }
+
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
+    /**
+     * @param fwd Forward movement, -1 to 1
+     * @param str Strafing movement, -1 to 1
+     * @param rcw Rotating mvoement, -1 to 1
+     */
     public void drive(double fwd, double str, double rcw) {
+        Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
+        Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
+        Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
         double a = str - rcw * (wheelBase / radius);
         double b = str + rcw * (wheelBase / radius);
         double c = fwd - rcw * (trackWidth / radius);
@@ -55,9 +71,10 @@ public class DriveBase extends Subsystem {
 
         // This should work...?
         for (int i = 0; i < wheelAngles.length; i++) {
+            // Angles are -PI/2 to PI/2
             double pAngle = steerSystem[i].getAngle();
             double travel = Math.abs(wheelAngles[i] - pAngle);
-            if (travel > 90 && travel < 270)
+            if (travel > -(Math.PI / 4) && travel < Math.PI / 4)
                 wheelSpeeds[i] *= -1;
         }
 
@@ -106,6 +123,19 @@ public class DriveBase extends Subsystem {
         // setDefaultCommand(new MySpecialCommand());
         setDefaultCommand(new RunPIDDrive());
     }
+
+    public void setSteerPID(double p, double i, double d) {
+        for (PIDSteer steer : steerSystem) {
+            steer.setPID(p, i, d);
+        }
+    }
+    /**
+     * public void setDrivePID(double p, double i, double d){
+     * 		for(PIDDrive drive: driveSystem){
+     * 			drive.setPID(p, i, d);
+     *        }
+     * }
+     * */
 }
 
 class SpeedDrive {
@@ -169,7 +199,7 @@ class PIDDrive extends PIDSubsystem {
 
 class PIDSteer extends PIDSubsystem {
 
-    private static final double degreesPerTick = (497.0 + 66.0 / 56.0) / 360.0;
+    //        private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
     Talon steerMotor;
     Encoder steerEncoder;
 
@@ -204,11 +234,24 @@ class PIDSteer extends PIDSubsystem {
         // e.g. yourMotor.set(output);
         steerMotor.set(output);
     }
-    public void setPID(double p, double i, double d){
-         super.setPID(p, i, d);
+
+    public void setPID(double p, double i, double d) {
+        getPIDController().setPID(p, i, d);
+    }
+
+    @Override
+    public void setSetpoint(final double setpoint) {
+        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_DEGREE1.getDouble() / Settings.Key.STEER_PID_TICKS_PER_DEGREE2.getDouble();
+
+        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint-raw", setpoint * 180 / Math.PI);
+        double setpointTicks = setpoint * ticksPerDegree;
+        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint", setpointTicks);
+        super.setSetpoint(setpointTicks);
     }
 
     public double getAngle() {
-        return steerEncoder.getDistance() * degreesPerTick;
+        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_DEGREE1.getDouble() / Settings.Key.STEER_PID_TICKS_PER_DEGREE2.getDouble();
+
+        return steerEncoder.getDistance() / ticksPerDegree;
     }
 }

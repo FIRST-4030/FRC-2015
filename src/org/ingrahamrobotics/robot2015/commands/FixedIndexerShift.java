@@ -19,6 +19,15 @@ public class FixedIndexerShift extends TimedCommand {
      * Is executed continuously until it returns true or the time runs out.
      */
     protected boolean executeState(final int state) {
+        if (directionIsUp) {
+            if (Subsystems.toggleSwitches.getIndexerTop()) {
+                return true;
+            }
+        } else {
+            if (Subsystems.toggleSwitches.getIndexerBottom()) {
+                return true;
+            }
+        }
         if (!Settings.Key.INDEXER_LEVEL_USE_ENCODER.getBoolean()) {
             return false;
         }

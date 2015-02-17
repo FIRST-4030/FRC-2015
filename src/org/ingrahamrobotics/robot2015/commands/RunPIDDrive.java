@@ -3,6 +3,9 @@ package org.ingrahamrobotics.robot2015.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.constants.input.IAxis;
+import org.ingrahamrobotics.robot2015.output.Output;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
+import org.ingrahamrobotics.robot2015.output.Settings;
 
 /**
  *
@@ -28,12 +31,16 @@ public class RunPIDDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        double x = IAxis.driveX.get();
-        double y = IAxis.driveY.get();
-        double RCW = IAxis.steer.get();
+        double multiplier = Settings.Key.DRIVE_SPEED_MULTIPLIER.getDouble();
+        double x = IAxis.driveX.get() * multiplier;
+        double y = IAxis.driveY.get() * multiplier;
+        double RCW = IAxis.steer.get() * multiplier;
+        Output.output(OutputLevel.SWERVE_DEBUG, "input-x", x);
+        Output.output(OutputLevel.SWERVE_DEBUG, "input-y", y);
+        Output.output(OutputLevel.SWERVE_DEBUG, "input-steer", RCW);
 
         double fieldAngle = Math.PI / 2;
-        
+
         double p = Settings.Key.STEER_PID_P.getDouble();
         double i = Settings.Key.STEER_PID_I.getDouble();
         double d = Settings.Key.STEER_PID_D.getDouble();
@@ -44,8 +51,8 @@ public class RunPIDDrive extends Command {
         double temp = FWD * Math.cos(fieldAngle) + STR * Math.sin(fieldAngle);
         STR = -1 * FWD * Math.sin(fieldAngle) + STR * Math.cos(fieldAngle);
         FWD = temp;
-        
-        Subsystems.driveBase.setPID(p, i, d);
+
+        Subsystems.driveBase.setSteerPID(p, i, d);
 
         Subsystems.driveBase.drive(FWD, STR, RCW);
     }

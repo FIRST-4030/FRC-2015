@@ -96,7 +96,7 @@ public class Output {
     }
 
     public static void output(OutputLevel level, String key, double value) {
-        output(level, key, Double.toString(value));
+        output(level, key, Double.toString(((int) (value * 100)) / 100.0));
     }
 
     public static void output(OutputLevel level, String key, boolean value) {
