@@ -23,7 +23,7 @@ public class VerticalIndexerControl extends Subsystem {
     }
 
     public void setSpeed(double speed) {
-        spoolMotor.set(speed);
+        spoolMotor.set(-speed);
         Output.output(OutputLevel.RAW_MOTORS, "Indexer:Speed", speed);
     }
 }

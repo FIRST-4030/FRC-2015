@@ -9,6 +9,7 @@ public class SensorStatusOutput extends Command {
 
     public SensorStatusOutput() {
         requires(Subsystems.toggleSwitches); // Purely for initDefaultCommand in ToggleSwitches
+        execute(); // Output initial status
     }
 
     @Override

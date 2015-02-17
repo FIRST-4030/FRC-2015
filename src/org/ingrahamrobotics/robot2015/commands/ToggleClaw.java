@@ -12,6 +12,11 @@ public class ToggleClaw extends Command {
     public ToggleClaw(boolean isLeft) {
         this.isLeft = isLeft;
         requires(isLeft ? Subsystems.leftClaw : Subsystems.rightClaw);
+        if (isLeft) {
+            Subsystems.leftClaw.set(false);
+        } else {
+            Subsystems.rightClaw.set(false);
+        }
     }
 
     @Override
