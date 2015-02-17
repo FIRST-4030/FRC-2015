@@ -60,11 +60,6 @@ public class HardwarePorts {
         public static final int FRONT_RIGHT_DRIVE_ENCODER_B = 13;
         public static final int BACK_RIGHT_DRIVE_ENCODER_A = 14;
         public static final int BACK_RIGHT_DRIVE_ENCODER_B = 15;
-        public static final int BOTTOM_INDEXER_SWITCH = 16;
-        public static final int TOP_INDEXER_SWITCH = 17;
-        public static final int BOTTOM_VERTICAL_CLAW_SWITCH = 18;
-        public static final int TOP_VERTICAL_CLAW_SWITCH = 19;
-
         public static final int INDEXER_ENCODER_A = 20;
         public static final int INDEXER_ENCODER_B = 21;
 
@@ -93,5 +88,15 @@ public class HardwarePorts {
                 FRONT_RIGHT_STEER_ENCODER_B,
                 BACK_RIGHT_STEER_ENCODER_B,
         };
+    }
+
+    public static class AnalogIoPorts {
+
+        // Confirmed
+        public static final int BOTTOM_INDEXER_SWITCH = 0;
+        public static final int BOTTOM_VERTICAL_CLAW_SWITCH = 1;
+        // Unconfirmed
+        public static final int TOP_INDEXER_SWITCH = 2;
+        public static final int TOP_VERTICAL_CLAW_SWITCH = 3;
     }
 }
