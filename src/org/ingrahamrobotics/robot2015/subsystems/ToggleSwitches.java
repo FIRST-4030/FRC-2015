@@ -19,18 +19,18 @@ public class ToggleSwitches extends Subsystem {
     }
 
     public boolean getIndexerBottom() {
-        return !Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && indexerBottom.get();
+        return Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && indexerBottom.get();
     }
 
     public boolean getIndexerTop() {
-        return !Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && indexerTop.get();
+        return Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && indexerTop.get();
     }
 
     public boolean getVerticalClawBottom() {
-        return !Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && clawVerticalBottom.get();
+        return Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && clawVerticalBottom.get();
     }
 
     public boolean getVerticalClawTop() {
-        return !Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && clawVerticalTop.get();
+        return Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && clawVerticalTop.get();
     }
 }
