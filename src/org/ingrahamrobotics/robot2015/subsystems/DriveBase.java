@@ -218,6 +218,9 @@ class PIDSteer extends PIDSubsystem {
         // e.g. yourMotor.set(output);
         steerMotor.set(output);
     }
+    public void setPID(double p, double i, double d){
+         super.setPID(p, i, d);
+    }
 
     public double getAngle() {
         return steerEncoder.getDistance() * degreesPerTick;
