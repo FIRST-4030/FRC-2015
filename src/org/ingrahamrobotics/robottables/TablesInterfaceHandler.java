@@ -1,6 +1,8 @@
 package org.ingrahamrobotics.robottables;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,30 +122,50 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
 
     void fireTableTypeChangeEvent(final RobotTable table, final TableType oldType, final TableType newType) {
         for (final ClientUpdateListener listener : listeners) {
-            listener.onTableChangeType(table, oldType, newType);
+            try {
+                listener.onTableChangeType(table, oldType, newType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     void fireNewTableEvent(final RobotTable table) {
         for (final ClientUpdateListener listener : listeners) {
-            listener.onNewTable(table);
+            try {
+                listener.onNewTable(table);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void fireStaleEvent(final RobotTable table, final boolean nowStale) {
         for (final ClientUpdateListener listener : listeners) {
-            listener.onTableStaleChange(table, nowStale);
+            try {
+                listener.onTableStaleChange(table, nowStale);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void fireSubscriberStaleEvent(final RobotTable table, final boolean nowStale) {
         for (final ClientUpdateListener listener : listeners) {
-            listener.onAllSubscribersStaleChange(table, nowStale);
+            try {
+                listener.onAllSubscribersStaleChange(table, nowStale);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public InternalTable getTable(final String tableName) {
         return tableMap.get(tableName);
+    }
+
+    public Collection<? extends RobotTable> getTableSet() {
+        return Collections.unmodifiableCollection(tableMap.values());
     }
 
     public RobotProtocol getProtocolHandler() {

@@ -17,6 +17,11 @@ public enum IAxis {
     }
 
     public double get() {
-        return iJoystick.getJoystick().getAxis(axisType);
+        double value = iJoystick.getJoystick().getAxis(axisType);
+        // ignore very low values
+        if (Math.abs(value) < 0.05) {
+            value = 0;
+        }
+        return value;
     }
 }
