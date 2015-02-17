@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.ingrahamrobotics.robot2015.Robot;
+import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
 import org.ingrahamrobotics.robot2015.output.Output;
 
 /**
@@ -21,26 +22,27 @@ import org.ingrahamrobotics.robot2015.output.Output;
  */
 public class DriveBase extends Subsystem {
 
-    private PIDSteer[] steerSystem;
-    private PIDDrive[] driveSystem;
+    private final PIDSteer[] steerSystem;
+    private final SpeedDrive[] driveSystem;
 
     private final int trackWidth = 24;
     private final int wheelBase = 43;
     private final double radius = Math.sqrt(trackWidth ^ 2 + wheelBase ^ 2);
 
     public DriveBase() {
+        driveSystem = new SpeedDrive[4];
+        steerSystem = new PIDSteer[4];
+        for (int i = 0; i < 4; i++) {
+            driveSystem[i] = new SpeedDrive(i + 1);
+        }
+        for (int i = 0; i < 4; i++) {
+            steerSystem[i] = new PIDSteer(i + 1);
+        }
         Output.initialized("DriveBase");
     }
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-
-    public void stop() {
-        driveSystem = new PIDDrive[]{new PIDDrive(1), new PIDDrive(2),
-                new PIDDrive(3), new PIDDrive(4)};
-        steerSystem = new PIDSteer[]{new PIDSteer(1), new PIDSteer(2),
-                new PIDSteer(3), new PIDSteer(4)};
-    }
 
     public void drive(double fwd, double str, double rcw) {
         double a = str - rcw * (wheelBase / radius);
@@ -102,6 +104,20 @@ public class DriveBase extends Subsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
+        setDefaultCommand(new RunPIDDrive());
+    }
+}
+
+class SpeedDrive {
+
+    Talon driveMotor;
+
+    public SpeedDrive(int wheelNum) {
+        driveMotor = new Talon(DRIVE_MOTORS[wheelNum - 1]);
+    }
+
+    public void setSetpoint(double speed) {
+        driveMotor.set(speed);
     }
 }
 
@@ -153,6 +169,7 @@ class PIDDrive extends PIDSubsystem {
 
 class PIDSteer extends PIDSubsystem {
 
+    private static final double degreesPerTick = (497.0 + 66.0 / 56.0) / 360.0;
     Talon steerMotor;
     Encoder steerEncoder;
 
@@ -187,8 +204,11 @@ class PIDSteer extends PIDSubsystem {
         // e.g. yourMotor.set(output);
         steerMotor.set(output);
     }
+    public void setPID(double p, double i, double d){
+         super.setPID(p, i, d);
+    }
 
     public double getAngle() {
-        return steerEncoder.getDistance();
+        return steerEncoder.getDistance() * degreesPerTick;
     }
 }

@@ -22,7 +22,10 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y"),
         INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "5000"),
         INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1"),
-        VERTICAL_CLAW_MAX_CMD_SPEED("ClawVerticalMax speed", "1");
+        VERTICAL_CLAW_MAX_CMD_SPEED("ClawVerticalMax speed", "1"),
+	STEER_PID_P("Steer PID: P", "1"),
+	STEER_PID_I("Steer PID: I", "0"),
+	STEER_PID_D("Steer PID: D", "0");
         public final String name;
         public final String defaultValue;
         private String value;
@@ -70,6 +73,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
 
         public boolean isInt() {
             try {
+                //noinspection ResultOfMethodCallIgnored
                 Integer.parseInt(value);
                 return true;
             } catch (NumberFormatException ex) {
@@ -79,6 +83,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
 
         public boolean isDouble() {
             try {
+                //noinspection ResultOfMethodCallIgnored
                 Double.parseDouble(value);
                 return true;
             } catch (NumberFormatException ex) {
