@@ -7,13 +7,14 @@ import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPo
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.DRIVE_MOTORS;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.STEER_MOTORS;
 
+import org.ingrahamrobotics.robot2015.Robot;
+import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
+import org.ingrahamrobotics.robot2015.output.Output;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.ingrahamrobotics.robot2015.Robot;
-import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
-import org.ingrahamrobotics.robot2015.output.Output;
 
 /**
  * Oversees the PIDDrive and PIDSteer Subsystems.
@@ -93,10 +94,10 @@ public class DriveBase extends Subsystem {
 
     private double[] getWheelAngles(double a, double b, double c, double d) {
         // Wheel angles -180 to 180. 0 is straight forward
-        double wa1 = Math.atan2(b, c);
-        double wa2 = Math.atan2(b, d);
-        double wa3 = Math.atan2(a, d);
-        double wa4 = Math.atan2(a, c);
+        double wa1 = Math.atan2(b, c) * (180/Math.PI);
+        double wa2 = Math.atan2(b, d) * (180/Math.PI);
+        double wa3 = Math.atan2(a, d) * (180/Math.PI);
+        double wa4 = Math.atan2(a, c) * (180/Math.PI);
 
         return new double[]{wa1, wa2, wa3, wa4};
     }
@@ -106,6 +107,19 @@ public class DriveBase extends Subsystem {
         // setDefaultCommand(new MySpecialCommand());
         setDefaultCommand(new RunPIDDrive());
     }
+    
+    public void setSteerPID(double p, double i, double d){
+    	for(PIDSteer steer: steerSystem){
+    		steer.setPID(p, i, d);
+    	}
+    }
+    /**
+     * public void setDrivePID(double p, double i, double d){
+     * 		for(PIDDrive drive: driveSystem){
+     * 			drive.setPID(p, i, d);
+     * 		}
+     * }
+     * */
 }
 
 class SpeedDrive {
@@ -207,5 +221,9 @@ class PIDSteer extends PIDSubsystem {
 
     public double getAngle() {
         return steerEncoder.getDistance() * degreesPerTick;
+    }
+    
+    public void setPID(double p, double i, double d){
+    	getPIDController().setPID(p, i, d);
     }
 }

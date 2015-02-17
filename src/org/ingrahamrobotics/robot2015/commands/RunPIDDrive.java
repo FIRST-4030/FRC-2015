@@ -1,8 +1,10 @@
 package org.ingrahamrobotics.robot2015.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.constants.input.IAxis;
+import org.ingrahamrobotics.robot2015.output.Settings;
 
 /**
  *
@@ -33,6 +35,10 @@ public class RunPIDDrive extends Command {
         double RCW = IAxis.steer.get();
 
         double fieldAngle = Math.PI / 2;
+        
+        double p = Settings.Key.STEER_PID_P.getDouble();
+        double i = Settings.Key.STEER_PID_I.getDouble();
+        double d = Settings.Key.STEER_PID_D.getDouble();
 
         FWD = -y;
         STR = x;
@@ -40,7 +46,9 @@ public class RunPIDDrive extends Command {
         double temp = FWD * Math.cos(fieldAngle) + STR * Math.sin(fieldAngle);
         STR = -1 * FWD * Math.sin(fieldAngle) + STR * Math.cos(fieldAngle);
         FWD = temp;
-
+        
+        Subsystems.driveBase.setSteerPID(p, i, d);
+        
         Subsystems.driveBase.drive(FWD, STR, RCW);
     }
 
