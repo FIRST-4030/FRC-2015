@@ -27,11 +27,10 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         STEER_PID_P("Steer PID: P", "0.01"),
         STEER_PID_I("Steer PID: I", "0"),
         STEER_PID_D("Steer PID: D", "0"),
-        STEER_PID_TICKS_PER_DEGREE1("ticks per degree constant1", String.valueOf(497.0 + 66.0 / 56.0)),
-        STEER_PID_TICKS_PER_DEGREE2("ticks per degree constant2", String.valueOf(5)),
+        STEER_PID_TICKS_PER_RADIAN("ticks per radian", String.valueOf((497.0 + 66.0 / 56.0) / 5)),
         DRIVE_SPEED_MULTIPLIER("drive-speed-multiplier", "0.5"),
         TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.5"),
-        TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI/60));
+        TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60));
         public final String name;
         public final String defaultValue;
         private String value;

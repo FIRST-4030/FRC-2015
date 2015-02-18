@@ -254,7 +254,7 @@ class PIDSteer extends PIDSubsystem {
 
     @Override
     public void setSetpoint(final double setpoint) {
-        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_DEGREE1.getDouble() / Settings.Key.STEER_PID_TICKS_PER_DEGREE2.getDouble();
+        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
 
         Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint-raw", setpoint * 180 / Math.PI);
         double setpointTicks = setpoint * ticksPerDegree;
@@ -263,8 +263,8 @@ class PIDSteer extends PIDSubsystem {
     }
 
     public double getAngle() {
-        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_DEGREE1.getDouble() / Settings.Key.STEER_PID_TICKS_PER_DEGREE2.getDouble();
+        double ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
 
-        return steerEncoder.getDistance() / ticksPerDegree;
+        return steerEncoder.getDistance() / ticksPerRadian;
     }
 }
