@@ -23,7 +23,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "1800"),
         INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1"),
         VERTICAL_CLAW_MAX_CMD_SPEED("ClawVerticalMax speed", "1"),
-        TOTE_CLEARANCE_ADDITION("Indexer tote clearance addition", "220"),
+        TOTE_CLEARANCE_ADDITION("Indexer tote clearance addition", "500"),
         STEER_PID_P("Steer PID: P", "0.01"),
         STEER_PID_I("Steer PID: I", "0"),
         STEER_PID_D("Steer PID: D", "0"),
