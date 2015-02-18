@@ -3,6 +3,7 @@ package org.ingrahamrobotics.robot2015.output;
 public enum OutputLevel {
     SWERVE_DEBUG(0, "Swerve"),
     DEBUG(0, "Debug"),
+    POWER(0, "Power"),
     INITIALIZED_SYSTEMS(1, "Initialized"),
     RAW_MOTORS(2, "Raw Motors"),
     RAW_SENSORS(3, "Raw Sensors"),

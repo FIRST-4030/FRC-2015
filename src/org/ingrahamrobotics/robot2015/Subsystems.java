@@ -3,6 +3,7 @@ package org.ingrahamrobotics.robot2015;
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.SolenoidPorts;
 import org.ingrahamrobotics.robot2015.subsystems.DriveBase;
 import org.ingrahamrobotics.robot2015.subsystems.IndexerEncoder;
+import org.ingrahamrobotics.robot2015.subsystems.PowerBoard;
 import org.ingrahamrobotics.robot2015.subsystems.SingleClawSubsystem;
 import org.ingrahamrobotics.robot2015.subsystems.ToggleSwitches;
 import org.ingrahamrobotics.robot2015.subsystems.VerticalClawShifter;
@@ -17,6 +18,7 @@ public class Subsystems {
     public static VerticalIndexerControl verticalIndexerControl;
     public static ToggleSwitches toggleSwitches;
     public static IndexerEncoder indexerEncoder;
+    public static PowerBoard powerBoard;
 
     public static void init() {
         driveBase = new DriveBase();
@@ -26,5 +28,6 @@ public class Subsystems {
         verticalIndexerControl = new VerticalIndexerControl();
         toggleSwitches = new ToggleSwitches();
         indexerEncoder = new IndexerEncoder();
+        powerBoard = new PowerBoard();
     }
 }
