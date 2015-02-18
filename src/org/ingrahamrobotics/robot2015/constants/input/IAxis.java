@@ -3,9 +3,10 @@ package org.ingrahamrobotics.robot2015.constants.input;
 import edu.wpi.first.wpilibj.Joystick;
 
 public enum IAxis {
-    driveX(IJoystick.driveJoystick, Joystick.AxisType.kX),
-    driveY(IJoystick.driveJoystick, Joystick.AxisType.kY),
-    steer(IJoystick.driveJoystick, Joystick.AxisType.kZ),
+    driveX(IJoystick.driveJoystick, Joystick.AxisType.kZ),
+    driveY(IJoystick.driveJoystick, Joystick.AxisType.kThrottle),
+    steer(IJoystick.driveJoystick, Joystick.AxisType.kX),
+
     manualControl(IJoystick.secondaryJoystick, Joystick.AxisType.kY);
 
     private Joystick.AxisType axisType;
