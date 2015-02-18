@@ -74,12 +74,12 @@ public class DriveBase extends Subsystem {
             // Angles are -PI/2 to PI/2
             double pAngle = steerSystem[i].getAngle();
             double travel = Math.abs(wheelAngles[i] - pAngle);
-            if (travel < Math.PI / 4){
+            if (travel > Math.PI / 4 * 1.2) {
                 wheelSpeeds[i] *= -1;
-            	travel -= Math.PI/2;
-        	}
-            if (pAngle * wheelAngles[i] < 0){
-            	wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
+                travel -= Math.PI / 2;
+            }
+            if (pAngle * wheelAngles[i] < 0) {
+                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
             }
         }
 
@@ -134,13 +134,11 @@ public class DriveBase extends Subsystem {
             steer.setPID(p, i, d);
         }
     }
+
     /**
-     * public void setDrivePID(double p, double i, double d){
-     * 		for(PIDDrive drive: driveSystem){
-     * 			drive.setPID(p, i, d);
-     *        }
+     * public void setDrivePID(double p, double i, double d){ for(PIDDrive drive: driveSystem){ drive.setPID(p, i, d); }
      * }
-     * */
+     */
 }
 
 class SpeedDrive {
@@ -212,7 +210,7 @@ class PIDSteer extends PIDSubsystem {
     public PIDSteer(int wheelNum) {
         super("PIDSteer" + wheelNum, 1, 0, 0);
         getPIDController().setContinuous(true);
-        
+
         // Use these to get going:
         // setSetpoint() - Sets where the PID controller should move the system
         // to
