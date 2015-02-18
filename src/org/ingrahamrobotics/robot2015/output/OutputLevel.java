@@ -6,9 +6,8 @@ public enum OutputLevel {
     INITIALIZED_SYSTEMS(1, "Initialized"),
     RAW_MOTORS(2, "Raw Motors"),
     RAW_SENSORS(3, "Raw Sensors"),
-    CMU(4, "CMUcam"),
-    AUTO(5, "Autonomous"),
-    HIGH(6, "Important");
+    AUTO(4, "Autonomous"),
+    HIGH(5, "Important");
 
     public final int level;
     public final String name;
