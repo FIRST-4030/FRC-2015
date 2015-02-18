@@ -76,7 +76,7 @@ public class DriveBase extends Subsystem {
             double travel = Math.abs(wheelAngles[i] - pAngle);
             if (travel < Math.PI / 4){
                 wheelSpeeds[i] *= -1;
-            	travel -= Math.PI/4;
+            	travel -= Math.PI/2;
         	}
             if (pAngle * wheelAngles[i] < 0){
             	wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
