@@ -26,10 +26,6 @@ public class FullIndexerCollapse extends Command {
 
     @Override
     protected void end() {
-        if (Subsystems.toggleSwitches.getIndexerBottom()) {
-            // If this ended at the bottom, reset the indexer encoder! (as apposed to if it was interrupted)
-            Subsystems.indexerEncoder.reset();
-        }
         Subsystems.verticalIndexerControl.setSpeed(0);
     }
 
