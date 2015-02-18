@@ -59,6 +59,7 @@ public class Robot extends IterativeRobot {
         // this line or comment it out.
         if (autonomousCommand != null)
             autonomousCommand.cancel();
+        Subsystems.driveBase.resetEncoders();
         output(OutputLevel.HIGH, "RobotState", "Teleop");
     }
 

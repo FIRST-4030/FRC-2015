@@ -24,6 +24,8 @@ import org.ingrahamrobotics.robot2015.output.Settings;
  */
 public class DriveBase extends Subsystem {
 
+    private boolean wasStillLast;
+    private double[] lastStillPoints = new double[4];
     private final PIDSteer[] steerSystem;
     private final SpeedDrive[] driveSystem;
 
@@ -55,12 +57,13 @@ public class DriveBase extends Subsystem {
     /**
      * @param fwd Forward movement, -1 to 1
      * @param str Strafing movement, -1 to 1
-     * @param rcw Rotating mvoement, -1 to 1
+     * @param rcw Rotating movement, -1 to 1
      */
     public void drive(double fwd, double str, double rcw) {
         Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
         Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
         Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
+        boolean isStill = fwd == 0 && str == 0 && rcw == 0;
         double a = str - rcw * (wheelBase / radius);
         double b = str + rcw * (wheelBase / radius);
         double c = fwd - rcw * (trackWidth / radius);
@@ -74,9 +77,24 @@ public class DriveBase extends Subsystem {
             // Angles are -PI/2 to PI/2
             double pAngle = steerSystem[i].getAngle();
             double travel = Math.abs(wheelAngles[i] - pAngle);
-            if (travel > -(Math.PI / 4) && travel < Math.PI / 4)
+            if (travel > Math.PI / 2 * 1.2) {
                 wheelSpeeds[i] *= -1;
+                travel -= Math.PI / 2;
+            }
+            if (pAngle * wheelAngles[i] < 0) {
+                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
+            }
+            // Shutoff for if we're stopped
+            if (isStill) {
+                if (wasStillLast) {
+                    wheelAngles[i] = lastStillPoints[i];
+                } else {
+                    lastStillPoints[i] = pAngle;
+                    wheelAngles[i] = pAngle;
+                }
+            }
         }
+        wasStillLast = isStill;
 
         for (int i = 0; i < 4; i++) {
             driveSystem[i].setSetpoint(wheelSpeeds[i]);
@@ -129,13 +147,19 @@ public class DriveBase extends Subsystem {
             steer.setPID(p, i, d);
         }
     }
+
     /**
-     * public void setDrivePID(double p, double i, double d){
-     * 		for(PIDDrive drive: driveSystem){
-     * 			drive.setPID(p, i, d);
-     *        }
+     * public void setDrivePID(double p, double i, double d){ for(PIDDrive drive: driveSystem){ drive.setPID(p, i, d); }
      * }
-     * */
+     */
+
+    public void resetEncoders() {
+        for (PIDSteer steer : steerSystem) {
+            steer.getPIDController().reset();
+            steer.steerEncoder.reset();
+            steer.getPIDController().enable();
+        }
+    }
 }
 
 class SpeedDrive {
@@ -206,6 +230,8 @@ class PIDSteer extends PIDSubsystem {
     // Initialize your subsystem here
     public PIDSteer(int wheelNum) {
         super("PIDSteer" + wheelNum, 1, 0, 0);
+        getPIDController().setContinuous(true);
+
         // Use these to get going:
         // setSetpoint() - Sets where the PID controller should move the system
         // to
@@ -241,7 +267,7 @@ class PIDSteer extends PIDSubsystem {
 
     @Override
     public void setSetpoint(final double setpoint) {
-        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_DEGREE1.getDouble() / Settings.Key.STEER_PID_TICKS_PER_DEGREE2.getDouble();
+        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
 
         Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint-raw", setpoint * 180 / Math.PI);
         double setpointTicks = setpoint * ticksPerDegree;
@@ -250,8 +276,8 @@ class PIDSteer extends PIDSubsystem {
     }
 
     public double getAngle() {
-        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_DEGREE1.getDouble() / Settings.Key.STEER_PID_TICKS_PER_DEGREE2.getDouble();
+        double ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
 
-        return steerEncoder.getDistance() / ticksPerDegree;
+        return steerEncoder.getDistance() / ticksPerRadian;
     }
 }

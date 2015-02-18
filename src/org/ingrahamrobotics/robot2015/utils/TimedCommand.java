@@ -4,15 +4,21 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public abstract class TimedCommand extends Command {
 
+    protected int nextStartState;
     protected long startTime;
     protected long lastSwitch;
     protected int currentState;
     protected long[] states;
 
+    public void setNextStartState(final int nextStartState) {
+        this.nextStartState = nextStartState;
+    }
+
     @Override
     protected void initialize() {
         startTime = lastSwitch = System.currentTimeMillis();
-        currentState = 0;
+        currentState = nextStartState;
+        nextStartState = 0;
         states = getWaitTimes();
         startState(currentState);
     }
@@ -20,11 +26,13 @@ public abstract class TimedCommand extends Command {
     @Override
     protected void execute() {
         boolean next = executeState(currentState) || (states[currentState] > 0 && System.currentTimeMillis() > lastSwitch + states[currentState]);
-        if (next) {
+        while (next) {
             lastSwitch = System.currentTimeMillis();
             currentState += 1;
             if (currentState < states.length) {
-                startState(currentState);
+                next = startState(currentState);
+            } else {
+                break;
             }
         }
     }
@@ -41,7 +49,7 @@ public abstract class TimedCommand extends Command {
 
     protected abstract boolean executeState(int state);
 
-    protected abstract void startState(int state);
+    protected abstract boolean startState(int state);
 
     protected abstract long[] getWaitTimes();
 }

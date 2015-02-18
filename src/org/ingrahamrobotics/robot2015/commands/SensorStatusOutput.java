@@ -24,6 +24,11 @@ public class SensorStatusOutput extends Command {
         Output.output(OutputLevel.RAW_SENSORS, "Switches:ClawBottom", Subsystems.toggleSwitches.getVerticalClawBottom());
         Output.output(OutputLevel.RAW_SENSORS, "Switches:ClawTop", Subsystems.toggleSwitches.getVerticalClawTop());
         Output.output(OutputLevel.RAW_SENSORS, "IndexerEncoder", Subsystems.indexerEncoder.get());
+        Output.output(OutputLevel.POWER, "tempurature", Subsystems.powerBoard.getTempurature());
+        Output.output(OutputLevel.POWER, "total-current", Subsystems.powerBoard.getTotalCurrent());
+        Output.output(OutputLevel.POWER, "total-energy", Subsystems.powerBoard.getTotalEnergy());
+        Output.output(OutputLevel.POWER, "total-power", Subsystems.powerBoard.getTotalPower());
+        Output.output(OutputLevel.POWER, "input-voltage", Subsystems.powerBoard.getVoltage());
     }
 
     @Override

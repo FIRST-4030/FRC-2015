@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.ingrahamrobotics.robot2015.commands.SensorStatusOutput;
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.AnalogIoPorts;
-import org.ingrahamrobotics.robot2015.output.Settings;
 
 public class ToggleSwitches extends Subsystem {
 
@@ -35,19 +34,18 @@ public class ToggleSwitches extends Subsystem {
     }
 
     public boolean getIndexerBottom() {
-
-        return Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && proccessAnalogInput("indexer-bottom", indexerBottom);
+        return proccessAnalogInput("indexer-bottom", indexerBottom);
     }
 
     public boolean getIndexerTop() {
-        return Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && proccessAnalogInput("indexer-top", indexerTop);
+        return proccessAnalogInput("indexer-top", indexerTop);
     }
 
     public boolean getVerticalClawBottom() {
-        return Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && proccessAnalogInput("claw-bottom", clawVerticalBottom);
+        return proccessAnalogInput("claw-bottom", clawVerticalBottom);
     }
 
     public boolean getVerticalClawTop() {
-        return Settings.Key.ACTUALLY_USE_SWITCHES.getBoolean() && proccessAnalogInput("claw-top", clawVerticalTop);
+        return proccessAnalogInput("claw-top", clawVerticalTop);
     }
 }
