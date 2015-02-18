@@ -139,6 +139,14 @@ public class DriveBase extends Subsystem {
      * public void setDrivePID(double p, double i, double d){ for(PIDDrive drive: driveSystem){ drive.setPID(p, i, d); }
      * }
      */
+
+    public void resetEncoders() {
+        for (PIDSteer steer : steerSystem) {
+            steer.getPIDController().reset();
+            steer.steerEncoder.reset();
+            steer.getPIDController().enable();
+        }
+    }
 }
 
 class SpeedDrive {
