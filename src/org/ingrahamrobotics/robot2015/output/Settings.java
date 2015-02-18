@@ -18,7 +18,6 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
      * Possible keys for input settings
      */
     public static enum Key {
-        ACTUALLY_USE_SWITCHES("use-switches-for-stopping", "y"),
         INDEXER_LEVEL_MAX_WAIT_TIME("Indexer one-up max time", "3000"),
         INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y"),
         INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "1800"),
