@@ -211,6 +211,8 @@ class PIDSteer extends PIDSubsystem {
     // Initialize your subsystem here
     public PIDSteer(int wheelNum) {
         super("PIDSteer" + wheelNum, 1, 0, 0);
+        getPIDController().setContinuous(true);
+        
         // Use these to get going:
         // setSetpoint() - Sets where the PID controller should move the system
         // to
