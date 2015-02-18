@@ -24,6 +24,8 @@ import org.ingrahamrobotics.robot2015.output.Settings;
  */
 public class DriveBase extends Subsystem {
 
+    private boolean wasStillLast;
+    private double[] lastStillPoints = new double[4];
     private final PIDSteer[] steerSystem;
     private final SpeedDrive[] driveSystem;
 
@@ -61,6 +63,7 @@ public class DriveBase extends Subsystem {
         Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
         Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
         Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
+        boolean isStill = fwd == 0 && str == 0 && rcw == 0;
         double a = str - rcw * (wheelBase / radius);
         double b = str + rcw * (wheelBase / radius);
         double c = fwd - rcw * (trackWidth / radius);
@@ -81,7 +84,17 @@ public class DriveBase extends Subsystem {
             if (pAngle * wheelAngles[i] < 0) {
                 wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
             }
+            // Shutoff for if we're stopped
+            if (isStill) {
+                if (wasStillLast) {
+                    wheelAngles[i] = lastStillPoints[i];
+                } else {
+                    lastStillPoints[i] = pAngle;
+                    wheelAngles[i] = pAngle;
+                }
+            }
         }
+        wasStillLast = isStill;
 
         for (int i = 0; i < 4; i++) {
             driveSystem[i].setSetpoint(wheelSpeeds[i]);
