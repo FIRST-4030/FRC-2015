@@ -55,7 +55,7 @@ public class DriveBase extends Subsystem {
     /**
      * @param fwd Forward movement, -1 to 1
      * @param str Strafing movement, -1 to 1
-     * @param rcw Rotating mvoement, -1 to 1
+     * @param rcw Rotating movement, -1 to 1
      */
     public void drive(double fwd, double str, double rcw) {
         Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
@@ -74,8 +74,13 @@ public class DriveBase extends Subsystem {
             // Angles are -PI/2 to PI/2
             double pAngle = steerSystem[i].getAngle();
             double travel = Math.abs(wheelAngles[i] - pAngle);
-            if (travel > -(Math.PI / 4) && travel < Math.PI / 4)
+            if (travel < Math.PI / 4){
                 wheelSpeeds[i] *= -1;
+            	travel -= Math.PI/4;
+        	}
+            if (pAngle * wheelAngles[i] < 0){
+            	wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
+            }
         }
 
         for (int i = 0; i < 4; i++) {
