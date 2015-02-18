@@ -20,7 +20,7 @@ public class OI {
         IButton.leftClawToggle.getButton().whenPressed(new ToggleClaw(true));
         IButton.rightClawToggle.getButton().whenPressed(new ToggleClaw(false));
         IButton.indexerDownOneLevel.getButton().whenPressed(new FixedIndexerShift(null, false));
-        IButton.indexerUpOneLevel.getButton().whenPressed(new FixedIndexerShift(Settings.Key.TOTE_CLEARANCE_ADDITION, false));
+        IButton.indexerUpOneLevel.getButton().whenPressed(new FixedIndexerShift(Settings.Key.TOTE_CLEARANCE_ADDITION, true));
         IndexerDownAndUp downAndUp = new IndexerDownAndUp();
         IButton.indexerDownAndUp.getButton().whenPressed(downAndUp);
         IButton.indexerDownAndUp.getButton().whenReleased(downAndUp.getReleasedCommand());
