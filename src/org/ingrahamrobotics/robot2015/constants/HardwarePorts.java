@@ -92,12 +92,25 @@ public class HardwarePorts {
     }
 
     public static class AnalogIoPorts {
-
-        // Confirmed
-        public static final int BOTTOM_INDEXER_SWITCH = 0;
-        public static final int BOTTOM_VERTICAL_CLAW_SWITCH = 1;
-        // Unconfirmed
-        public static final int TOP_INDEXER_SWITCH = 2;
-        public static final int TOP_VERTICAL_CLAW_SWITCH = 3;
+    	
+    	public static final int POD_1_RESET_SWITCH = 0;
+        public static final int POD_2_RESET_SWITCH = 1;
+        public static final int POD_3_RESET_SWITCH = 2;
+        public static final int POD_4_RESET_SWITCH = 3;
+        
+        public static final int[] POD_RESET_SWITCHES ={
+        	POD_1_RESET_SWITCH,
+        	POD_2_RESET_SWITCH,
+        	POD_3_RESET_SWITCH,
+        	POD_4_RESET_SWITCH,
+        };
+    	
+        /** Currently disabled due to lack of IO Ports */
+        public static final int BOTTOM_INDEXER_SWITCH = -1;
+        public static final int BOTTOM_VERTICAL_CLAW_SWITCH = -1;
+        public static final int TOP_INDEXER_SWITCH = -1;
+        public static final int TOP_VERTICAL_CLAW_SWITCH = -1;
+        
+        
     }
 }

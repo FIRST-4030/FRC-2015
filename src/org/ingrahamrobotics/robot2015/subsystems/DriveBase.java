@@ -4,18 +4,21 @@ import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPo
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.DRIVE_ENCODERS_B;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_A;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_B;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.AnalogIoPorts.POD_RESET_SWITCHES;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.DRIVE_MOTORS;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.STEER_MOTORS;
 
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import org.ingrahamrobotics.robot2015.Robot;
 import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
 import org.ingrahamrobotics.robot2015.output.Settings;
+
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  * Oversees the PIDDrive and PIDSteer Subsystems.
@@ -74,10 +77,12 @@ public class DriveBase extends Subsystem {
 
         // This should work...?
         for (int i = 0; i < wheelAngles.length; i++) {
-            // Angles are -PI/2 to PI/2
+            // Angles are -PI to PI
             double pAngle = steerSystem[i].getAngle();
             double travel = Math.abs(wheelAngles[i] - pAngle);
-            if (travel > Math.PI / 2 * 1.2) {
+            // Reverse the wheel if the angle is greater than 90, but less than 270
+            // Allows shortest path to still function over the -PI -> PI wrap-around 
+            if ((Math.PI * 3) / 2 > travel && travel > Math.PI / 2 * 1.2) {
                 wheelSpeeds[i] *= -1;
                 travel -= Math.PI / 2;
             }
@@ -100,7 +105,24 @@ public class DriveBase extends Subsystem {
             driveSystem[i].setSetpoint(wheelSpeeds[i]);
             steerSystem[i].setSetpoint(wheelAngles[i]);
         }
+        
+        
+        for (int i = 0; i < 4; i++) {
+        	// Resets the steering encoder when it passes the switch going in the positive direction
+        	if (wheelAngles[i] < steerSystem[i].getAngle()) {
+        		if (steerSystem[i].pResetState && !steerSystem[i].getResetSwitch()) {
+        			steerSystem[i].resetEncoder();
+        		}
+        	}
+        	// Resets the steering encoder when it passes the switch going in the negative direction
+        	else if (wheelAngles[i] > steerSystem[i].getAngle()) {
+        		if (!steerSystem[i].pResetState && steerSystem[i].getResetSwitch()) {
+        			steerSystem[i].resetEncoder();
+        		}
+        	}
+        }
     }
+
 
     private double[] getWheelSpeeds(double a, double b, double c, double d) {
         double ws1 = Math.sqrt(b * b + c * c);
@@ -226,19 +248,20 @@ class PIDSteer extends PIDSubsystem {
     //        private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
     Talon steerMotor;
     Encoder steerEncoder;
+    AnalogInput resetSwitch;
+    
+    boolean pResetState = false;
 
     // Initialize your subsystem here
     public PIDSteer(int wheelNum) {
         super("PIDSteer" + wheelNum, 1, 0, 0);
+        getPIDController().setInputRange(-Math.PI, Math.PI);
         getPIDController().setContinuous(true);
 
-        // Use these to get going:
-        // setSetpoint() - Sets where the PID controller should move the system
-        // to
-        // enable() - Enables the PID controller.
         steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
         steerEncoder = new Encoder(STEER_ENCODERS_A[wheelNum - 1], STEER_ENCODERS_B[wheelNum - 1]);
-
+        resetSwitch = new AnalogInput(POD_RESET_SWITCHES[wheelNum - 1]);
+        
         setSetpoint(0.0);
         enable();
     }
@@ -279,5 +302,19 @@ class PIDSteer extends PIDSubsystem {
         double ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
 
         return steerEncoder.getDistance() / ticksPerRadian;
+    }
+    
+    public boolean getPreviousResetState(){
+    	return pResetState;
+    }
+    
+    public boolean getResetSwitch(){
+    	boolean isPressed = resetSwitch.getValue() < 2048 ? true : false;
+    	pResetState = isPressed;
+    	return isPressed;
+    }
+    
+    public void resetEncoder(){
+    	steerEncoder.reset();
     }
 }
