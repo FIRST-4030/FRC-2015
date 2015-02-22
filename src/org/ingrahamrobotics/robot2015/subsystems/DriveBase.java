@@ -4,7 +4,7 @@ import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPo
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.DRIVE_ENCODERS_B;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_A;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_B;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.AnalogIoPorts.POD_RESET_SWITCHES;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.POD_RESET_SWITCHES;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.DRIVE_MOTORS;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.STEER_MOTORS;
 
@@ -14,7 +14,7 @@ import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
 import org.ingrahamrobotics.robot2015.output.Settings;
 
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
@@ -110,13 +110,13 @@ public class DriveBase extends Subsystem {
         for (int i = 0; i < 4; i++) {
         	// Resets the steering encoder when it passes the switch going in the positive direction
         	if (wheelAngles[i] < steerSystem[i].getAngle()) {
-        		if (steerSystem[i].pResetState && !steerSystem[i].getResetSwitch()) {
+        		if (steerSystem[i].getPreviousResetState() && !steerSystem[i].getResetSwitch()) {
         			steerSystem[i].resetEncoder();
         		}
         	}
         	// Resets the steering encoder when it passes the switch going in the negative direction
         	else if (wheelAngles[i] > steerSystem[i].getAngle()) {
-        		if (!steerSystem[i].pResetState && steerSystem[i].getResetSwitch()) {
+        		if (!steerSystem[i].getPreviousResetState() && steerSystem[i].getResetSwitch()) {
         			steerSystem[i].resetEncoder();
         		}
         	}
@@ -248,7 +248,7 @@ class PIDSteer extends PIDSubsystem {
     //        private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
     Talon steerMotor;
     Encoder steerEncoder;
-    AnalogInput resetSwitch;
+    DigitalInput resetSwitch;
     
     boolean pResetState = false;
 
@@ -260,7 +260,7 @@ class PIDSteer extends PIDSubsystem {
 
         steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
         steerEncoder = new Encoder(STEER_ENCODERS_A[wheelNum - 1], STEER_ENCODERS_B[wheelNum - 1]);
-        resetSwitch = new AnalogInput(POD_RESET_SWITCHES[wheelNum - 1]);
+        resetSwitch = new DigitalInput(POD_RESET_SWITCHES[wheelNum - 1]);
         
         setSetpoint(0.0);
         enable();
@@ -309,9 +309,7 @@ class PIDSteer extends PIDSubsystem {
     }
     
     public boolean getResetSwitch(){
-    	boolean isPressed = resetSwitch.getValue() < 2048 ? true : false;
-    	pResetState = isPressed;
-    	return isPressed;
+    	return resetSwitch.get();
     }
     
     public void resetEncoder(){
