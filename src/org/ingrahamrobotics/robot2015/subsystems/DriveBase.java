@@ -75,31 +75,31 @@ public class DriveBase extends Subsystem {
         double[] wheelSpeeds = getWheelSpeeds(a, b, c, d);
         double[] wheelAngles = getWheelAngles(a, b, c, d);
 
-        // This should work...?
-        for (int i = 0; i < wheelAngles.length; i++) {
-            // Angles are -PI to PI
-            double pAngle = steerSystem[i].getAngle();
-            double travel = Math.abs(wheelAngles[i] - pAngle);
-            // Reverse the wheel if the angle is greater than 90, but less than 270
-            // Allows shortest path to still function over the -PI -> PI wrap-around 
-            if ((Math.PI * 3) / 2 > travel && travel > Math.PI / 2 * 1.2) {
-                wheelSpeeds[i] *= -1;
-                travel -= Math.PI / 2;
-            }
-            if (pAngle * wheelAngles[i] < 0) {
-                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
-            }
-            // Shutoff for if we're stopped
-            if (isStill) {
-                if (wasStillLast) {
-                    wheelAngles[i] = lastStillPoints[i];
-                } else {
-                    lastStillPoints[i] = pAngle;
-                    wheelAngles[i] = pAngle;
-                }
-            }
-        }
-        wasStillLast = isStill;
+//        // This should work...?
+//        for (int i = 0; i < wheelAngles.length; i++) {
+//            // Angles are -PI to PI
+//            double pAngle = steerSystem[i].getAngle();
+//            double travel = Math.abs(wheelAngles[i] - pAngle);
+//            // Reverse the wheel if the angle is greater than 90, but less than 270
+//            // Allows shortest path to still function over the -PI -> PI wrap-around 
+//            if ((Math.PI * 3) / 2 > travel && travel > Math.PI / 2 * 1.2) {
+//                wheelSpeeds[i] *= -1;
+//                travel -= Math.PI / 2;
+//            }
+//            if (pAngle * wheelAngles[i] < 0) {
+//                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
+//            }
+//            // Shutoff for if we're stopped
+//            if (isStill) {
+//                if (wasStillLast) {
+//                    wheelAngles[i] = lastStillPoints[i];
+//                } else {
+//                    lastStillPoints[i] = pAngle;
+//                    wheelAngles[i] = pAngle;
+//                }
+//            }
+//        }
+//        wasStillLast = isStill;
 
         for (int i = 0; i < 4; i++) {
             driveSystem[i].setSetpoint(wheelSpeeds[i]);
@@ -107,20 +107,20 @@ public class DriveBase extends Subsystem {
         }
         
         
-        for (int i = 0; i < 4; i++) {
-        	// Resets the steering encoder when it passes the switch going in the positive direction
-        	if (wheelAngles[i] < steerSystem[i].getAngle()) {
-        		if (steerSystem[i].getPreviousResetState() && !steerSystem[i].getResetSwitch()) {
-        			steerSystem[i].resetEncoder();
-        		}
-        	}
-        	// Resets the steering encoder when it passes the switch going in the negative direction
-        	else if (wheelAngles[i] > steerSystem[i].getAngle()) {
-        		if (!steerSystem[i].getPreviousResetState() && steerSystem[i].getResetSwitch()) {
-        			steerSystem[i].resetEncoder();
-        		}
-        	}
-        }
+//        for (int i = 0; i < 4; i++) {
+//        	// Resets the steering encoder when it passes the switch going in the positive direction
+//        	if (wheelAngles[i] < steerSystem[i].getAngle()) {
+//        		if (steerSystem[i].getPreviousResetState() && !steerSystem[i].getResetSwitch()) {
+//        			steerSystem[i].resetEncoder();
+//        		}
+//        	}
+//        	// Resets the steering encoder when it passes the switch going in the negative direction
+//        	else if (wheelAngles[i] > steerSystem[i].getAngle()) {
+//        		if (!steerSystem[i].getPreviousResetState() && steerSystem[i].getResetSwitch()) {
+//        			steerSystem[i].resetEncoder();
+//        		}
+//        	}
+//        }
     }
 
 
@@ -245,17 +245,18 @@ class PIDDrive extends PIDSubsystem {
 
 class PIDSteer extends PIDSubsystem {
 
-    //        private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
+    //private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
     Talon steerMotor;
     Encoder steerEncoder;
     DigitalInput resetSwitch;
     
+    private double ticksPerRadian = (497.0 + 66.0 / 56.0);
     boolean pResetState = false;
 
     // Initialize your subsystem here
     public PIDSteer(int wheelNum) {
         super("PIDSteer" + wheelNum, 1, 0, 0);
-        getPIDController().setInputRange(-Math.PI, Math.PI);
+        //getPIDController().setInputRange(-Math.PI, Math.PI);
         getPIDController().setContinuous(true);
 
         steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
@@ -275,7 +276,7 @@ class PIDSteer extends PIDSubsystem {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return steerEncoder.getDistance();
+        return steerEncoder.getDistance() * ticksPerRadian;
     }
 
     protected void usePIDOutput(double output) {
@@ -290,16 +291,16 @@ class PIDSteer extends PIDSubsystem {
 
     @Override
     public void setSetpoint(final double setpoint) {
-        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
+        ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
 
         Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint-raw", setpoint * 180 / Math.PI);
-        double setpointTicks = setpoint * ticksPerDegree;
+        double setpointTicks = setpoint * ticksPerRadian;
         Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint", setpointTicks);
         super.setSetpoint(setpointTicks);
     }
 
     public double getAngle() {
-        double ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
+        ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
 
         return steerEncoder.getDistance() / ticksPerRadian;
     }
@@ -309,6 +310,7 @@ class PIDSteer extends PIDSubsystem {
     }
     
     public boolean getResetSwitch(){
+    	
     	return resetSwitch.get();
     }
     
