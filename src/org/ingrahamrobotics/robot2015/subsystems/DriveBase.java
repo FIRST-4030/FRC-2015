@@ -256,7 +256,7 @@ class PIDSteer extends PIDSubsystem {
     // Initialize your subsystem here
     public PIDSteer(int wheelNum) {
         super("PIDSteer" + wheelNum, 1, 0, 0);
-        //getPIDController().setInputRange(-Math.PI, Math.PI);
+        getPIDController().setInputRange(-Math.PI, Math.PI);
         getPIDController().setContinuous(true);
 
         steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
@@ -276,7 +276,8 @@ class PIDSteer extends PIDSubsystem {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return steerEncoder.getDistance() * ticksPerRadian;
+    	ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
+        return steerEncoder.getDistance() / ticksPerRadian;
     }
 
     protected void usePIDOutput(double output) {
@@ -291,18 +292,8 @@ class PIDSteer extends PIDSubsystem {
 
     @Override
     public void setSetpoint(final double setpoint) {
-        ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
-
-        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint-raw", setpoint * 180 / Math.PI);
-        double setpointTicks = setpoint * ticksPerRadian;
-        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint", setpointTicks);
-        super.setSetpoint(setpointTicks);
-    }
-
-    public double getAngle() {
-        ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
-
-        return steerEncoder.getDistance() / ticksPerRadian;
+        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint", setpoint);
+        super.setSetpoint(setpoint);
     }
     
     public boolean getPreviousResetState(){
@@ -310,7 +301,6 @@ class PIDSteer extends PIDSubsystem {
     }
     
     public boolean getResetSwitch(){
-    	
     	return resetSwitch.get();
     }
     
