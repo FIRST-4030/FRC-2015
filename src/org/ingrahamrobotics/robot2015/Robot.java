@@ -2,13 +2,14 @@ package org.ingrahamrobotics.robot2015;
 
 import static org.ingrahamrobotics.robot2015.output.Output.output;
 
+import org.ingrahamrobotics.robot2015.output.Output;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
+import org.ingrahamrobotics.robot2015.output.Settings;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import org.ingrahamrobotics.robot2015.output.Output;
-import org.ingrahamrobotics.robot2015.output.OutputLevel;
-import org.ingrahamrobotics.robot2015.output.Settings;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
