@@ -1,23 +1,10 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.DRIVE_ENCODERS_A;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.DRIVE_ENCODERS_B;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_A;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_B;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.AnalogIoPorts.POD_RESET_SWITCHES;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.DRIVE_MOTORS;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.STEER_MOTORS;
-
-import org.ingrahamrobotics.robot2015.Robot;
+import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
-import org.ingrahamrobotics.robot2015.output.Settings;
 
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -27,18 +14,28 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class DriveBase extends Subsystem {
 
-    private boolean wasStillLast;
-    private double[] lastStillPoints = new double[4];
-    private final PIDSteer[] steerSystem;
-    private final SpeedDrive[] driveSystem;
+    //private boolean wasStillLast;
+    //private double[] lastStillPoints = new double[4];
+    public final PIDSteer[] steerSystem;
+    public final SpeedDrive[] driveSystem;
 
     private final int trackWidth = 37;
     private final int wheelBase = 21;
     private final double radius = Math.sqrt(trackWidth ^ 2 + wheelBase ^ 2);
 
     public DriveBase() {
-        driveSystem = new SpeedDrive[4];
-        steerSystem = new PIDSteer[4];
+        driveSystem = new SpeedDrive[] {
+        		Subsystems.pidDrive1, 
+        		Subsystems.pidDrive2, 
+        		Subsystems.pidDrive3, 
+        		Subsystems.pidDrive4, 
+        };
+        steerSystem = new PIDSteer[] {
+        		Subsystems.pidSteer1,
+        		Subsystems.pidSteer2,
+        		Subsystems.pidSteer3,
+        		Subsystems.pidSteer4,
+        };
         for (int i = 0; i < 4; i++) {
             driveSystem[i] = new SpeedDrive(i + 1);
         }
@@ -66,7 +63,7 @@ public class DriveBase extends Subsystem {
         Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
         Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
         Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
-        boolean isStill = fwd == 0 && str == 0 && rcw == 0;
+        //boolean isStill = fwd == 0 && str == 0 && rcw == 0;
         double a = str - rcw * (wheelBase / radius);
         double b = str + rcw * (wheelBase / radius);
         double c = fwd - rcw * (trackWidth / radius);
@@ -75,31 +72,31 @@ public class DriveBase extends Subsystem {
         double[] wheelSpeeds = getWheelSpeeds(a, b, c, d);
         double[] wheelAngles = getWheelAngles(a, b, c, d);
 
-        // This should work...?
-        for (int i = 0; i < wheelAngles.length; i++) {
-            // Angles are -PI to PI
-            double pAngle = steerSystem[i].getAngle();
-            double travel = Math.abs(wheelAngles[i] - pAngle);
-            // Reverse the wheel if the angle is greater than 90, but less than 270
-            // Allows shortest path to still function over the -PI -> PI wrap-around 
-            if ((Math.PI * 3) / 2 > travel && travel > Math.PI / 2 * 1.2) {
-                wheelSpeeds[i] *= -1;
-                travel -= Math.PI / 2;
-            }
-            if (pAngle * wheelAngles[i] < 0) {
-                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
-            }
-            // Shutoff for if we're stopped
-            if (isStill) {
-                if (wasStillLast) {
-                    wheelAngles[i] = lastStillPoints[i];
-                } else {
-                    lastStillPoints[i] = pAngle;
-                    wheelAngles[i] = pAngle;
-                }
-            }
-        }
-        wasStillLast = isStill;
+//        // This should work...?
+//        for (int i = 0; i < wheelAngles.length; i++) {
+//            // Angles are -PI to PI
+//            double pAngle = steerSystem[i].getAngle();
+//            double travel = Math.abs(wheelAngles[i] - pAngle);
+//            // Reverse the wheel if the angle is greater than 90, but less than 270
+//            // Allows shortest path to still function over the -PI -> PI wrap-around 
+//            if ((Math.PI * 3) / 2 > travel && travel > Math.PI / 2 * 1.2) {
+//                wheelSpeeds[i] *= -1;
+//                travel -= Math.PI / 2;
+//            }
+//            if (pAngle * wheelAngles[i] < 0) {
+//                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
+//            }
+//            // Shutoff for if we're stopped
+//            if (isStill) {
+//                if (wasStillLast) {
+//                    wheelAngles[i] = lastStillPoints[i];
+//                } else {
+//                    lastStillPoints[i] = pAngle;
+//                    wheelAngles[i] = pAngle;
+//                }
+//            }
+//        }
+//        wasStillLast = isStill;
 
         for (int i = 0; i < 4; i++) {
             driveSystem[i].setSetpoint(wheelSpeeds[i]);
@@ -107,20 +104,20 @@ public class DriveBase extends Subsystem {
         }
         
         
-        for (int i = 0; i < 4; i++) {
-        	// Resets the steering encoder when it passes the switch going in the positive direction
-        	if (wheelAngles[i] < steerSystem[i].getAngle()) {
-        		if (steerSystem[i].pResetState && !steerSystem[i].getResetSwitch()) {
-        			steerSystem[i].resetEncoder();
-        		}
-        	}
-        	// Resets the steering encoder when it passes the switch going in the negative direction
-        	else if (wheelAngles[i] > steerSystem[i].getAngle()) {
-        		if (!steerSystem[i].pResetState && steerSystem[i].getResetSwitch()) {
-        			steerSystem[i].resetEncoder();
-        		}
-        	}
-        }
+//        for (int i = 0; i < 4; i++) {
+//        	// Resets the steering encoder when it passes the switch going in the positive direction
+//        	if (wheelAngles[i] < steerSystem[i].getAngle()) {
+//        		if (steerSystem[i].getPreviousResetState() && !steerSystem[i].getResetSwitch()) {
+//        			steerSystem[i].resetEncoder();
+//        		}
+//        	}
+//        	// Resets the steering encoder when it passes the switch going in the negative direction
+//        	else if (wheelAngles[i] > steerSystem[i].getAngle()) {
+//        		if (!steerSystem[i].getPreviousResetState() && steerSystem[i].getResetSwitch()) {
+//        			steerSystem[i].resetEncoder();
+//        		}
+//        	}
+//        }
     }
 
 
@@ -184,137 +181,3 @@ public class DriveBase extends Subsystem {
     }
 }
 
-class SpeedDrive {
-
-    Talon driveMotor;
-
-    public SpeedDrive(int wheelNum) {
-        driveMotor = new Talon(DRIVE_MOTORS[wheelNum - 1]);
-    }
-
-    public void setSetpoint(double speed) {
-        driveMotor.set(speed);
-    }
-}
-
-class PIDDrive extends PIDSubsystem {
-
-    Talon driveMotor;
-    Encoder driveEncoder;
-
-    boolean rateBasedDrive;
-
-    // Initialize your subsystem here
-    public PIDDrive(int wheelNum) {
-        super("PIDDrive" + wheelNum, 1.0, 0.0, 0.0);
-        // Use these to get going:
-        // setSetpoint() - Sets where the PID controller should move the system
-        // to
-        // enable() - Enables the PID controller.
-
-        driveMotor = new Talon(DRIVE_MOTORS[wheelNum - 1]);
-        driveEncoder = new Encoder(DRIVE_ENCODERS_A[wheelNum - 1], DRIVE_ENCODERS_B[wheelNum - 1]);
-
-        setSetpoint(0.0);
-        enable();
-        rateBasedDrive = Robot.rateBasedDrive;
-    }
-
-    public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        // setDefaultCommand(new MySpecialCommand());
-    }
-
-    protected double returnPIDInput() {
-        // Return your input value for the PID loop
-        // e.g. a sensor, like a potentiometer:
-        // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return rateBasedDrive ? driveEncoder.getRate() : driveEncoder.getDistance();
-    }
-
-    protected void usePIDOutput(double output) {
-        // Use output to drive your system, like a motor
-        // e.g. yourMotor.set(output);
-        driveMotor.set(output);
-    }
-
-    public double getSpeed() {
-        return driveMotor.get();
-    }
-}
-
-class PIDSteer extends PIDSubsystem {
-
-    //        private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
-    Talon steerMotor;
-    Encoder steerEncoder;
-    AnalogInput resetSwitch;
-    
-    boolean pResetState = false;
-
-    // Initialize your subsystem here
-    public PIDSteer(int wheelNum) {
-        super("PIDSteer" + wheelNum, 1, 0, 0);
-        getPIDController().setInputRange(-Math.PI, Math.PI);
-        getPIDController().setContinuous(true);
-
-        steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
-        steerEncoder = new Encoder(STEER_ENCODERS_A[wheelNum - 1], STEER_ENCODERS_B[wheelNum - 1]);
-        resetSwitch = new AnalogInput(POD_RESET_SWITCHES[wheelNum - 1]);
-        
-        setSetpoint(0.0);
-        enable();
-    }
-
-    public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        // setDefaultCommand(new MySpecialCommand());
-    }
-
-    protected double returnPIDInput() {
-        // Return your input value for the PID loop
-        // e.g. a sensor, like a potentiometer:
-        // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return steerEncoder.getDistance();
-    }
-
-    protected void usePIDOutput(double output) {
-        // Use output to drive your system, like a motor
-        // e.g. yourMotor.set(output);
-        steerMotor.set(output);
-    }
-
-    public void setPID(double p, double i, double d) {
-        getPIDController().setPID(p, i, d);
-    }
-
-    @Override
-    public void setSetpoint(final double setpoint) {
-        double ticksPerDegree = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
-
-        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint-raw", setpoint * 180 / Math.PI);
-        double setpointTicks = setpoint * ticksPerDegree;
-        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint", setpointTicks);
-        super.setSetpoint(setpointTicks);
-    }
-
-    public double getAngle() {
-        double ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
-
-        return steerEncoder.getDistance() / ticksPerRadian;
-    }
-    
-    public boolean getPreviousResetState(){
-    	return pResetState;
-    }
-    
-    public boolean getResetSwitch(){
-    	boolean isPressed = resetSwitch.getValue() < 2048 ? true : false;
-    	pResetState = isPressed;
-    	return isPressed;
-    }
-    
-    public void resetEncoder(){
-    	steerEncoder.reset();
-    }
-}
