@@ -31,7 +31,6 @@ public class Subsystems {
     public static PowerBoard powerBoard;
 
     public static void init() {
-        driveBase = new DriveBase();
         pidSteer1 = new PIDSteer(1);
         pidSteer2 = new PIDSteer(2);
         pidSteer3 = new PIDSteer(3);
@@ -40,6 +39,7 @@ public class Subsystems {
         pidDrive2 = new SpeedDrive(2);
         pidDrive3 = new SpeedDrive(3);
         pidDrive4 = new SpeedDrive(4);
+        driveBase = new DriveBase();
         leftClaw = new SingleClawSubsystem("Left", SolenoidPorts.LEFT_CLAW_EXTEND, SolenoidPorts.LEFT_CLAW_RETRACT);
         rightClaw = new SingleClawSubsystem("Right", SolenoidPorts.RIGHT_CLAW_EXTEND, SolenoidPorts.RIGHT_CLAW_RETRACT);
         verticalClawShifter = new VerticalClawShifter();

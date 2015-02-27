@@ -50,7 +50,7 @@ public class HardwarePorts {
         public static final int FRONT_RIGHT_STEER_ENCODER_B = 5;
         public static final int BACK_RIGHT_STEER_ENCODER_A = 6;
         public static final int BACK_RIGHT_STEER_ENCODER_B = 7;
-        
+
         // Values below this line are unconfirmed.
         public static final int FRONT_LEFT_DRIVE_ENCODER_A = 8;
         public static final int FRONT_LEFT_DRIVE_ENCODER_B = 9;
@@ -60,18 +60,17 @@ public class HardwarePorts {
         public static final int FRONT_RIGHT_DRIVE_ENCODER_B = 13;
         public static final int BACK_RIGHT_DRIVE_ENCODER_A = 14;
         public static final int BACK_RIGHT_DRIVE_ENCODER_B = 15;
-        
-        public static final int FRONT_LEFT_RESET_SWITCH = 16;
-        public static final int BACK_LEFT_RESET_SWITCH = 17;
-        public static final int FRONT_RIGHT_RESET_SWITCH = 18;
-        public static final int BACK_RIGHT_RESET_SWITCH = 19;
-        
+
+        public static final int FRONT_LEFT_RESET_SWITCH = 8; //16;
+        public static final int BACK_LEFT_RESET_SWITCH = 9; //17;
+        public static final int FRONT_RIGHT_RESET_SWITCH = 10;//18;
+        public static final int BACK_RIGHT_RESET_SWITCH = 11;//19;
+
         public static final int INDEXER_ENCODER_A = 20;
         public static final int INDEXER_ENCODER_B = 21;
-        
+
         public static final int CONTAINER_ENCODER_A = 22;
         public static final int CONTAINER_ENCODER_B = 23;
-        
 
         // For swerve organization
         public static final int[] DRIVE_ENCODERS_A = {
@@ -99,20 +98,19 @@ public class HardwarePorts {
                 BACK_RIGHT_STEER_ENCODER_B,
         };
         public static final int[] POD_RESET_SWITCHES = {
-        		FRONT_LEFT_RESET_SWITCH,
-        		BACK_LEFT_RESET_SWITCH,
-        		FRONT_RIGHT_RESET_SWITCH,
-        		BACK_RIGHT_RESET_SWITCH,
+                FRONT_LEFT_RESET_SWITCH,
+                BACK_LEFT_RESET_SWITCH,
+                FRONT_RIGHT_RESET_SWITCH,
+                BACK_RIGHT_RESET_SWITCH,
         };
     }
 
     public static class AnalogIoPorts {
-    	
+
         /** Currently disabled due to lack of IO Ports */
         public static final int BOTTOM_INDEXER_SWITCH = 0;
         public static final int BOTTOM_VERTICAL_CLAW_SWITCH = 1;
         public static final int TOP_INDEXER_SWITCH = 2;
         public static final int TOP_VERTICAL_CLAW_SWITCH = 3;
-        
     }
 }

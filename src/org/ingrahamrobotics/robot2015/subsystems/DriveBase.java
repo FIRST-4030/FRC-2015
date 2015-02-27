@@ -24,24 +24,18 @@ public class DriveBase extends Subsystem {
     private final double radius = Math.sqrt(trackWidth ^ 2 + wheelBase ^ 2);
 
     public DriveBase() {
-        driveSystem = new SpeedDrive[] {
-        		Subsystems.pidDrive1, 
-        		Subsystems.pidDrive2, 
-        		Subsystems.pidDrive3, 
-        		Subsystems.pidDrive4, 
+        driveSystem = new SpeedDrive[]{
+                Subsystems.pidDrive1,
+                Subsystems.pidDrive2,
+                Subsystems.pidDrive3,
+                Subsystems.pidDrive4,
         };
-        steerSystem = new PIDSteer[] {
-        		Subsystems.pidSteer1,
-        		Subsystems.pidSteer2,
-        		Subsystems.pidSteer3,
-        		Subsystems.pidSteer4,
+        steerSystem = new PIDSteer[]{
+                Subsystems.pidSteer1,
+                Subsystems.pidSteer2,
+                Subsystems.pidSteer3,
+                Subsystems.pidSteer4,
         };
-        for (int i = 0; i < 4; i++) {
-            driveSystem[i] = new SpeedDrive(i + 1);
-        }
-        for (int i = 0; i < 4; i++) {
-            steerSystem[i] = new PIDSteer(i + 1);
-        }
         Output.initialized("DriveBase");
     }
 
@@ -102,24 +96,23 @@ public class DriveBase extends Subsystem {
             driveSystem[i].setSetpoint(wheelSpeeds[i]);
             steerSystem[i].setSetpoint(wheelAngles[i]);
         }
-        
-        
+
+
 //        for (int i = 0; i < 4; i++) {
-//        	// Resets the steering encoder when it passes the switch going in the positive direction
-//        	if (wheelAngles[i] < steerSystem[i].getAngle()) {
-//        		if (steerSystem[i].getPreviousResetState() && !steerSystem[i].getResetSwitch()) {
-//        			steerSystem[i].resetEncoder();
-//        		}
-//        	}
-//        	// Resets the steering encoder when it passes the switch going in the negative direction
-//        	else if (wheelAngles[i] > steerSystem[i].getAngle()) {
-//        		if (!steerSystem[i].getPreviousResetState() && steerSystem[i].getResetSwitch()) {
-//        			steerSystem[i].resetEncoder();
-//        		}
-//        	}
+//            // Resets the steering encoder when it passes the switch going in the positive direction
+//            if (wheelAngles[i] < steerSystem[i].getAngle()) {
+//                if (steerSystem[i].getPreviousResetState() && !steerSystem[i].getResetSwitch()) {
+//                    steerSystem[i].resetEncoder();
+//                }
+//            }
+//            // Resets the steering encoder when it passes the switch going in the negative direction
+//            else if (wheelAngles[i] > steerSystem[i].getAngle()) {
+//                if (!steerSystem[i].getPreviousResetState() && steerSystem[i].getResetSwitch()) {
+//                    steerSystem[i].resetEncoder();
+//                }
+//            }
 //        }
     }
-
 
     private double[] getWheelSpeeds(double a, double b, double c, double d) {
         double ws1 = Math.sqrt(b * b + c * c);
@@ -174,7 +167,6 @@ public class DriveBase extends Subsystem {
 
     public void resetEncoders() {
         for (PIDSteer steer : steerSystem) {
-            steer.getPIDController().reset();
             steer.steerEncoder.reset();
             steer.getPIDController().enable();
         }

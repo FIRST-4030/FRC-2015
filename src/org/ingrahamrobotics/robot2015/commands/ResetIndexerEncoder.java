@@ -17,7 +17,6 @@ public class ResetIndexerEncoder extends Command {
 
     @Override
     protected void initialize() {
-
     }
 
     @Override

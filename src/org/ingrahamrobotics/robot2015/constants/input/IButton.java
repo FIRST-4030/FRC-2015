@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.ingrahamrobotics.robot2015.constants.JMap;
 
 public enum IButton {
-	steerReset(IJoystick.driveJoystick, 1),
+    steerReset(IJoystick.driveJoystick, 1),
     leftClawToggle(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.LEFT),
     rightClawToggle(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.RIGHT),
     manualClawHold(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.LEFT_TOP),

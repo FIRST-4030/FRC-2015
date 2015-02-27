@@ -1,6 +1,7 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.DRIVE_MOTORS;
+
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -19,9 +20,7 @@ public class SpeedDrive extends Subsystem {
         driveMotor.set(speed);
     }
 
-	@Override
-	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    protected void initDefaultCommand() {
+    }
 }

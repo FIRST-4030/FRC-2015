@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 public class PIDSteer extends PIDSubsystem {
 
     //private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
-    Talon steerMotor;
-    Encoder steerEncoder;
-    DigitalInput resetSwitch;
-    
+    public Talon steerMotor;
+    public Encoder steerEncoder;
+    public DigitalInput resetSwitch;
+
     private double ticksPerRadian = (497.0 + 66.0 / 56.0);
     boolean pResetState = false;
 
@@ -33,7 +33,7 @@ public class PIDSteer extends PIDSubsystem {
         steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
         steerEncoder = new Encoder(STEER_ENCODERS_A[wheelNum - 1], STEER_ENCODERS_B[wheelNum - 1]);
         resetSwitch = new DigitalInput(POD_RESET_SWITCHES[wheelNum - 1]);
-        
+
         setSetpoint(0.0);
         enable();
     }
@@ -47,7 +47,7 @@ public class PIDSteer extends PIDSubsystem {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
-    	ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
+        ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
         return steerEncoder.getDistance() / ticksPerRadian;
     }
 
@@ -66,25 +66,25 @@ public class PIDSteer extends PIDSubsystem {
         Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-setpoint", setpoint);
         super.setSetpoint(setpoint);
     }
-    
-    public boolean getPreviousResetState(){
-    	return pResetState;
+
+    public boolean getPreviousResetState() {
+        return pResetState;
     }
-    
-    public boolean getResetSwitch(){
-    	return resetSwitch.get();
+
+    public boolean getResetSwitch() {
+        return resetSwitch.get();
     }
-    
-    public void resetEncoder(){
-    	steerEncoder.reset();
+
+    public void resetEncoder() {
+        steerEncoder.reset();
     }
-    
+
     public void setSpeed(double speed) {
-    	if (getPIDController().isEnable())
-    		steerMotor.set(speed);
+        if (!getPIDController().isEnable())
+            steerMotor.set(speed);
     }
-    
+
     public void setPrevResetState(boolean wasReset) {
-    	pResetState = wasReset;
+        pResetState = wasReset;
     }
 }
