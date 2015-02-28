@@ -1,11 +1,10 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
+import edu.wpi.first.wpilibj.command.Subsystem;
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
-
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  * Oversees the PIDDrive and PIDSteer Subsystems.
@@ -14,8 +13,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class DriveBase extends Subsystem {
 
-    //private boolean wasStillLast;
-    //private double[] lastStillPoints = new double[4];
+    private boolean wasStillLast;
     public final PIDSteer[] steerSystem;
     public final SpeedDrive[] driveSystem;
 
@@ -57,7 +55,7 @@ public class DriveBase extends Subsystem {
         Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
         Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
         Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
-        //boolean isStill = fwd == 0 && str == 0 && rcw == 0;
+        boolean isStill = fwd == 0 && str == 0 && rcw == 0;
         double a = str - rcw * (wheelBase / radius);
         double b = str + rcw * (wheelBase / radius);
         double c = fwd - rcw * (trackWidth / radius);
@@ -81,17 +79,22 @@ public class DriveBase extends Subsystem {
 //            if (pAngle * wheelAngles[i] < 0) {
 //                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
 //            }
-//            // Shutoff for if we're stopped
-//            if (isStill) {
-//                if (wasStillLast) {
-//                    wheelAngles[i] = lastStillPoints[i];
-//                } else {
-//                    lastStillPoints[i] = pAngle;
-//                    wheelAngles[i] = pAngle;
-//                }
-//            }
-//        }
-//        wasStillLast = isStill;
+
+        // This logic stops us from turning the wheels at all if we aren't trying to move the robot at all.
+        if (isStill != wasStillLast) {
+            if (isStill) {
+                // we are now still
+                for (PIDSteer steer : steerSystem) {
+                    steer.disable();
+                }
+            } else {
+                // we are no longer still
+                for (PIDSteer steer : steerSystem) {
+                    steer.enable();
+                }
+            }
+            wasStillLast = isStill;
+        }
 
         for (int i = 0; i < 4; i++) {
             driveSystem[i].setSetpoint(wheelSpeeds[i]);
