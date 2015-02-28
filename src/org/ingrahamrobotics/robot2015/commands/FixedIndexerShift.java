@@ -24,6 +24,8 @@ public class FixedIndexerShift extends TimedCommand {
         if (directionIsUp) {
             if (Subsystems.toggleSwitches.getIndexerTop()) {
                 return true;
+            }else if (Subsystems.indexerEncoder.get() > Settings.Key.INDEXER_MAX_HEIGHT.getInt()){
+            	return true;
             }
         } else {
             if (Subsystems.toggleSwitches.getIndexerBottom()) {

@@ -30,7 +30,7 @@ public class IndexerDownAndUp extends TimedCommand {
                 return true;
             }
         } else {
-            if (encoderValue < Settings.Key.INDEXER_MAX_HEIGHT.getInt()/**Subsystems.toggleSwitches.getIndexerTop()*/) {
+            if (encoderValue > Settings.Key.INDEXER_MAX_HEIGHT.getInt()/**Subsystems.toggleSwitches.getIndexerTop()*/) {
                 return true;
             }
         }
