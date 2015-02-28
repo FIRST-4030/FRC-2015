@@ -24,13 +24,13 @@ public class IndexerDownAndUp extends TimedCommand {
      * Is executed continuously until it returns true or the time runs out.
      */
     protected boolean executeState(final int state) {
-    	int encoderValue = Subsystems.indexerEncoder.get();
+        int encoderValue = Subsystems.indexerEncoder.get();
         if (state == 0) {// 0 is down, 1 is up
             if (Subsystems.toggleSwitches.getIndexerBottom()) {
                 return true;
             }
         } else {
-            if (encoderValue > Settings.Key.INDEXER_MAX_HEIGHT.getInt()/**Subsystems.toggleSwitches.getIndexerTop()*/) {
+            if (Subsystems.toggleSwitches.getIndexerTop() || encoderValue > Settings.Key.INDEXER_MAX_HEIGHT.getInt()) {
                 return true;
             }
         }

@@ -3,6 +3,7 @@ package org.ingrahamrobotics.robot2015.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.constants.input.IAxis;
+import org.ingrahamrobotics.robot2015.output.Settings;
 import org.ingrahamrobotics.robot2015.state.ManualControlState;
 
 public class ManualIndexerControl extends Command {
@@ -25,7 +26,8 @@ public class ManualIndexerControl extends Command {
         if (ManualControlState.isManualClawRunning()) {
             return;
         }
-        if (y > 0 && Subsystems.toggleSwitches.getIndexerTop()) {
+        if (y > 0 && (Subsystems.toggleSwitches.getIndexerTop()
+                || Subsystems.indexerEncoder.get() > Settings.Key.INDEXER_MAX_HEIGHT.getInt())) {
             return;
         }
         if (y < 0 && Subsystems.toggleSwitches.getIndexerBottom()) {
