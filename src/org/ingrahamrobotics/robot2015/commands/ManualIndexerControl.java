@@ -7,8 +7,6 @@ import org.ingrahamrobotics.robot2015.state.ManualControlState;
 
 public class ManualIndexerControl extends Command {
 
-    private static final double threshold = 0.05;
-
     public ManualIndexerControl() {
         requires(Subsystems.verticalIndexerControl);
         ManualControlState.setManualIndexerRunning(false);
@@ -24,6 +22,9 @@ public class ManualIndexerControl extends Command {
     protected void execute() {
         double y = IAxis.manualControl.get();
 
+        if (ManualControlState.isManualClawRunning()) {
+            return;
+        }
         if (y > 0 && Subsystems.toggleSwitches.getIndexerTop()) {
             return;
         }
@@ -31,9 +32,7 @@ public class ManualIndexerControl extends Command {
             return;
         }
 
-        if (Math.abs(y) > threshold && !ManualControlState.isManualClawRunning()) {
-            Subsystems.verticalIndexerControl.setSpeed(y);
-        }
+        Subsystems.verticalIndexerControl.setSpeed(y);
     }
 
     @Override
