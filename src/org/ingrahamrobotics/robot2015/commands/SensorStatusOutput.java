@@ -27,6 +27,7 @@ public class SensorStatusOutput extends Command {
         Output.output(OutputLevel.RAW_SENSORS, "Switches:ClawTop", Subsystems.toggleSwitches.getVerticalClawTop());
         for (PIDSteer steer : Subsystems.driveBase.steerSystem) {
             Output.output(OutputLevel.RAW_SENSORS, "ResetSwitch:" + steer.getName(), steer.getResetSwitch());
+            Output.output(OutputLevel.RAW_SENSORS, "EncoderTicks" + steer.getName(), steer.steerEncoder.get());
         }
         Output.output(OutputLevel.RAW_SENSORS, "IndexerEncoder", Subsystems.indexerEncoder.get());
         Output.output(OutputLevel.POWER, "tempurature", Subsystems.powerBoard.getTempurature());

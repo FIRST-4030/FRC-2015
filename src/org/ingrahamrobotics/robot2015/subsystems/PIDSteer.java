@@ -21,7 +21,7 @@ public class PIDSteer extends PIDSubsystem {
     public Encoder steerEncoder;
     public DigitalInput resetSwitch;
 
-    private double ticksPerRadian = (497.0 + 66.0 / 56.0);
+    private double ticksPerRadian = (611 - 35)/(Math.PI * 2);
     boolean pResetState = false;
 
     // Initialize your subsystem here
@@ -47,7 +47,7 @@ public class PIDSteer extends PIDSubsystem {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
+        //ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
         return steerEncoder.getDistance() / ticksPerRadian;
     }
 

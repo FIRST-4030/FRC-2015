@@ -66,10 +66,10 @@ public class DriveBase extends Subsystem {
         double[] wheelSpeeds = getWheelSpeeds(a, b, c, d);
         double[] wheelAngles = getWheelAngles(a, b, c, d);
 
-//        // This should work...?
+        // This should work...?
 //        for (int i = 0; i < wheelAngles.length; i++) {
 //            // Angles are -PI to PI
-//            double pAngle = steerSystem[i].getAngle();
+//            double pAngle = steerSystem[i].returnPIDInput();
 //            double travel = Math.abs(wheelAngles[i] - pAngle);
 //            // Reverse the wheel if the angle is greater than 90, but less than 270
 //            // Allows shortest path to still function over the -PI -> PI wrap-around 
@@ -77,6 +77,7 @@ public class DriveBase extends Subsystem {
 //                wheelSpeeds[i] *= -1;
 //                travel -= Math.PI / 2;
 //            }
+//        }
 //            if (pAngle * wheelAngles[i] < 0) {
 //                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
 //            }
