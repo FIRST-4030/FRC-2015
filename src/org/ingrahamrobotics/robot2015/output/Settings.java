@@ -31,7 +31,8 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         STEER_PID_TICKS_PER_RADIAN("ticks per radian", String.valueOf((611-35)/(2*Math.PI))),
         DRIVE_SPEED_MULTIPLIER("drive-speed-multiplier", "0.5"),
         TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.5"),
-        TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60));
+        TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60)),
+        DRIVE_RESET_ENCODERS_ON_ENABLE("Reset swerve encoders on enable", "y");
         public final String name;
         public final String defaultValue;
         private String value;
