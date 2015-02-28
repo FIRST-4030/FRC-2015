@@ -18,7 +18,7 @@ import org.ingrahamrobotics.robot2015.output.Settings;
 public class OI {
 
     public OI() {
-    	IButton.steerReset.getButton().whenPressed(new ResetTurningMotors());
+        IButton.steerReset.getButton().whenPressed(new ResetTurningMotors());
         IButton.leftClawToggle.getButton().whenPressed(new ToggleClaw(true));
         IButton.rightClawToggle.getButton().whenPressed(new ToggleClaw(false));
         IButton.indexerDownOneLevel.getButton().whenPressed(new FixedIndexerShift(null, false));
@@ -26,7 +26,7 @@ public class OI {
         IndexerDownAndUp downAndUp = new IndexerDownAndUp();
         IButton.indexerDownAndUp.getButton().whenPressed(downAndUp);
         IButton.indexerDownAndUp.getButton().whenReleased(downAndUp.getReleasedCommand());
-        IButton.indexerCollapseAll.getButton().whenPressed(new FullIndexerCollapse());
+        IButton.indexerCollapseAll.getButton().whenPressed(new FullIndexerCollapse(0));
         IButton.manualClawHold.getButton().whileHeld(new ManualClawControl());
         IButton.manualIndexerHold.getButton().whileHeld(new ManualIndexerControl());
         IButton.clawVerticalMaxUp.getButton().whenPressed(new VerticalClawMax(true));

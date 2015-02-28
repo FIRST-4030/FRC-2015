@@ -6,22 +6,43 @@ import org.ingrahamrobotics.robot2015.output.Settings;
 
 public class FullIndexerCollapse extends Command {
 
-    public FullIndexerCollapse() {
+    private boolean initialUpDone;
+    private final int encoderUpInitial;
+
+    public FullIndexerCollapse(final int initial) {
+        encoderUpInitial = initial;
         requires(Subsystems.verticalIndexerControl);
     }
 
     @Override
     protected void initialize() {
+        if (encoderUpInitial <= 0) {
+            initialUpDone = true;
+        }
     }
 
     @Override
     protected void execute() {
-        Subsystems.verticalIndexerControl.setSpeed(-Settings.Key.INDEXER_FIXED_SPEED.getDouble());
+        double speed = Math.abs(Settings.Key.INDEXER_FIXED_SPEED.getDouble());
+        if (initialUpDone) {
+            Subsystems.verticalIndexerControl.setSpeed(-speed);
+        } else {
+            int encoderValue = Subsystems.indexerEncoder.get();
+            if (encoderValue >= encoderUpInitial) {
+                initialUpDone = true;
+                return;
+            }
+            if (Subsystems.toggleSwitches.getIndexerTop() || encoderValue > Settings.Key.INDEXER_MAX_HEIGHT.getInt()) {
+                initialUpDone = true;
+                return;
+            }
+            Subsystems.verticalClawShifter.setSpeed(speed);
+        }
     }
 
     @Override
     protected boolean isFinished() {
-        return Subsystems.toggleSwitches.getIndexerBottom();
+        return initialUpDone && Subsystems.toggleSwitches.getIndexerBottom();
     }
 
     @Override

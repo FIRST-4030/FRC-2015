@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import org.ingrahamrobotics.robot2015.commands.FullIndexerCollapse;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -21,6 +22,7 @@ public class Robot extends IterativeRobot {
     public static boolean rateBasedDrive = true;
     public static OI oi;
     private Command autonomousCommand;
+    private boolean initialIndexerResetRun = false;
 
     /**
      * This function is run when the robot is first started up and should be used for any initialization code.
@@ -41,6 +43,10 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
+        if (!initialIndexerResetRun) {
+            new FullIndexerCollapse(Settings.Key.INDEXER_INITIAL_CLEARANCE_UP.getInt()).start();
+            initialIndexerResetRun = true;
+        } // TODO: Ensure to include the initial indexer reset in the autonomous command, or just don't do it here.
         if (autonomousCommand != null)
             autonomousCommand.start();
         output(OutputLevel.HIGH, "RobotState", "Autonomous");
@@ -60,6 +66,10 @@ public class Robot extends IterativeRobot {
         // this line or comment it out.
         if (autonomousCommand != null)
             autonomousCommand.cancel();
+        if (!initialIndexerResetRun) {
+            new FullIndexerCollapse(Settings.Key.INDEXER_INITIAL_CLEARANCE_UP.getInt()).start();
+            initialIndexerResetRun = true;
+        }
         if (Settings.Key.DRIVE_RESET_ENCODERS_ON_ENABLE.getBoolean()) {
             Subsystems.driveBase.resetEncoders();
         }
