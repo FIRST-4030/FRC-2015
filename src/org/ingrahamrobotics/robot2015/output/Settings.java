@@ -29,7 +29,6 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         STEER_PID_P("Steer PID: P", "3.2"),
         STEER_PID_I("Steer PID: I", "0.8"),
         STEER_PID_D("Steer PID: D", "0"),
-        STEER_PID_TICKS_PER_RADIAN("ticks per radian", String.valueOf((611 - 35) / (2 * Math.PI))),
         DRIVE_SPEED_MULTIPLIER("drive-speed-multiplier", "0.5"),
         TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.5"),
         TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60)),
