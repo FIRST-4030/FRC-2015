@@ -5,6 +5,7 @@ import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.commands.RunPIDDrive;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
+import org.ingrahamrobotics.robot2015.output.Settings;
 
 /**
  * Oversees the PIDDrive and PIDSteer Subsystems.
@@ -36,15 +37,6 @@ public class DriveBase extends Subsystem {
         };
         Output.initialized("DriveBase");
     }
-
-    public void setPID(double p, double i, double d) {
-        for (PIDSteer steer : steerSystem) {
-            steer.setPID(p, i, d);
-        }
-    }
-
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
 
     /**
      * @param fwd Forward movement, -1 to 1
@@ -156,6 +148,16 @@ public class DriveBase extends Subsystem {
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
         setDefaultCommand(new RunPIDDrive());
+    }
+
+    /**
+     * Sets the steer pid settings from Settings.
+     */
+    public void updateSteerPID() {
+        double p = Settings.Key.STEER_PID_P.getDouble();
+        double i = Settings.Key.STEER_PID_I.getDouble();
+        double d = Settings.Key.STEER_PID_D.getDouble();
+        setSteerPID(p, i, d);
     }
 
     public void setSteerPID(double p, double i, double d) {

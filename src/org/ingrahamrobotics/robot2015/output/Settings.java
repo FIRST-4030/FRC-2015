@@ -19,21 +19,26 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
      */
     public static enum Key {
         INDEXER_LEVEL_MAX_WAIT_TIME("Indexer one-up max time", "3000"),
-        INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y"),
+        INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y", false),
         INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "1800"),
         INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1"),
         INDEXER_MAX_HEIGHT("Indexer max height", "3000"),
-        VERTICAL_CLAW_MAX_CMD_SPEED("ClawVerticalMax speed", "1"),
         TOTE_CLEARANCE_ADDITION("Indexer tote clearance addition", "500"),
         INDEXER_INITIAL_CLEARANCE_UP("Indexer initial upwards movement", "200"),
-        STEER_PID_P("Steer PID: P", "3.2"),
-        STEER_PID_I("Steer PID: I", "0.8"),
-        STEER_PID_D("Steer PID: D", "0"),
+        VERTICAL_CLAW_MAX_CMD_SPEED("Claw auto-max speed", "1"),
+        STEER_PID_P("Steer PID: P", "3.2", false),
+        STEER_PID_I("Steer PID: I", "0.8", false),
+        STEER_PID_D("Steer PID: D", "0", false),
         DRIVE_SPEED_MULTIPLIER("drive-speed-multiplier", "0.5"),
         TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.5"),
         TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60)),
-        DRIVE_RESET_ENCODERS_ON_ENABLE("Reset swerve encoders on enable", "y"),
-        AUTO_ROUTINE_TIME("Autonomous routine time", "10000");
+        DRIVE_RESET_ENCODERS_ON_ENABLE("Reset swerve encoders on enable", "n", false),
+        AUTO_ROUTINE_TIME("Autonomous routine time", "750");
+
+        /**
+         * this is just so we can easily change this, rather than commenting out values.
+         */
+        public final boolean actuallyChangeFromDefault;
         public final String name;
         public final String defaultValue;
         private String value;
@@ -42,6 +47,14 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
             this.name = name;
             this.defaultValue = defaultValue;
             this.value = defaultValue;
+            this.actuallyChangeFromDefault = true;
+        }
+
+        private Key(final String name, final String defaultValue, boolean actuallyChangeFromDefault) {
+            this.name = name;
+            this.defaultValue = defaultValue;
+            this.value = defaultValue;
+            this.actuallyChangeFromDefault = actuallyChangeFromDefault;
         }
 
         public String get() {
@@ -133,7 +146,9 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         client.addClientListener(this, true);
         driverSettings.addUpdateListener(this, true);
         for (Key key : Key.values()) {
-            defaultSettings.set(key.name, key.defaultValue);
+            if (key.actuallyChangeFromDefault) {
+                defaultSettings.set(key.name, key.defaultValue);
+            }
         }
     }
 

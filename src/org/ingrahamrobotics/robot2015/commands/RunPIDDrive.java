@@ -42,9 +42,6 @@ public class RunPIDDrive extends Command {
 
         double fieldAngle = Math.PI / 2;
 
-        double p = Settings.Key.STEER_PID_P.getDouble();
-        double i = Settings.Key.STEER_PID_I.getDouble();
-        double d = Settings.Key.STEER_PID_D.getDouble();
 
         FWD = -y;
         STR = x;
@@ -53,7 +50,7 @@ public class RunPIDDrive extends Command {
         STR = -1 * FWD * Math.sin(fieldAngle) + STR * Math.cos(fieldAngle);
         FWD = temp;
 
-        Subsystems.driveBase.setSteerPID(p, i, d);
+        Subsystems.driveBase.updateSteerPID();
 
         Subsystems.driveBase.drive(FWD, STR, RCW);
     }

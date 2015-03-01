@@ -17,11 +17,8 @@ public class AutonomousRoutine extends TimedCommand {
 
     @Override
     protected boolean startState(final int state) {
-        double p = Settings.Key.STEER_PID_P.getDouble();
-        double i = Settings.Key.STEER_PID_I.getDouble();
-        double d = Settings.Key.STEER_PID_D.getDouble();
-        Subsystems.driveBase.setSteerPID(p, i, d);
-        Subsystems.driveBase.drive(0, -0.5, 0);
+        Subsystems.driveBase.updateSteerPID();
+        Subsystems.driveBase.drive(-0.5, 0, 0);
         return false;
     }
 
