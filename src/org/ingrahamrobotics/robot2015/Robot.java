@@ -2,15 +2,15 @@ package org.ingrahamrobotics.robot2015;
 
 import static org.ingrahamrobotics.robot2015.output.Output.output;
 
-import org.ingrahamrobotics.robot2015.output.Output;
-import org.ingrahamrobotics.robot2015.output.OutputLevel;
-import org.ingrahamrobotics.robot2015.output.Settings;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import org.ingrahamrobotics.robot2015.commands.AutonomousRoutine;
 import org.ingrahamrobotics.robot2015.commands.FullIndexerCollapse;
+import org.ingrahamrobotics.robot2015.output.Output;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
+import org.ingrahamrobotics.robot2015.output.Settings;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
         Subsystems.init();
         oi = new OI();
         // instantiate the command used for the autonomous period
-        autonomousCommand = null;
+        autonomousCommand = new AutonomousRoutine();
         output(OutputLevel.HIGH, "RobotState", "Initialized");
     }
 
@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
         if (!initialIndexerResetRun) {
             new FullIndexerCollapse(Settings.Key.INDEXER_INITIAL_CLEARANCE_UP.getInt()).start();
             initialIndexerResetRun = true;
-        } // TODO: Ensure to include the initial indexer reset in the autonomous command, or just don't do it here.
+        }
         if (autonomousCommand != null)
             autonomousCommand.start();
         output(OutputLevel.HIGH, "RobotState", "Autonomous");
