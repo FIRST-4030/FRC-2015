@@ -9,8 +9,8 @@ public class FullIndexerCollapse extends Command {
     private boolean initialUpDone;
     private final int encoderUpInitial;
 
-    public FullIndexerCollapse(final int initial) {
-        encoderUpInitial = initial;
+    public FullIndexerCollapse(final int encoderUpInitial) {
+        this.encoderUpInitial = encoderUpInitial;
         requires(Subsystems.verticalIndexerControl);
     }
 
