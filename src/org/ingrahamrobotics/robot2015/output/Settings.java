@@ -20,7 +20,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
     public static enum Key {
         INDEXER_LEVEL_MAX_WAIT_TIME("Indexer one-up max time", "3000"),
         INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y", false),
-        INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "1800"),
+        INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "350"),
         INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1"),
         INDEXER_MAX_HEIGHT("Indexer max height", "3000"),
         TOTE_CLEARANCE_ADDITION("Indexer tote clearance addition", "500"),
@@ -29,11 +29,11 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         STEER_PID_P("Steer PID: P", "3.2", false),
         STEER_PID_I("Steer PID: I", "0.8", false),
         STEER_PID_D("Steer PID: D", "0", false),
-        DRIVE_SPEED_MULTIPLIER("drive-speed-multiplier", "0.5"),
-        TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.5"),
+        DRIVE_SPEED_MULTIPLIER("drive-speed-multiplier", "0.6"),
+        TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.2"),
         TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60)),
         DRIVE_RESET_ENCODERS_ON_ENABLE("Reset swerve encoders on enable", "n", false),
-        AUTO_ROUTINE_TIME("Autonomous routine time", "750");
+        AUTO_ROUTINE_TIME("Autonomous routine time", "500");
 
         /**
          * this is just so we can easily change this, rather than commenting out values.
