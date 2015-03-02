@@ -5,23 +5,21 @@ import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPo
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_B;
 import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.STEER_MOTORS;
 
-import org.ingrahamrobotics.robot2015.output.Output;
-import org.ingrahamrobotics.robot2015.output.OutputLevel;
-import org.ingrahamrobotics.robot2015.output.Settings;
-
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import org.ingrahamrobotics.robot2015.output.Output;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
+import org.ingrahamrobotics.robot2015.utils.PossiblyFlippedDigitalInput;
 
 public class PIDSteer extends PIDSubsystem {
 
     //private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
     public Talon steerMotor;
     public Encoder steerEncoder;
-    public DigitalInput resetSwitch;
+    public PossiblyFlippedDigitalInput resetSwitch;
 
-    private double ticksPerRadian = (611 - 35)/(Math.PI * 2);
+    private double ticksPerRadian = (611 - 35) / (Math.PI * 2);
     boolean pResetState = false;
 
     // Initialize your subsystem here
@@ -32,7 +30,7 @@ public class PIDSteer extends PIDSubsystem {
 
         steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
         steerEncoder = new Encoder(STEER_ENCODERS_A[wheelNum - 1], STEER_ENCODERS_B[wheelNum - 1]);
-        resetSwitch = new DigitalInput(POD_RESET_SWITCHES[wheelNum - 1]);
+        resetSwitch = new PossiblyFlippedDigitalInput(POD_RESET_SWITCHES[wheelNum - 1]);
 
         setSetpoint(0.0);
         enable();
