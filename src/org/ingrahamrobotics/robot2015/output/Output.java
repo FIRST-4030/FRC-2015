@@ -99,6 +99,10 @@ public class Output {
         output(level, key, Double.toString(((int) (value * 100)) / 100.0));
     }
 
+    public static void output(OutputLevel level, String key, long value) {
+        output(level, key, Long.toString(value));
+    }
+
     public static void output(OutputLevel level, String key, boolean value) {
         output(level, key, value ? "true" : "false");
     }
