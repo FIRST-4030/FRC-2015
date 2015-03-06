@@ -26,7 +26,7 @@ public abstract class TimedCommand extends Command {
     @Override
     protected void execute() {
         boolean next = executeState(currentState) || (states[currentState] > 0 && System.currentTimeMillis() > lastSwitch + states[currentState]);
-        while (next) {
+        while (!next) {
             lastSwitch = System.currentTimeMillis();
             currentState += 1;
             if (currentState < states.length) {
