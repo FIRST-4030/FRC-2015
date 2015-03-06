@@ -11,9 +11,9 @@ public class ToggleSwitches extends Subsystem {
 
     private Set<String> warnedFor = new HashSet<>();
     private AnalogInput indexerBottom = new AnalogInput(AnalogIoPorts.BOTTOM_INDEXER_SWITCH);
-    private AnalogInput indexerTop = new AnalogInput(AnalogIoPorts.TOP_INDEXER_SWITCH);
+//    private AnalogInput indexerTop = new AnalogInput(AnalogIoPorts.TOP_INDEXER_SWITCH);
     private AnalogInput clawVerticalBottom = new AnalogInput(AnalogIoPorts.BOTTOM_VERTICAL_CLAW_SWITCH);
-    private AnalogInput clawVerticalTop = new AnalogInput(AnalogIoPorts.TOP_VERTICAL_CLAW_SWITCH);
+//    private AnalogInput clawVerticalTop = new AnalogInput(AnalogIoPorts.TOP_VERTICAL_CLAW_SWITCH);
 
     @Override
     protected void initDefaultCommand() {
@@ -44,14 +44,14 @@ public class ToggleSwitches extends Subsystem {
     }
 
     public boolean getIndexerTop() {
-        return proccessAnalogInput("indexer-top", indexerTop);
+        return false;
     }
 
     public boolean getVerticalClawBottom() {
-        return proccessAnalogInput("claw-bottom", clawVerticalBottom);
+        return !proccessAnalogInput("claw-bottom", clawVerticalBottom);
     }
 
     public boolean getVerticalClawTop() {
-        return proccessAnalogInput("claw-top", clawVerticalTop);
+        return false;
     }
 }
