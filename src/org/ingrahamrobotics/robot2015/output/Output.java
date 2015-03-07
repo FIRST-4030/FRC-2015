@@ -73,6 +73,9 @@ public class Output {
     }
 
     public void log(OutputLevel level, String key, String value) {
+        if (!level.enabled) {
+            return;
+        }
         if (successfullyInitialized) {
             levelMap.get(level).set(key, value);
         } else {
