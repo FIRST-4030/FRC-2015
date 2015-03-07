@@ -26,6 +26,9 @@ public class FullIndexerCollapse extends Command {
         double speed = Math.abs(Settings.Key.INDEXER_FIXED_SPEED.getDouble());
         if (initialUpDone) {
             Subsystems.verticalIndexerControl.setSpeed(-speed);
+            if (initialUpDone && Subsystems.toggleSwitches.getIndexerBottom()) {
+                Subsystems.indexerEncoder.reset();
+            }
         } else {
             int encoderValue = Subsystems.indexerEncoder.get();
             if (encoderValue >= encoderUpInitial) {

@@ -2,6 +2,8 @@ package org.ingrahamrobotics.robot2015.subsystems;
 
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
+
+import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
@@ -19,7 +21,10 @@ public class VerticalClawShifter extends Subsystem {
     }
 
     public void setSpeed(double value) {
-        motor.set(-value);
+        motor.set(value);
+        if (value > 0.1) {
+            Subsystems.toggleSwitches.clawHasGoneUp();
+        }
         Output.output(OutputLevel.RAW_MOTORS, "VerticalClawShifter:Speed", value);
     }
 }

@@ -2,13 +2,19 @@ package org.ingrahamrobotics.robot2015.subsystems;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
+
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
+
 import org.ingrahamrobotics.robot2015.commands.SensorStatusOutput;
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.AnalogIoPorts;
 
 public class ToggleSwitches extends Subsystem {
 
+    private boolean clawHasGoneUpSinceLastBottomPress;
+    private long lastIndexerBottomOn;
+    private long lastClawBottomOn;
     private Set<String> warnedFor = new HashSet<>();
     private AnalogInput indexerBottom = new AnalogInput(AnalogIoPorts.BOTTOM_INDEXER_SWITCH);
 //    private AnalogInput indexerTop = new AnalogInput(AnalogIoPorts.TOP_INDEXER_SWITCH);
@@ -40,15 +46,41 @@ public class ToggleSwitches extends Subsystem {
     }
 
     public boolean getIndexerBottom() {
-        return proccessAnalogInput("indexer-bottom", indexerBottom);
+        boolean current = proccessAnalogInput("indexer-bottom", indexerBottom);
+        long now = System.currentTimeMillis();
+        if (current) {
+            lastIndexerBottomOn = now;
+        }
+        if (lastIndexerBottomOn + 200 >= now) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean getIndexerTop() {
         return false;
     }
 
+    public void clawHasGoneUp() {
+        clawHasGoneUpSinceLastBottomPress = true;
+    }
+
     public boolean getVerticalClawBottom() {
-        return !proccessAnalogInput("claw-bottom", clawVerticalBottom);
+        boolean current = !proccessAnalogInput("claw-bottom",
+                clawVerticalBottom);
+        long now = System.currentTimeMillis();
+        if (current) {
+            lastClawBottomOn = now;
+            clawHasGoneUpSinceLastBottomPress = false;
+        }
+        if (lastClawBottomOn + 200 >= now) {
+            return true;
+        } else {
+            // If the claw hasn't moved up at all since the button was last
+            // pressed, it should still count as pressed
+            return !clawHasGoneUpSinceLastBottomPress;
+        }
     }
 
     public boolean getVerticalClawTop() {
