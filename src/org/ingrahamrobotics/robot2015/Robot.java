@@ -22,7 +22,7 @@ public class Robot extends IterativeRobot {
     public static boolean rateBasedDrive = true;
     public static OI oi;
     private Command autonomousCommand;
-    private boolean initialIndexerResetRun = false;
+    private boolean initialIndexerResetRun = true;
 
     /**
      * This function is run when the robot is first started up and should be used for any initialization code.
