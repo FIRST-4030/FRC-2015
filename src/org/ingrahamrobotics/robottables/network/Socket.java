@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Collections;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 
 public class Socket {
 
-    private static final boolean IGNORE_LOCAL = true;
+    private static final boolean IGNORE_LOCAL = false;
     private static final int MAX_MESSAGE_SIZE = 65535;
 
     private final DatagramSocket conn;
@@ -24,7 +25,9 @@ public class Socket {
         this.addr = addr;
         this.port = port;
         try {
-            conn = new DatagramSocket(port);
+            conn = new DatagramSocket(null);
+            conn.setReuseAddress(true);
+            conn.bind(new InetSocketAddress(port));
             conn.setBroadcast(true);
             if (IGNORE_LOCAL) {
                 getLocalAddrs();
@@ -74,6 +77,8 @@ public class Socket {
     public void send(String str) throws IOException {
         throwIfClosed();
 
+        str += "\0" + IO.INSTANCE_UNIQUE;
+
         try {
             DatagramPacket out = new DatagramPacket(str.getBytes(), str.length(), addr, port);
             conn.send(out);
@@ -87,13 +92,18 @@ public class Socket {
 
         byte[] buf = new byte[MAX_MESSAGE_SIZE];
         DatagramPacket in = null;
+        String messageUnique = null;
+        String data = null;
         try {
             // Ignore locally-generated packets
-            while (in == null || lAddrs.contains(in.getAddress().getHostAddress())) {
+            while (in == null || messageUnique.equals(IO.INSTANCE_UNIQUE)) {
                 in = new DatagramPacket(buf, buf.length);
                 conn.receive(in);
+                String raw = new String(buf, 0, in.getLength());
+                data = raw.substring(0, raw.lastIndexOf('\0'));
+                messageUnique = raw.substring(raw.lastIndexOf('\0') + 1);
             }
-            return new String(buf, 0, in.getLength());
+            return data;
         } catch (IOException ex) {
             throw new IOException("Unable to recv: " + ex.toString());
         }

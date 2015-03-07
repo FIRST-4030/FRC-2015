@@ -2,6 +2,7 @@ package org.ingrahamrobotics.robottables;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.List;
 import org.ingrahamrobotics.robottables.api.RobotTablesClient;
 import org.ingrahamrobotics.robottables.network.IO;
 import org.ingrahamrobotics.robottables.network.Queue;
@@ -15,8 +16,8 @@ public class RobotTables implements QueueEvents {
     private final TablesInterfaceHandler tablesInterfaceHandler;
     private Dispatch dispatch;
 
-    public RobotTables(InetAddress targetAddress) throws IOException {
-        io = new IO(targetAddress);
+    public RobotTables(List<InetAddress> targetAddresses) throws IOException {
+        io = new IO(targetAddresses);
         protocolHandler = new ProtocolHandler(io);
         tablesInterfaceHandler = new TablesInterfaceHandler(protocolHandler);
         // Set the internal handler on the protocol handler

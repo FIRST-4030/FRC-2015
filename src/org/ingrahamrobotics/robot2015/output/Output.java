@@ -5,9 +5,11 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Enumeration;
+import java.util.List;
 import org.ingrahamrobotics.robottables.RobotTables;
 import org.ingrahamrobotics.robottables.api.RobotTable;
 import org.ingrahamrobotics.robottables.api.RobotTablesClient;
@@ -20,23 +22,23 @@ public class Output {
     private boolean successfullyInitialized;
 
     public Output() {
-        InetAddress address;
+        List<InetAddress> addresses;
         try {
-            address = findValidBroadcastAddress();
+            addresses = findValidBroadcastAddresses();
         } catch (SocketException e) {
             e.printStackTrace();
             successfullyInitialized = false;
             return;
         }
-        if (address == null) {
+        if (addresses == null || addresses.isEmpty()) {
             System.err.println("Failed to find valid broadcast address!");
             successfullyInitialized = false;
             return;
         }
-        System.out.printf("Using broadcast address: %s%n", address);
+        System.out.printf("Using broadcast addresses: %s%n", addresses);
         RobotTables robotTables;
         try {
-            robotTables = new RobotTables(address);
+            robotTables = new RobotTables(addresses);
         } catch (IOException e) {
             e.printStackTrace();
             successfullyInitialized = false;
@@ -54,7 +56,8 @@ public class Output {
         successfullyInitialized = true;
     }
 
-    private InetAddress findValidBroadcastAddress() throws SocketException {
+    private List<InetAddress> findValidBroadcastAddresses() throws SocketException {
+        List<InetAddress> result = new ArrayList<>();
         Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
         for (NetworkInterface iface : Collections.list(ifaces)) {
             for (InterfaceAddress interfaceAddress : iface.getInterfaceAddresses()) {
@@ -65,11 +68,11 @@ public class Output {
                 InetAddress broadcastAddress = interfaceAddress.getBroadcast();
                 // this might be null (only for IPv6 addresses?)
                 if (broadcastAddress != null) {
-                    return interfaceAddress.getBroadcast();
+                    result.add(interfaceAddress.getBroadcast());
                 }
             }
         }
-        return null;
+        return result;
     }
 
     public void log(OutputLevel level, String key, String value) {
