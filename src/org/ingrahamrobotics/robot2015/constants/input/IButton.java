@@ -6,8 +6,6 @@ import org.ingrahamrobotics.robot2015.constants.JMap;
 
 public enum IButton {
     steerReset(IJoystick.driveJoystick, 1),
-    leftClawToggle(IJoystick.attackJoystick, JMap.Button.JoystickTop.LEFT),
-    rightClawToggle(IJoystick.attackJoystick, JMap.Button.JoystickTop.RIGHT),
     manualClawHold(IJoystick.attackJoystick, JMap.Button.JoystickStand.LEFT_TOP),
     manualIndexerHold(IJoystick.attackJoystick, JMap.Button.JoystickStand.LEFT_BOTTOM),
     indexerUpOneLevel(IJoystick.attackJoystick, JMap.Button.JoystickTop.MIDDLE),

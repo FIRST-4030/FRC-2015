@@ -6,7 +6,6 @@ import org.ingrahamrobotics.robot2015.commands.IndexerDownAndUp;
 import org.ingrahamrobotics.robot2015.commands.ManualClawControl;
 import org.ingrahamrobotics.robot2015.commands.ManualIndexerControl;
 import org.ingrahamrobotics.robot2015.commands.ResetTurningMotors;
-import org.ingrahamrobotics.robot2015.commands.ToggleClaw;
 import org.ingrahamrobotics.robot2015.commands.VerticalClawMax;
 import org.ingrahamrobotics.robot2015.constants.input.IButton;
 import org.ingrahamrobotics.robot2015.output.Settings;
@@ -19,8 +18,6 @@ public class OI {
 
     public OI() {
         IButton.steerReset.getButton().whenPressed(new ResetTurningMotors());
-        IButton.leftClawToggle.getButton().whenPressed(new ToggleClaw(true));
-        IButton.rightClawToggle.getButton().whenPressed(new ToggleClaw(false));
         IButton.indexerDownOneLevel.getButton().whenPressed(new FixedIndexerShift(null, false));
         IButton.indexerUpOneLevel.getButton().whenPressed(new FixedIndexerShift(Settings.Key.TOTE_CLEARANCE_ADDITION, true));
         IndexerDownAndUp downAndUp = new IndexerDownAndUp();
