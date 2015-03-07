@@ -61,13 +61,13 @@ public class HardwarePorts {
         public static final int BACK_RIGHT_DRIVE_ENCODER_A = 14;
         public static final int BACK_RIGHT_DRIVE_ENCODER_B = 15;
 
-        public static final int FRONT_LEFT_RESET_SWITCH = 16; //16;
-        public static final int BACK_LEFT_RESET_SWITCH = 17; //17;
-        public static final int FRONT_RIGHT_RESET_SWITCH = 10;//18;
-        public static final int BACK_RIGHT_RESET_SWITCH = 11;//19;
+        public static final int FRONT_LEFT_RESET_SWITCH = 10;
+        public static final int BACK_LEFT_RESET_SWITCH = 11;
+        public static final int FRONT_RIGHT_RESET_SWITCH = 12;
+        public static final int BACK_RIGHT_RESET_SWITCH = 13;
 
-        public static final int INDEXER_ENCODER_A = 8;
-        public static final int INDEXER_ENCODER_B = 9;
+        public static final int INDEXER_ENCODER_A = 9;
+        public static final int INDEXER_ENCODER_B = 8;
 
         public static final int CONTAINER_ENCODER_A = 22;
         public static final int CONTAINER_ENCODER_B = 23;
