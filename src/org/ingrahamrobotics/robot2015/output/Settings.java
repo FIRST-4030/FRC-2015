@@ -22,18 +22,18 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y", false),
         INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "350"),
         INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1"),
-        INDEXER_MAX_HEIGHT("Indexer max height", "3000"),
+        INDEXER_MAX_HEIGHT("Indexer max height", "9000"),
         TOTE_CLEARANCE_ADDITION("Indexer tote clearance addition", "500"),
         INDEXER_INITIAL_CLEARANCE_UP("Indexer initial upwards movement", "200"),
         VERTICAL_CLAW_MAX_CMD_SPEED("Claw auto-max speed", "1"),
         STEER_PID_P("Steer PID: P", "3.2", false),
         STEER_PID_I("Steer PID: I", "0.8", false),
         STEER_PID_D("Steer PID: D", "0", false),
-        DRIVE_SPEED_MULTIPLIER("drive-speed-multiplier", "0.6"),
-        TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.2"),
+        DRIVE_SPEED_MULTIPLIER("drive-speed-multiplier", "0.65"),
+        TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.1"),
         TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60)),
         DRIVE_RESET_ENCODERS_ON_ENABLE("Reset swerve encoders on enable", "n", false),
-        AUTO_ROUTINE_TIME("Autonomous routine time", "500");
+        AUTO_ROUTINE_TIME("Autonomous routine time", "1");
 
         /**
          * this is just so we can easily change this, rather than commenting out values.
