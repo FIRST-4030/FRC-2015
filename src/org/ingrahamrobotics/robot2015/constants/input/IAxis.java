@@ -7,7 +7,7 @@ public enum IAxis {
     driveY(IJoystick.driveJoystick, Joystick.AxisType.kThrottle),
     steer(IJoystick.driveJoystick, Joystick.AxisType.kX),
 
-    manualControl(IJoystick.secondaryJoystick, Joystick.AxisType.kY);
+    manualControl(IJoystick.attackJoystick, Joystick.AxisType.kY);
 
     private Joystick.AxisType axisType;
     private IJoystick iJoystick;

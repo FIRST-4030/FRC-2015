@@ -8,8 +8,7 @@ package org.ingrahamrobotics.robot2015.constants;
 public class JMap {
 
     public static final int DRIVE_JOYSTICK = 0;
-    public static final int STEERING_JOYSTICK = 1;
-    public static final int SECONDARY_JOYSTICK = 2;
+    public static final int ATTACK_JOYSTICK = 1;
 
     public static class Axis {
 

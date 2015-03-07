@@ -6,16 +6,16 @@ import org.ingrahamrobotics.robot2015.constants.JMap;
 
 public enum IButton {
     steerReset(IJoystick.driveJoystick, 1),
-    leftClawToggle(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.LEFT),
-    rightClawToggle(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.RIGHT),
-    manualClawHold(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.LEFT_TOP),
-    manualIndexerHold(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.LEFT_BOTTOM),
-    indexerUpOneLevel(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.MIDDLE),
-    indexerDownAndUp(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.BOTTOM),
-    indexerDownOneLevel(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.RIGHT_TOP),
-    indexerCollapseAll(IJoystick.secondaryJoystick, JMap.Button.JoystickTop.TRIGGER),
-    clawVerticalMaxUp(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.RIGHT_TOP),
-    clawVerticalMaxDown(IJoystick.secondaryJoystick, JMap.Button.JoystickStand.RIGHT_BOTTOM),;
+    leftClawToggle(IJoystick.attackJoystick, JMap.Button.JoystickTop.LEFT),
+    rightClawToggle(IJoystick.attackJoystick, JMap.Button.JoystickTop.RIGHT),
+    manualClawHold(IJoystick.attackJoystick, JMap.Button.JoystickStand.LEFT_TOP),
+    manualIndexerHold(IJoystick.attackJoystick, JMap.Button.JoystickStand.LEFT_BOTTOM),
+    indexerUpOneLevel(IJoystick.attackJoystick, JMap.Button.JoystickTop.MIDDLE),
+    indexerDownAndUp(IJoystick.attackJoystick, JMap.Button.JoystickTop.BOTTOM),
+    indexerDownOneLevel(IJoystick.attackJoystick, JMap.Button.JoystickStand.RIGHT_TOP),
+    indexerCollapseAll(IJoystick.attackJoystick, JMap.Button.JoystickTop.TRIGGER),
+    clawVerticalMaxUp(IJoystick.attackJoystick, JMap.Button.JoystickStand.RIGHT_TOP),
+    clawVerticalMaxDown(IJoystick.attackJoystick, JMap.Button.JoystickStand.RIGHT_BOTTOM),;
 
     private Button button;
 

@@ -5,8 +5,7 @@ import org.ingrahamrobotics.robot2015.constants.JMap;
 
 public enum IJoystick {
     driveJoystick(JMap.DRIVE_JOYSTICK),
-    steeringJoystick(JMap.STEERING_JOYSTICK),
-    secondaryJoystick(JMap.SECONDARY_JOYSTICK);
+    attackJoystick(JMap.ATTACK_JOYSTICK);
 
     public Joystick joystick;
 
