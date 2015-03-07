@@ -21,16 +21,19 @@ public class ManualIndexerControl extends Command {
 
     @Override
     protected void execute() {
-        double y = IAxis.manualControl.get();
+        double y = -IAxis.manualControl.get();
 
         if (ManualControlState.isManualClawRunning()) {
+            Subsystems.verticalIndexerControl.setSpeed(0);
             return;
         }
         if (y > 0 && (Subsystems.toggleSwitches.getIndexerTop()
                 || Subsystems.indexerEncoder.get() > Settings.Key.INDEXER_MAX_HEIGHT.getInt())) {
+            Subsystems.verticalIndexerControl.setSpeed(0);
             return;
         }
         if (y < 0 && Subsystems.toggleSwitches.getIndexerBottom()) {
+            Subsystems.verticalIndexerControl.setSpeed(0);
             return;
         }
 

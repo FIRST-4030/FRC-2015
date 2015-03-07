@@ -22,12 +22,14 @@ public class ManualClawControl extends Command {
 
     @Override
     protected void execute() {
-        double y = IAxis.manualControl.get();
+        double y = -IAxis.manualControl.get();
 
         if (y > 0 && Subsystems.toggleSwitches.getVerticalClawTop()) {
+            Subsystems.verticalClawShifter.setSpeed(0);
             return;
         }
         if (y < 0 && Subsystems.toggleSwitches.getVerticalClawBottom()) {
+            Subsystems.verticalClawShifter.setSpeed(0);
             return;
         }
 
