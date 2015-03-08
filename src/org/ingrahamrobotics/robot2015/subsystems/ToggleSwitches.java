@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.ingrahamrobotics.robot2015.commands.SensorStatusOutput;
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.AnalogIoPorts;
+import org.ingrahamrobotics.robot2015.output.Output;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
 
 public class ToggleSwitches extends Subsystem {
 
@@ -41,7 +43,7 @@ public class ToggleSwitches extends Subsystem {
             }
             value = false;
         }
-
+        Output.output(OutputLevel.RAW_SENSORS, "RawSwitch:"+name, value);
         return value;
     }
 
