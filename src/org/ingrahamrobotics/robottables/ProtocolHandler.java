@@ -100,6 +100,15 @@ public class ProtocolHandler implements RobotProtocol {
         sendMessage(new Message(Message.Type.DELETE_ADMIN, tableName, key, "_"));
     }
 
+    public void recheckNetworkInterfaces(boolean forceRestart) {
+        try {
+            io.reconnect(forceRestart);
+        } catch (IOException e) {
+            System.err.println("Error reconnecting to network interfaces: ");
+            e.printStackTrace();
+        }
+    }
+
     public void sendMessage(final Message message) {
         // System.out.println("[Sending] " + message.singleLineDisplayStr());
         try {

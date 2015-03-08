@@ -219,4 +219,8 @@ public class TablesInterfaceHandler implements RobotTablesClient, InternalTableH
     public void removeClientListener(final ClientUpdateListener listener) {
         listeners.remove(listener);
     }
+
+    public void recheckNetworkInterfaces(boolean forceRestart) {
+        protocolHandler.recheckNetworkInterfaces(forceRestart);
+    }
 }

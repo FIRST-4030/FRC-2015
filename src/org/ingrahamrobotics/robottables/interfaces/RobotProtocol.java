@@ -48,4 +48,6 @@ public interface RobotProtocol extends DistpachEvents {
     public void sendAdminKeyUpdate(String tableName, String key, String value);
 
     public void sendAdminKeyDelete(String tableName, String key);
+
+    public void recheckNetworkInterfaces(boolean forceRestart);
 }

@@ -75,4 +75,9 @@ public interface RobotTablesClient {
      * @param listener The listener to remove
      */
     public void removeClientListener(ClientUpdateListener listener);
+
+    /**
+     * Reconnects sockets if network interfaces have changed.
+     */
+    public void recheckNetworkInterfaces(boolean forceRestart);
 }
