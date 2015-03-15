@@ -11,9 +11,9 @@ Items which are created and fully functional should be marked with ✓. Items wh
 
 Subsystems:
 
-- [ ] ToteIndexer
+- [x] ToteIndexer
   - Controls the position of the tote indexer.
-- [ ] IntakeWheels
+- [x] IntakeWheels
   - Controls the intake wheels for the tote indexer.
 - [x] DriveBase
   - Controls the swerve drive.
@@ -23,7 +23,7 @@ Subsystems:
 
 Commands:
 
-- [ ] AutonomousRoutine
+- [x] AutonomousRoutine
   - Runs during autonomous mode. Function currently undetermined.
 - [x] FixedIndexerShift
   - [x] Shifts the indexer up/down a specific amount.
@@ -57,7 +57,3 @@ Variable Stores:
 - [x] InputSettings
   - Contains settings for where all buttons are located.
   - Might want to make this an enum with a method to directly obtain the JoystickButton. That would allow for statements like `InputSettings.CLAW_TOGGLE_LEFT.get().onPressed(...)` instead of `clawToggleButton = new JoystickButton(InputSettings.CLAW_TOGGLE_LEFT)` and then `clawToggleButton.onPressed(...)`
-- [x] ManualControlState
-  - Contains whether or not ManualIndexerControl is running.
-  - Should just have a method to get/set the boolean state.
-  - Should publish which manual control has priority on the dashboard.
