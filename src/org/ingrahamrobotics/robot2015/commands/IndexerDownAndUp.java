@@ -12,7 +12,7 @@ public class IndexerDownAndUp extends TimedCommand {
     private long currentTargetEncoderValue;
 
     public IndexerDownAndUp() {
-        requires(Subsystems.verticalIndexerControl);
+        requires(Subsystems.toteIndexer);
     }
 
     public ButtonReleasedTrigger getReleasedCommand() {
@@ -102,9 +102,9 @@ public class IndexerDownAndUp extends TimedCommand {
 
         double speed = Settings.Key.INDEXER_FIXED_SPEED.getDouble();
         if (state == 0) {
-            Subsystems.verticalIndexerControl.setSpeed(-speed);
+            Subsystems.toteIndexer.setSpeed(-speed);
         } else {
-            Subsystems.verticalIndexerControl.setSpeed(speed);
+            Subsystems.toteIndexer.setSpeed(speed);
         }
         return false;
     }
@@ -119,7 +119,7 @@ public class IndexerDownAndUp extends TimedCommand {
 
     @Override
     protected void end() {
-        Subsystems.verticalIndexerControl.setSpeed(0);
+        Subsystems.toteIndexer.setSpeed(0);
     }
 
     public class ButtonReleasedTrigger extends Command {
