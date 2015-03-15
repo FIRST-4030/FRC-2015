@@ -22,10 +22,7 @@ public class Subsystems {
     public static SpeedDrive pidDrive2;
     public static SpeedDrive pidDrive3;
     public static SpeedDrive pidDrive4;
-    public static SingleClawSubsystem leftClaw;
-    public static SingleClawSubsystem rightClaw;
-    public static VerticalClawShifter verticalClawShifter;
-    public static VerticalIndexerControl verticalIndexerControl;
+    public static ToteIndexer toteIndexer;
     public static ToggleSwitches toggleSwitches;
     public static IndexerEncoder indexerEncoder;
     public static PowerBoard powerBoard;
@@ -40,10 +37,7 @@ public class Subsystems {
         pidDrive3 = new SpeedDrive(3);
         pidDrive4 = new SpeedDrive(4);
         driveBase = new DriveBase();
-        leftClaw = new SingleClawSubsystem("Left", SolenoidPorts.LEFT_CLAW_EXTEND, SolenoidPorts.LEFT_CLAW_RETRACT);
-        rightClaw = new SingleClawSubsystem("Right", SolenoidPorts.RIGHT_CLAW_EXTEND, SolenoidPorts.RIGHT_CLAW_RETRACT);
-        verticalClawShifter = new VerticalClawShifter();
-        verticalIndexerControl = new VerticalIndexerControl();
+        toteIndexer = new ToteIndexer();
         toggleSwitches = new ToggleSwitches();
         indexerEncoder = new IndexerEncoder();
         powerBoard = new PowerBoard();

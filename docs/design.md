@@ -31,7 +31,7 @@ Commands:
   - [ ] Setting to use encoder or not use encoder.
 - [ ] FullIndexerCollapse
   - Shifts the indexer all the way down.
-- [ ] ManualIndexerControl
+- [x] ManualIndexerControl
   - Controls the ToteIndexer manually via the non-drive joystick continuously.
   - Should be controlled via a `.runWhilePressed()` on the manual indexer control button.
   - Should stop running up/down if the up/down indexer toggle switches are activate.
