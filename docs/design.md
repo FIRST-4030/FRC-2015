@@ -25,11 +25,11 @@ Commands:
 
 - [ ] AutonomousRoutine
   - Runs during autonomous mode. Function currently undetermined.
-- [ ] FixedIndexerShift
-  - [ ] Shifts the indexer up/down a specific amount.
-  - [ ] Should be able to be set to shift up or down via a constructor parameter.
-  - [ ] Setting to use encoder or not use encoder.
-- [ ] FullIndexerCollapse
+- [x] FixedIndexerShift
+  - [x] Shifts the indexer up/down a specific amount.
+  - [x] Should be able to be set to shift up or down via a constructor parameter.
+  - [x] Setting to use encoder or not use encoder.
+- [x] FullIndexerCollapse
   - Shifts the indexer all the way down.
 - [x] ManualIndexerControl
   - Controls the ToteIndexer manually via the non-drive joystick continuously.
@@ -46,7 +46,7 @@ Commands:
   - Should take joystick input from the drive joysticks and/or drive turnknob, and control DriveBase.
 - [ ] ResetTurningMotors
   - Spins DriveBase turning motors until their reset switch is triggered, then zeros their encoder.
-- [ ] ResetIndexerEncoder
+- [x] ResetIndexerEncoder
   - Drives the ToteIndexer down until it triggers its bottom switch, then zeros the encoder.
 
 
