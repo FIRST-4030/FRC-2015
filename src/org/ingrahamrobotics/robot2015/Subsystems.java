@@ -5,11 +5,10 @@ import org.ingrahamrobotics.robot2015.subsystems.DriveBase;
 import org.ingrahamrobotics.robot2015.subsystems.IndexerEncoder;
 import org.ingrahamrobotics.robot2015.subsystems.PIDSteer;
 import org.ingrahamrobotics.robot2015.subsystems.PowerBoard;
-import org.ingrahamrobotics.robot2015.subsystems.SingleClawSubsystem;
 import org.ingrahamrobotics.robot2015.subsystems.SpeedDrive;
 import org.ingrahamrobotics.robot2015.subsystems.ToggleSwitches;
-import org.ingrahamrobotics.robot2015.subsystems.VerticalClawShifter;
-import org.ingrahamrobotics.robot2015.subsystems.VerticalIndexerControl;
+import org.ingrahamrobotics.robot2015.subsystems.ToteIndexer;
+import org.ingrahamrobotics.robot2015.subsystems.IntakeWheels;
 
 public class Subsystems {
 
@@ -23,6 +22,7 @@ public class Subsystems {
     public static SpeedDrive pidDrive3;
     public static SpeedDrive pidDrive4;
     public static ToteIndexer toteIndexer;
+    public static IntakeWheels intakeWheels;
     public static ToggleSwitches toggleSwitches;
     public static IndexerEncoder indexerEncoder;
     public static PowerBoard powerBoard;
@@ -38,6 +38,7 @@ public class Subsystems {
         pidDrive4 = new SpeedDrive(4);
         driveBase = new DriveBase();
         toteIndexer = new ToteIndexer();
+        intakeWheels = new IntakeWheels();
         toggleSwitches = new ToggleSwitches();
         indexerEncoder = new IndexerEncoder();
         powerBoard = new PowerBoard();

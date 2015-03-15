@@ -12,7 +12,6 @@ import org.ingrahamrobotics.robot2015.output.OutputLevel;
 public class ToteIndexer extends Subsystem {
 
     private final Talon motor = new Talon(MotorPorts.TOTE_INDEXER_MOTOR);
-    private final Encoder encoder = new Encoder(DigitalIOPorts.INDEXER_ENCODER_A, DigitalIOPorts.INDEXER_ENCODER_B);
 
     public ToteIndexer() {
         Output.initialized("ToteIndexer");
@@ -22,10 +21,6 @@ public class ToteIndexer extends Subsystem {
     public void initDefaultCommand() {
     }
     
-    public int getPosition() {
-        encoder.get();
-    }
-
     public void setSpeed(double value) {
         motor.set(value);
         if (value > 0.1) {
