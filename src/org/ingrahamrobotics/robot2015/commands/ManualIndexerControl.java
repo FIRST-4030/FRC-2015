@@ -9,9 +9,9 @@ import org.ingrahamrobotics.robot2015.state.ManualControlState;
 public class ManualIndexerControl extends Command {
 
     public ManualIndexerControl() {
-        requires(Subsystems.verticalIndexerControl);
+        requires(Subsystems.toteIndexer);
         ManualControlState.setManualIndexerRunning(false);
-        Subsystems.verticalIndexerControl.setSpeed(0);
+        Subsystems.toteIndexer.setSpeed(0);
     }
 
     @Override
@@ -23,21 +23,17 @@ public class ManualIndexerControl extends Command {
     protected void execute() {
         double y = -IAxis.manualControl.get();
 
-        if (ManualControlState.isManualClawRunning()) {
-            Subsystems.verticalIndexerControl.setSpeed(0);
-            return;
-        }
         if (y > 0 && (Subsystems.toggleSwitches.getIndexerTop()
                 || Subsystems.indexerEncoder.get() > Settings.Key.INDEXER_MAX_HEIGHT.getInt())) {
-            Subsystems.verticalIndexerControl.setSpeed(0);
+            Subsystems.toteIndexer.setSpeed(0);
             return;
         }
         if (y < 0 && Subsystems.toggleSwitches.getIndexerBottom()) {
-            Subsystems.verticalIndexerControl.setSpeed(0);
+            Subsystems.toteIndexer.setSpeed(0);
             return;
         }
 
-        Subsystems.verticalIndexerControl.setSpeed(y);
+        Subsystems.toteIndexer.setSpeed(y);
     }
 
     @Override
@@ -47,7 +43,7 @@ public class ManualIndexerControl extends Command {
 
     @Override
     protected void end() {
-        Subsystems.verticalIndexerControl.setSpeed(0);
+        Subsystems.toteIndexer.setSpeed(0);
         ManualControlState.setManualIndexerRunning(false);
     }
 

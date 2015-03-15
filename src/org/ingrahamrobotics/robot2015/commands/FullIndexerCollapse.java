@@ -11,7 +11,7 @@ public class FullIndexerCollapse extends Command {
 
     public FullIndexerCollapse(final int encoderUpInitial) {
         this.encoderUpInitial = encoderUpInitial;
-        requires(Subsystems.verticalIndexerControl);
+        requires(Subsystems.toteIndexer);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class FullIndexerCollapse extends Command {
                 initialUpDone = true;
                 return;
             }
-            Subsystems.verticalClawShifter.setSpeed(speed);
+            Subsystems.toteIndexer.setSpeed(speed);
         }
     }
 
@@ -50,7 +50,7 @@ public class FullIndexerCollapse extends Command {
 
     @Override
     protected void end() {
-        Subsystems.verticalIndexerControl.setSpeed(0);
+        Subsystems.toteIndexer.setSpeed(0);
     }
 
     @Override

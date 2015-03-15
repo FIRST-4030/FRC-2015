@@ -12,7 +12,7 @@ public class FixedIndexerShift extends TimedCommand {
 
     public FixedIndexerShift(final Settings.Key additionKey, boolean directionIsUp) {
         this.additionKey = additionKey;
-        requires(Subsystems.verticalIndexerControl);
+        requires(Subsystems.toteIndexer);
         this.directionIsUp = directionIsUp;
     }
 
@@ -79,9 +79,9 @@ public class FixedIndexerShift extends TimedCommand {
 
         double speed = Settings.Key.INDEXER_FIXED_SPEED.getDouble();
         if (directionIsUp) {
-            Subsystems.verticalIndexerControl.setSpeed(speed);
+            Subsystems.toteIndexer.setSpeed(speed);
         } else {
-            Subsystems.verticalIndexerControl.setSpeed(-speed);
+            Subsystems.toteIndexer.setSpeed(-speed);
         }
         return false; // we're never done in startState
     }
@@ -95,6 +95,6 @@ public class FixedIndexerShift extends TimedCommand {
 
     @Override
     protected void end() {
-        Subsystems.verticalIndexerControl.setSpeed(0);
+        Subsystems.toteIndexer.setSpeed(0);
     }
 }
