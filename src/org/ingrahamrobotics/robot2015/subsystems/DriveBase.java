@@ -17,10 +17,13 @@ public class DriveBase extends Subsystem {
     private boolean wasStillLast;
     public final PIDSteer[] steerSystem;
     public final SpeedDrive[] driveSystem;
-
-    private final int trackWidth = 37;
-    private final int wheelBase = 21;
-    private final double radius = Math.sqrt(trackWidth ^ 2 + wheelBase ^ 2);
+    
+    private final int frontTrackWidth = 37;
+    private final int backTrackWidth = 37;
+    private final int frontWheelBase = 22;
+    private final int backWheelBase = 21;
+    private final double frontRadius = Math.sqrt(frontTrackWidth ^ 2 + frontWheelBase ^ 2);
+    private final double backRadius = Math.sqrt(backTrackWidth ^ 2 + backWheelBase ^ 2);
 
     public DriveBase() {
         driveSystem = new SpeedDrive[]{
@@ -48,13 +51,21 @@ public class DriveBase extends Subsystem {
         Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
         Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
         boolean isStill = fwd == 0 && str == 0 && rcw == 0;
-        double a = str - rcw * (wheelBase / radius);
-        double b = str + rcw * (wheelBase / radius);
-        double c = fwd - rcw * (trackWidth / radius);
-        double d = fwd + rcw * (trackWidth / radius);
+        double[] frontTanQuad = {
+            (str - rcw * (frontWheelBase / frontRadius)),
+            (str + rcw * (frontWheelBase / frontRadius)),
+            (fwd - rcw * (frontTrackWidth / frontRadius)),
+            (fwd + rcw * (frontTrackWidth / frontRadius)),
+        }
+        double[] backTanQuad = {
+            (str - rcw * (backWheelBase / backRadius)),
+            (str + rcw * (backWheelBase / backRadius)),
+            (fwd - rcw * (backTrackWidth / backRadius)),
+            (fwd + rcw * (backTrackWidth / backRadius)),
+        }
 
-        double[] wheelSpeeds = getWheelSpeeds(a, b, c, d);
-        double[] wheelAngles = getWheelAngles(a, b, c, d);
+        double[] wheelSpeeds = getWheelSpeeds(frontTanQuad, backTanQuad);
+        double[] wheelAngles = getWheelAngles(frontTanQuad, backTanQuad);
 
         // This should work...?
         for (int i = 0; i < wheelAngles.length; i++) {
@@ -110,11 +121,11 @@ public class DriveBase extends Subsystem {
 //        }
     }
 
-    private double[] getWheelSpeeds(double a, double b, double c, double d) {
-        double ws1 = Math.sqrt(b * b + c * c);
-        double ws2 = Math.sqrt(b * b + d * d);
-        double ws3 = Math.sqrt(a * a + d * d);
-        double ws4 = Math.sqrt(a * a + c * c);
+    private double[] getWheelSpeeds(double[] frontQuad, double[] backQuad) {
+        double ws1 = Math.sqrt(frontQuad[1] ^ 2 + frontQuad[2] ^ 2);
+        double ws2 = Math.sqrt(frontQuad[1] ^ 2 + frontQuad[3] ^ 2);
+        double ws3 = Math.sqrt(backQuad[0] ^ 2 + backQuad[3]);
+        double ws4 = Math.sqrt(backQuad[0] ^ 2 + backQuad[2]);
 
         // Binds the wheel speeds to [0, +1]
         double max = ws1;
@@ -134,12 +145,12 @@ public class DriveBase extends Subsystem {
         return new double[]{ws1, ws2, ws3, ws4};
     }
 
-    private double[] getWheelAngles(double a, double b, double c, double d) {
+    private double[] getWheelAngles(double[] frontQuad, double[] backQuad) {
         // Wheel angles -180 to 180. 0 is straight forward
-        double wa1 = Math.atan2(b, c);
-        double wa2 = Math.atan2(b, d);
-        double wa3 = Math.atan2(a, d);
-        double wa4 = Math.atan2(a, c);
+        double wa1 = Math.atan2(frontQuad[1], frontQuad[2]);
+        double wa2 = Math.atan2(frontQuad[1], frontQuad[3]);
+        double wa3 = Math.atan2(backQuad[0], backQuad[3]);
+        double wa4 = Math.atan2(backQuad[0], backQuad[2]);
 
         return new double[]{wa1, wa2, wa3, wa4};
     }
