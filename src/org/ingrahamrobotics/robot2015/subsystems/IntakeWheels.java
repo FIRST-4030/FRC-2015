@@ -12,7 +12,7 @@ import org.ingrahamrobotics.robot2015.output.Settings;
 
 public class IntakeWheels extends Subsystem {
 
-    private final Talon motor = new Talon(MotorPorts.INTAKE_WHEEL_MOTOR);
+    private final Talon motor = new Talon(MotorPorts.INTAKE_WHEEL_MOTORS);
 
     public IntakeWheels() {
         Output.initialized("IntakeWheels");

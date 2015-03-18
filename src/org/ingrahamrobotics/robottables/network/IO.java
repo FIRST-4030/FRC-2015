@@ -76,8 +76,10 @@ public class IO {
         for (Socket socket : oldSockets) {
             socket.close();
         }
-        for (RecvThread thread : oldThreads) {
-            thread.done = true;
+        if (oldThreads != null) {
+            for (RecvThread thread : oldThreads) {
+                thread.done = true;
+            }
         }
     }
 

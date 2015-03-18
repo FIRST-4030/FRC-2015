@@ -2,15 +2,6 @@ package org.ingrahamrobotics.robot2015.constants;
 
 public class HardwarePorts {
 
-    public static class SolenoidPorts {
-
-        // All solenoid ports are unconfirmed.
-        public static final int LEFT_CLAW_EXTEND = 0;
-        public static final int LEFT_CLAW_RETRACT = 1;
-        public static final int RIGHT_CLAW_EXTEND = 2;
-        public static final int RIGHT_CLAW_RETRACT = 3;
-    }
-
     public static class MotorPorts {
 
         // All motor ports are confirmed
@@ -22,8 +13,8 @@ public class HardwarePorts {
         public static final int BACK_LEFT_STEER = 5;
         public static final int FRONT_RIGHT_STEER = 6;
         public static final int BACK_RIGHT_STEER = 7;
-        public static final int INDEXER_SPOOL_MOTOR = 8; // NOTE: This motor's speed is flipped
-        public static final int CLAW_VERTICAL_SHIFTER = 9;
+        public static final int INDEXER_MOTORS = 8; // NOTE: This motor's speed is flipped
+        public static final int INTAKE_WHEEL_MOTORS = 9;
 
         // For swerve organization
         public static final int[] DRIVE_MOTORS = {

@@ -3,20 +3,21 @@ package org.ingrahamrobotics.robot2015.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.constants.input.IAxis;
+import org.ingrahamrobotics.robot2015.output.Output;
+import org.ingrahamrobotics.robot2015.output.OutputLevel;
 import org.ingrahamrobotics.robot2015.output.Settings;
-import org.ingrahamrobotics.robot2015.state.ManualControlState;
 
 public class ManualIndexerControl extends Command {
 
     public ManualIndexerControl() {
         requires(Subsystems.toteIndexer);
-        ManualControlState.setManualIndexerRunning(false);
+        Output.output(OutputLevel.HIGH, "ManualControlDevice", "None");
         Subsystems.toteIndexer.setSpeed(0);
     }
 
     @Override
     protected void initialize() {
-        ManualControlState.setManualIndexerRunning(true);
+        Output.output(OutputLevel.HIGH, "ManualControlDevice", "Indexer");
     }
 
     @Override
@@ -44,7 +45,7 @@ public class ManualIndexerControl extends Command {
     @Override
     protected void end() {
         Subsystems.toteIndexer.setSpeed(0);
-        ManualControlState.setManualIndexerRunning(false);
+        Output.output(OutputLevel.HIGH, "ManualControlDevice", "None");
     }
 
     //Should always be called, but will redirect to end for form
