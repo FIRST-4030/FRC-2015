@@ -50,7 +50,7 @@ public class ToggleSwitches extends Subsystem {
     }
 
     public boolean getIndexerBottom() {
-        boolean current = !proccessAnalogInput("indexer-bottom", indexerBottom);
+        boolean current = proccessAnalogInput("indexer-bottom", indexerBottom);
         long now = System.currentTimeMillis();
         if (current) {
             lastIndexerBottomOn = now;
