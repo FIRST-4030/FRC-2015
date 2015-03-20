@@ -46,7 +46,7 @@ public class PIDSteer extends PIDSubsystem {
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         //ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
-    	double pidInput = steerEncoder.getDistance() / ticksPerRadian;
+    	double pidInput = (steerEncoder.getDistance() / ticksPerRadian) % Math.PI;
     	Output.output(OutputLevel.SWERVE_DEBUG, getName() + "pid input", pidInput);
         return pidInput;
     }
