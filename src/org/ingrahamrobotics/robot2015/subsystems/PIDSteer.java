@@ -54,6 +54,7 @@ public class PIDSteer extends PIDSubsystem {
     protected void usePIDOutput(double output) {
         // Use output to drive your system, like a motor
         // e.g. yourMotor.set(output);
+    	Output.output(OutputLevel.RAW_MOTORS, getName() + " Motor Speed", output);
         steerMotor.set(output);
     }
 

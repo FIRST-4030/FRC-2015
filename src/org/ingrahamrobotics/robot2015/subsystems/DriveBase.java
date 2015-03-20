@@ -21,7 +21,7 @@ public class DriveBase extends Subsystem {
     private final int frontTrackWidth = 37;
     private final int backTrackWidth = 37;
     private final int frontWheelBase = 22;
-    private final int backWheelBase = 21;
+    private final int backWheelBase = 22;
     private final double frontRadius = Math.sqrt(frontTrackWidth ^ 2 + frontWheelBase ^ 2);
     private final double backRadius = Math.sqrt(backTrackWidth ^ 2 + backWheelBase ^ 2);
 
