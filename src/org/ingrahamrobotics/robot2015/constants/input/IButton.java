@@ -14,7 +14,6 @@ public enum IButton {
     toteIntakeIn(IJoystick.attackJoystick, JMap.Button.JoystickStand.BOTTOM_LEFT),
     toteIntakeOut(IJoystick.attackJoystick, JMap.Button.JoystickStand.BOTTOM_RIGHT),;
 
-
     private Button button;
 
     private IButton(IJoystick iJoystick, int buttonNumber) {

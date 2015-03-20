@@ -17,7 +17,7 @@ public class DriveBase extends Subsystem {
     private boolean wasStillLast;
     public final PIDSteer[] steerSystem;
     public final SpeedDrive[] driveSystem;
-    
+
     private final int frontTrackWidth = 37;
     private final int backTrackWidth = 37;
     private final int frontWheelBase = 22;
@@ -52,17 +52,17 @@ public class DriveBase extends Subsystem {
         Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
         boolean isStill = fwd == 0 && str == 0 && rcw == 0;
         double[] frontTanQuad = {
-            (str - rcw * (frontWheelBase / frontRadius)),
-            (str + rcw * (frontWheelBase / frontRadius)),
-            (fwd - rcw * (frontTrackWidth / frontRadius)),
-            (fwd + rcw * (frontTrackWidth / frontRadius)),
-        }
+                (str - rcw * (frontWheelBase / frontRadius)),
+                (str + rcw * (frontWheelBase / frontRadius)),
+                (fwd - rcw * (frontTrackWidth / frontRadius)),
+                (fwd + rcw * (frontTrackWidth / frontRadius)),
+        };
         double[] backTanQuad = {
-            (str - rcw * (backWheelBase / backRadius)),
-            (str + rcw * (backWheelBase / backRadius)),
-            (fwd - rcw * (backTrackWidth / backRadius)),
-            (fwd + rcw * (backTrackWidth / backRadius)),
-        }
+                (str - rcw * (backWheelBase / backRadius)),
+                (str + rcw * (backWheelBase / backRadius)),
+                (fwd - rcw * (backTrackWidth / backRadius)),
+                (fwd + rcw * (backTrackWidth / backRadius)),
+        };
 
         double[] wheelSpeeds = getWheelSpeeds(frontTanQuad, backTanQuad);
         double[] wheelAngles = getWheelAngles(frontTanQuad, backTanQuad);
@@ -122,10 +122,10 @@ public class DriveBase extends Subsystem {
     }
 
     private double[] getWheelSpeeds(double[] frontQuad, double[] backQuad) {
-        double ws1 = Math.sqrt(frontQuad[1] ^ 2 + frontQuad[2] ^ 2);
-        double ws2 = Math.sqrt(frontQuad[1] ^ 2 + frontQuad[3] ^ 2);
-        double ws3 = Math.sqrt(backQuad[0] ^ 2 + backQuad[3]);
-        double ws4 = Math.sqrt(backQuad[0] ^ 2 + backQuad[2]);
+        double ws1 = Math.sqrt(Math.pow(frontQuad[1], 2) + Math.pow(frontQuad[2], 2));
+        double ws2 = Math.sqrt(Math.pow(frontQuad[1], 2) + Math.pow(frontQuad[3], 2));
+        double ws3 = Math.sqrt(Math.pow(backQuad[0], 2) + backQuad[3]);
+        double ws4 = Math.sqrt(Math.pow(backQuad[0], 2) + backQuad[2]);
 
         // Binds the wheel speeds to [0, +1]
         double max = ws1;

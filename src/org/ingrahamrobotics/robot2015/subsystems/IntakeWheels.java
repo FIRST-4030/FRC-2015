@@ -2,8 +2,6 @@ package org.ingrahamrobotics.robot2015.subsystems;
 
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
-import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.commands.ManipulateTote;
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts;
 import org.ingrahamrobotics.robot2015.output.Output;
@@ -22,7 +20,7 @@ public class IntakeWheels extends Subsystem {
     public void initDefaultCommand() {
         setDefaultCommand(new ManipulateTote());
     }
-    
+
     public void pullInTote() {
         setSpeed(Settings.Key.TOTE_INTAKE_IN_SPEED.getDouble());
     }

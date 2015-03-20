@@ -2,30 +2,34 @@ package org.ingrahamrobotics.robot2015.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.ingrahamrobotics.robot2015.Subsystems;
-import org.ingrahamrobotics.robot2015.output.Settings;
+import org.ingrahamrobotics.robot2015.constants.input.IButton;
 
 public class ManipulateTote extends Command {
 
-
     public ManipulateTote() {
-        requires(Subsystems.intakeWheels); 
+        requires(Subsystems.intakeWheels);
         Subsystems.intakeWheels.setSpeed(0);
     }
 
-    protected void execute() {
-        boolean intakeIn = IButton.toteIntakeIn.get();
-        boolean intakeOut = IButton.toteIntakeOut.get();
+    @Override
+    protected void initialize() {
 
-        if(intakeIn) {
+    }
+
+    protected void execute() {
+        boolean intakeIn = IButton.toteIntakeIn.getButton().get();
+        boolean intakeOut = IButton.toteIntakeOut.getButton().get();
+
+        if (intakeIn) {
             Subsystems.intakeWheels.pullInTote();
-        } else if(intakeOut) {
+        } else if (intakeOut) {
             Subsystems.intakeWheels.spitOutTote();
         } else {
             Subsystems.intakeWheels.setSpeed(0);
         }
     }
 
-    @Overide
+    @Override
     protected boolean isFinished() {
         return false;
     }
