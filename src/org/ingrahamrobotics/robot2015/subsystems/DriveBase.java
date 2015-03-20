@@ -47,6 +47,33 @@ public class DriveBase extends Subsystem {
      * @param rcw Rotating movement, -1 to 1
      */
     public void drive(double fwd, double str, double rcw) {
+        prepareWheelAnglesFor(fwd, str, rcw);
+        double[] frontTanQuad = {
+                (str - rcw * (frontWheelBase / frontRadius)),
+                (str + rcw * (frontWheelBase / frontRadius)),
+                (fwd - rcw * (frontTrackWidth / frontRadius)),
+                (fwd + rcw * (frontTrackWidth / frontRadius)),
+        };
+        double[] backTanQuad = {
+                (str - rcw * (backWheelBase / backRadius)),
+                (str + rcw * (backWheelBase / backRadius)),
+                (fwd - rcw * (backTrackWidth / backRadius)),
+                (fwd + rcw * (backTrackWidth / backRadius)),
+        };
+
+        double[] wheelSpeeds = getWheelSpeeds(frontTanQuad, backTanQuad);
+
+        for (int i = 0; i < 4; i++) {
+            driveSystem[i].setSetpoint(wheelSpeeds[i]);
+        }
+    }
+
+    /**
+     * @param fwd Forward movement, -1 to 1
+     * @param str Strafing movement, -1 to 1
+     * @param rcw Rotating movement, -1 to 1
+     */
+    public void prepareWheelAnglesFor(double fwd, double str, double rcw) {
         Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
         Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
         Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
@@ -64,21 +91,21 @@ public class DriveBase extends Subsystem {
                 (fwd + rcw * (backTrackWidth / backRadius)),
         };
 
-        double[] wheelSpeeds = getWheelSpeeds(frontTanQuad, backTanQuad);
         double[] wheelAngles = getWheelAngles(frontTanQuad, backTanQuad);
 
-        // This should work...?
-        for (int i = 0; i < wheelAngles.length; i++) {
-            // Angles are -PI to PI
-            double pAngle = steerSystem[i].returnPIDInput();
-            double travel = Math.abs(wheelAngles[i] - pAngle);
-            // Reverse the wheel if the angle is greater than 90, but less than 270
-            // Allows shortest path to still function over the -PI -> PI wrap-around 
-            if ((Math.PI * 3) / 2 > travel && travel > Math.PI / 2 * 1.2) {
-                wheelSpeeds[i] *= -1;
-                travel -= Math.PI / 2;
-            }
-        }
+        // this was kind of broken and not doing anything (travel was not used afterwards), so just commenting it out is ok.
+//        // This should work...?
+//        for (int i = 0; i < wheelAngles.length; i++) {
+//            // Angles are -PI to PI
+//            double pAngle = steerSystem[i].returnPIDInput();
+//            double travel = Math.abs(wheelAngles[i] - pAngle);
+//            // Reverse the wheel if the angle is greater than 90, but less than 270
+//            // Allows shortest path to still function over the -PI -> PI wrap-around
+//            if ((Math.PI * 3) / 2 > travel && travel > Math.PI / 2 * 1.2) {
+//                wheelSpeeds[i] *= -1;
+//                travel -= Math.PI / 2;
+//            }
+//        }
 //            if (pAngle * wheelAngles[i] < 0) {
 //                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
 //            }
@@ -100,7 +127,6 @@ public class DriveBase extends Subsystem {
         }
 
         for (int i = 0; i < 4; i++) {
-            driveSystem[i].setSetpoint(wheelSpeeds[i]);
             steerSystem[i].setSetpoint(wheelAngles[i]);
         }
 

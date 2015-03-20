@@ -35,24 +35,28 @@ public class RunPIDDrive extends Command {
         double turnMultiplier = Settings.Key.TURN_SPEED_MULTIPLIER.getDouble();
         double x = IAxis.driveX.get() * IAxis.driveX.get() * multiplier;
         double y = IAxis.driveY.get() * IAxis.driveY.get() * multiplier;
-        double RCW = -IAxis.steer.get() * turnMultiplier;
+        double turn = -IAxis.steer.get() * turnMultiplier;
         Output.output(OutputLevel.SWERVE_DEBUG, "input-x", x);
         Output.output(OutputLevel.SWERVE_DEBUG, "input-y", y);
-        Output.output(OutputLevel.SWERVE_DEBUG, "input-steer", RCW);
+        Output.output(OutputLevel.SWERVE_DEBUG, "input-steer", turn);
 
-        double fieldAngle = Math.PI / 2;
-
-
-        FWD = -y;
-        STR = x;
-
-        double temp = FWD * Math.cos(fieldAngle) + STR * Math.sin(fieldAngle);
-        STR = -1 * FWD * Math.sin(fieldAngle) + STR * Math.cos(fieldAngle);
-        FWD = temp;
+        // This code was being used as a possible use of a field angle, but what it was doing is basically
+        // flipping FWD and STR - it also assigned FWD and STR to class-level variables, which is just done in this
+        // non-commented block now.
+        FWD = x;
+        STR = y;
+//        double fieldAngle = Math.PI / 2;
+//
+//        FWD = -y;
+//        STR = x;
+//
+//        double temp = FWD * Math.cos(fieldAngle) + STR * Math.sin(fieldAngle);
+//        STR = -1 * FWD * Math.sin(fieldAngle) + STR * Math.cos(fieldAngle);
+//        FWD = temp;
 
         Subsystems.driveBase.updateSteerPID();
 
-        Subsystems.driveBase.drive(FWD, STR, RCW);
+        Subsystems.driveBase.drive(FWD, STR, turn);
     }
 
     // Make this return true when this Command no longer needs to run execute()
