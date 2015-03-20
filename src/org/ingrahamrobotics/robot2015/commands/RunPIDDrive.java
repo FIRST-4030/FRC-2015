@@ -12,8 +12,8 @@ import org.ingrahamrobotics.robot2015.output.Settings;
  */
 public class RunPIDDrive extends Command {
 
-    private double FWD;
-    private double STR;
+//    private double FWD;
+//    private double STR;
 
     public RunPIDDrive() {
         // Use requires() here to declare subsystem dependencies
@@ -25,8 +25,8 @@ public class RunPIDDrive extends Command {
     protected void initialize() {
 //        Subsystems.driveBase.stop();
 
-        FWD = 0;
-        STR = 0;
+//        FWD = 0;
+//        STR = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -43,8 +43,8 @@ public class RunPIDDrive extends Command {
         // This code was being used as a possible use of a field angle, but what it was doing is basically
         // flipping FWD and STR - it also assigned FWD and STR to class-level variables, which is just done in this
         // non-commented block now.
-        FWD = x;
-        STR = y;
+//        FWD = x;
+//        STR = y;
 //        double fieldAngle = Math.PI / 2;
 //
 //        FWD = -y;
@@ -56,7 +56,7 @@ public class RunPIDDrive extends Command {
 
         Subsystems.driveBase.updateSteerPID();
 
-        Subsystems.driveBase.drive(FWD, STR, turn);
+        Subsystems.driveBase.drive(y, x, turn);
     }
 
     // Make this return true when this Command no longer needs to run execute()
