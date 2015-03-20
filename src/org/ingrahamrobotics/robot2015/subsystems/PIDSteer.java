@@ -25,12 +25,12 @@ public class PIDSteer extends PIDSubsystem {
     // Initialize your subsystem here
     public PIDSteer(int wheelNum) {
         super("PIDSteer" + wheelNum, 1, 0, 0);
-        getPIDController().setInputRange(-Math.PI, Math.PI);
-        getPIDController().setContinuous(true);
+        //getPIDController().setInputRange(-Math.PI, Math.PI);
+        //getPIDController().setContinuous(true);
 
         steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
         steerEncoder = new Encoder(STEER_ENCODERS_A[wheelNum - 1], STEER_ENCODERS_B[wheelNum - 1]);
-        resetSwitch = new PossiblyFlippedDigitalInput(POD_RESET_SWITCHES[wheelNum - 1]);
+        //resetSwitch = new PossiblyFlippedDigitalInput(POD_RESET_SWITCHES[wheelNum - 1]);
 
         setSetpoint(0.0);
         enable();
@@ -46,7 +46,7 @@ public class PIDSteer extends PIDSubsystem {
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         //ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
-    	double pidInput = (steerEncoder.getDistance() / ticksPerRadian) % Math.PI;
+    	double pidInput = (steerEncoder.getDistance() / ticksPerRadian);// % Math.PI;
     	Output.output(OutputLevel.SWERVE_DEBUG, getName() + "pid input", pidInput);
         return pidInput;
     }
@@ -69,15 +69,16 @@ public class PIDSteer extends PIDSubsystem {
     }
 
     public boolean getPreviousResetState() {
-        return pResetState;
+        return false;//pResetState;
     }
 
     public boolean getResetSwitch() {
-        return resetSwitch.get();
+        return false;//resetSwitch.get();
     }
 
     public void resetEncoder() {
-        steerEncoder.reset();
+    	return;
+        //steerEncoder.reset();
     }
 
     public void setSpeed(double speed) {
