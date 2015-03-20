@@ -8,7 +8,7 @@ public abstract class TimedCommand extends Command {
     protected long startTime;
     protected long lastSwitch;
     protected int currentState;
-    protected long[] states;
+    protected long[] stateTimeouts;
 
     public void setNextStartState(final int nextStartState) {
         this.nextStartState = nextStartState;
@@ -19,18 +19,20 @@ public abstract class TimedCommand extends Command {
         startTime = lastSwitch = System.currentTimeMillis();
         currentState = nextStartState;
         nextStartState = 0;
-        states = getWaitTimes();
+        stateTimeouts = getWaitTimes();
         startState(currentState);
     }
 
     @Override
     protected void execute() {
-        boolean next = executeState(currentState) || (states[currentState] > 0 && System.currentTimeMillis() > lastSwitch + states[currentState]);
-        while (!next) {
+        boolean continueToNextState = executeState(currentState) == ExecuteResult.DONE
+                // We should also continue to the next state if the current state has a timeout, and the timeout has passed
+                || (stateTimeouts[currentState] > 0 && System.currentTimeMillis() > lastSwitch + stateTimeouts[currentState]);
+        while (!continueToNextState) {
             lastSwitch = System.currentTimeMillis();
             currentState += 1;
-            if (currentState < states.length) {
-                next = startState(currentState);
+            if (currentState < stateTimeouts.length) {
+                continueToNextState = startState(currentState) == ExecuteResult.DONE;
             } else {
                 break;
             }
@@ -39,7 +41,7 @@ public abstract class TimedCommand extends Command {
 
     @Override
     protected boolean isFinished() {
-        return currentState >= states.length;
+        return currentState >= stateTimeouts.length;
     }
 
     @Override
@@ -47,9 +49,9 @@ public abstract class TimedCommand extends Command {
         end();
     }
 
-    protected abstract boolean executeState(int state);
+    protected abstract ExecuteResult executeState(int state);
 
-    protected abstract boolean startState(int state);
+    protected abstract ExecuteResult startState(int state);
 
     protected abstract long[] getWaitTimes();
 }

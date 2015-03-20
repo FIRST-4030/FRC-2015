@@ -2,6 +2,7 @@ package org.ingrahamrobotics.robot2015.commands;
 
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.output.Settings;
+import org.ingrahamrobotics.robot2015.utils.ExecuteResult;
 import org.ingrahamrobotics.robot2015.utils.TimedCommand;
 
 public class FixedIndexerShift extends TimedCommand {
@@ -20,29 +21,29 @@ public class FixedIndexerShift extends TimedCommand {
     /**
      * Is executed continuously until it returns true or the time runs out.
      */
-    protected boolean executeState(final int state) {
+    protected ExecuteResult executeState(final int state) {
         if (directionIsUp) {
             if (Subsystems.toggleSwitches.getIndexerTop() || Subsystems.indexerEncoder.get() > Settings.Key.INDEXER_MAX_HEIGHT.getInt()) {
-                return true;
+                return ExecuteResult.DONE;
             }
         } else {
             if (Subsystems.toggleSwitches.getIndexerBottom()) {
-                return true;
+                return ExecuteResult.DONE;
             }
         }
         if (!Settings.Key.INDEXER_LEVEL_USE_ENCODER.getBoolean()) {
-            return false;
+            return ExecuteResult.NOT_DONE;
         }
         int encoderValue = Subsystems.indexerEncoder.get();
         if (directionIsUp) {
-            return encoderValue >= currentTargetEncoderValue;
+            return encoderValue >= currentTargetEncoderValue ? ExecuteResult.DONE : ExecuteResult.NOT_DONE;
         } else {
-            return encoderValue <= currentTargetEncoderValue;
+            return encoderValue <= currentTargetEncoderValue ? ExecuteResult.DONE : ExecuteResult.NOT_DONE;
         }
     }
 
     @Override
-    protected boolean startState(final int state) {
+    protected ExecuteResult startState(final int state) {
         // How much we go up/down each time
         int interval = Math.abs(Settings.Key.INDEXER_LEVEL_ENCODER_TICKS.getInt());
         // How close to a regular interval can we be that we treat our current count as that regular interval
@@ -83,7 +84,7 @@ public class FixedIndexerShift extends TimedCommand {
         } else {
             Subsystems.toteIndexer.setSpeed(-speed);
         }
-        return false; // we're never done in startState
+        return ExecuteResult.NOT_DONE; // we're never done in startState
     }
 
     @Override

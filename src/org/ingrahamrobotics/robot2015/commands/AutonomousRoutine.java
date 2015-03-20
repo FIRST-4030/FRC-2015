@@ -2,6 +2,7 @@ package org.ingrahamrobotics.robot2015.commands;
 
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.output.Settings;
+import org.ingrahamrobotics.robot2015.utils.ExecuteResult;
 import org.ingrahamrobotics.robot2015.utils.TimedCommand;
 
 public class AutonomousRoutine extends TimedCommand {
@@ -11,15 +12,15 @@ public class AutonomousRoutine extends TimedCommand {
     }
 
     @Override
-    protected boolean executeState(final int state) {
-        return false;
+    protected ExecuteResult executeState(final int state) {
+        return ExecuteResult.NOT_DONE;
     }
 
     @Override
-    protected boolean startState(final int state) {
+    protected ExecuteResult startState(final int state) {
         Subsystems.driveBase.updateSteerPID();
         Subsystems.driveBase.drive(Settings.Key.AUTO_ROUTINE_STR.getDouble(), Settings.Key.AUTO_ROUTINE_FWD.getDouble(), 0);
-        return false;
+        return ExecuteResult.NOT_DONE;
     }
 
     @Override
