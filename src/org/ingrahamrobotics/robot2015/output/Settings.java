@@ -18,12 +18,12 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
      * Possible keys for input settings
      */
     public static enum Key {
-        INDEXER_LEVEL_MAX_WAIT_TIME("Indexer one-up max time", "3000"),
+        INDEXER_LEVEL_MAX_WAIT_TIME("Indexer one-up max time", "10000", false),
         INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y", false),
-        INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "350"),
+        INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "700"),
         INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1"),
-        INDEXER_MAX_HEIGHT("Indexer max height", "9000"),
-        TOTE_CLEARANCE_ADDITION("Indexer tote clearance addition", "500"),
+        INDEXER_MAX_HEIGHT("Indexer max height", "6800"),
+        TOTE_CLEARANCE_ADDITION("Indexer tote clearance addition", "500", false),
         INDEXER_INITIAL_CLEARANCE_UP("Indexer initial upwards movement", "200"),
         TOTE_INTAKE_IN_SPEED("Tote intake in-speed", "1"),
         TOTE_INTAKE_OUT_SPEED("Tote intake out-speed", "-1"),
