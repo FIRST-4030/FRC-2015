@@ -11,7 +11,7 @@ import org.ingrahamrobotics.robot2015.output.OutputLevel;
 
 public class ToggleSwitches extends Subsystem {
 
-    private boolean indexerHasGoneUpSinceLastBottomPress;
+    private boolean indexerHasGoneUpSinceLastBottomPress = true;
     private long lastIndexerBottomOn;
     private Set<String> warnedFor = new HashSet<>();
     private AnalogInput indexerBottom = new AnalogInput(AnalogIoPorts.BOTTOM_INDEXER_SWITCH);
