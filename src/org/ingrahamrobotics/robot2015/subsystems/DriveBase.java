@@ -42,6 +42,17 @@ public class DriveBase extends Subsystem {
     }
 
     /**
+     * @param movementDirection Direction to move in in radians
+     * @param speed             Speed to move at
+     * @param turn              Turn speed to move at
+     */
+    public void driveWithAngle(double movementDirection, double speed, double turn) {
+        double fwd = speed * Math.cos(movementDirection);
+        double str = speed * Math.sin(movementDirection);
+        drive(fwd, str, turn);
+    }
+
+    /**
      * @param fwd Forward movement, -1 to 1
      * @param str Strafing movement, -1 to 1
      * @param rcw Rotating movement, -1 to 1
