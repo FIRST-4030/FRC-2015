@@ -38,7 +38,7 @@ public class PIDSteer extends PIDSubsystem {
         // setDefaultCommand(new MySpecialCommand());
     }
 
-    public double returnPIDInput() {
+    protected double returnPIDInput() {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
