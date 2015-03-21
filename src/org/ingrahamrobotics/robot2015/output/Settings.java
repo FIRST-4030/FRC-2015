@@ -34,9 +34,13 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.1"),
         TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60)),
         DRIVE_RESET_ENCODERS_ON_ENABLE("Reset swerve encoders on enable", "n", false),
-        AUTO_ROUTINE_TIME("Autonomous routine time", "700"),
-        AUTO_ROUTINE_FWD("Autonomous forward", "-0.4"),
-        AUTO_ROUTINE_STR("Autonomous strafe", "0");
+        AUTO_WHEEL_ANGLE_ALLOWANCE_BEFORE_RUNNING_MOTORS("Autonomous wheel angle difference allowance before starting motors", "0.2", false),
+        AUTO_MS_PER_RADIANS_TURNING("Autonomous ms per radians turning", "1000", false),
+        AUTO_MS_PER_FOOT_FORWARD("Autonomous ms per foot forward", "1000", false),
+        AUTO_FWD_STR_SPEED("Autonomous strafe/forward speed", "0.5", false),
+        AUTO_TURN_SPEED("Autonomous turn speed", "0.2", false),
+        AUTO_ROUTINE_FWD("Autonomous forward", "3"), // would be in `ms` once we have ms per radians configured
+        AUTO_ROUTINE_STR("Autonomous strafe", "0"); // would be in `ms` once we have ms per radians configured
 
         /**
          * this is just so we can easily change this, rather than commenting out values.

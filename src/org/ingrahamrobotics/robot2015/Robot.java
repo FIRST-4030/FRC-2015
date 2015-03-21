@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import org.ingrahamrobotics.robot2015.autonomous.AutonomousState;
+import org.ingrahamrobotics.robot2015.autonomous.AutonomousTemplate;
 import org.ingrahamrobotics.robot2015.commands.AutonomousRoutine;
 import org.ingrahamrobotics.robot2015.commands.FullIndexerCollapse;
 import org.ingrahamrobotics.robot2015.output.Output;
@@ -35,7 +37,10 @@ public class Robot extends IterativeRobot {
         Subsystems.init();
         oi = new OI();
         // instantiate the command used for the autonomous period
-        autonomousCommand = new AutonomousRoutine();
+//        autonomousCommand = new AutonomousRoutine();
+        autonomousCommand = new AutonomousTemplate(new AutonomousState[]{
+           new AutonomousState(0, Settings.Key.AUTO_ROUTINE_FWD.getDouble(), Settings.Key.AUTO_ROUTINE_STR.getDouble())
+        });
         output(OutputLevel.HIGH, "RobotState", "Initialized");
     }
 

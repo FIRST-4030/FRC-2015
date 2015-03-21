@@ -151,6 +151,24 @@ public class DriveBase extends Subsystem {
 //        }
     }
 
+    /**
+     * Returns whether the wheels are turned to the angle last set, allowing allowanceRadians difference
+     *
+     * @param allowanceRadians Radian difference to allow for each wheel - must be positive
+     */
+    public boolean areWheelAnglesReady(double allowanceRadians) {
+        for (PIDSteer pidSteer : steerSystem) {
+            if (Math.abs(pidSteer.getSetpoint() - pidSteer.getPosition()) > allowanceRadians) {
+//                System.out.println("Wheels not ready!");
+                return false;
+            } else {
+                System.out.println("Wheel is good! Setpoint: " + pidSteer.getSetpoint() + " Position: " + pidSteer.getPosition() + " Allowance: " + allowanceRadians);
+            }
+        }
+        System.out.println("Wheels ready!");
+        return true;
+    }
+
     private double[] getWheelSpeeds(double[] frontQuad, double[] backQuad) {
         double ws1 = Math.sqrt(Math.pow(frontQuad[1], 2) + Math.pow(frontQuad[2], 2));
         double ws2 = Math.sqrt(Math.pow(frontQuad[1], 2) + Math.pow(frontQuad[3], 2));

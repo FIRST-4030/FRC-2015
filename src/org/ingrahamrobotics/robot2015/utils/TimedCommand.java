@@ -28,7 +28,7 @@ public abstract class TimedCommand extends Command {
         boolean continueToNextState = executeState(currentState) == ExecuteResult.DONE
                 // We should also continue to the next state if the current state has a timeout, and the timeout has passed
                 || (stateTimeouts[currentState] > 0 && System.currentTimeMillis() > lastSwitch + stateTimeouts[currentState]);
-        while (!continueToNextState) {
+        while (continueToNextState) {
             lastSwitch = System.currentTimeMillis();
             currentState += 1;
             if (currentState < stateTimeouts.length) {
