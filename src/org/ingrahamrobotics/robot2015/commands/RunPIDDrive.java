@@ -34,7 +34,7 @@ public class RunPIDDrive extends Command {
         double multiplier = Settings.Key.DRIVE_SPEED_MULTIPLIER.getDouble();
         double turnMultiplier = Settings.Key.TURN_SPEED_MULTIPLIER.getDouble();
         double x = IAxis.driveX.get() * Math.abs(IAxis.driveX.get()) * multiplier;
-        double y = IAxis.driveY.get() * Math.abs(IAxis.driveY.get()) * multiplier;
+        double y = -IAxis.driveY.get() * Math.abs(IAxis.driveY.get()) * multiplier;
         double turn = -IAxis.steer.get() * Math.abs(IAxis.steer.get()) * turnMultiplier;
         Output.output(OutputLevel.SWERVE_DEBUG, "input-x", x);
         Output.output(OutputLevel.SWERVE_DEBUG, "input-y", y);
