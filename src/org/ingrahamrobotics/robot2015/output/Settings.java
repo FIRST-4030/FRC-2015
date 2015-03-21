@@ -38,7 +38,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         AUTO_WHEEL_ANGLE_ALLOWANCE_BEFORE_RUNNING_MOTORS("Autonomous wheel angle difference allowance before starting motors", "0.2", false),
         AUTO_MS_PER_RADIANS_TURNING("Autonomous ms per radians turning", "1000", false),
         AUTO_MS_PER_FOOT_FORWARD("Autonomous ms per foot forward", "1000", false),
-        AUTO_FWD_STR_SPEED("Autonomous strafe/forward speed", "0.5", true),
+        AUTO_FWD_STR_SPEED("Autonomous strafe/forward speed", "0.5"),
         AUTO_TURN_SPEED("Autonomous turn speed", "0.2", false),
         AUTO_ROUTINE_FWD("Autonomous forward", "-1"), // would be in `ms` once we have ms per radians configured
         AUTO_ROUTINE_STR("Autonomous strafe", "0"); // would be in `ms` once we have ms per radians configured

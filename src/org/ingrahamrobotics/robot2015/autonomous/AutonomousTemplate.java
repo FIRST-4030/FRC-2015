@@ -32,13 +32,13 @@ public class AutonomousTemplate extends TimedCommand {
 
         // TODO: Support diagonal movement
         double forward, strafe, turn;
-        if (currentAutonomousState.forwardFeet != 0) {
+        if (currentAutonomousState.getForwardFeet() != 0) {
             forward = Settings.Key.AUTO_FWD_STR_SPEED.getDouble();
             strafe = turn = 0;
-        } else if (currentAutonomousState.strafeFeet != 0) {
+        } else if (currentAutonomousState.getStrafeFeet() != 0) {
             strafe = Settings.Key.AUTO_FWD_STR_SPEED.getDouble();
             forward = turn = 0;
-        } else if (currentAutonomousState.turnRadians != 0) {
+        } else if (currentAutonomousState.getTurnRadians() != 0) {
             turn = Settings.Key.AUTO_TURN_SPEED.getDouble();
             forward = strafe = 0;
         } else {
@@ -84,21 +84,21 @@ public class AutonomousTemplate extends TimedCommand {
 
         // TODO: Support diagonal movement
         double forward, strafe, turn;
-        if (currentAutonomousState.forwardFeet != 0) {
+        if (currentAutonomousState.getForwardFeet() != 0) {
             forward = Settings.Key.AUTO_FWD_STR_SPEED.getDouble();
-            if (currentAutonomousState.forwardFeet < 0) {
+            if (currentAutonomousState.getForwardFeet() < 0) {
                 forward *= -1;
             }
             strafe = turn = 0;
-        } else if (currentAutonomousState.strafeFeet != 0) {
+        } else if (currentAutonomousState.getStrafeFeet() != 0) {
             strafe = Settings.Key.AUTO_FWD_STR_SPEED.getDouble();
-            if (currentAutonomousState.strafeFeet < 0) {
+            if (currentAutonomousState.getStrafeFeet() < 0) {
                 strafe *= -1;
             }
             forward = turn = 0;
-        } else if (currentAutonomousState.turnRadians != 0) {
+        } else if (currentAutonomousState.getTurnRadians() != 0) {
             turn = Settings.Key.AUTO_TURN_SPEED.getDouble();
-            if (currentAutonomousState.turnRadians < 0) {
+            if (currentAutonomousState.getTurnRadians() < 0) {
                 turn *= -1;
             }
             forward = strafe = 0;
@@ -129,12 +129,12 @@ public class AutonomousTemplate extends TimedCommand {
             result[i * 2] = 1500; // the first part shouldn't timeout, but this is a backup timeout just in case.
             AutonomousState currentAutonomousState = autoStates[i];
             double time;
-            if (currentAutonomousState.forwardFeet != 0) {
-                time = Math.abs(currentAutonomousState.forwardFeet) * Settings.Key.AUTO_MS_PER_FOOT_FORWARD.getDouble();
-            } else if (currentAutonomousState.strafeFeet != 0) {
-                time = Math.abs(currentAutonomousState.strafeFeet) * Settings.Key.AUTO_MS_PER_FOOT_FORWARD.getDouble();
-            } else if (currentAutonomousState.turnRadians != 0) {
-                time = Math.abs(currentAutonomousState.turnRadians) * Settings.Key.AUTO_MS_PER_RADIANS_TURNING.getDouble();
+            if (currentAutonomousState.getForwardFeet() != 0) {
+                time = Math.abs(currentAutonomousState.getForwardFeet()) * Settings.Key.AUTO_MS_PER_FOOT_FORWARD.getDouble();
+            } else if (currentAutonomousState.getStrafeFeet() != 0) {
+                time = Math.abs(currentAutonomousState.getStrafeFeet()) * Settings.Key.AUTO_MS_PER_FOOT_FORWARD.getDouble();
+            } else if (currentAutonomousState.getTurnRadians() != 0) {
+                time = Math.abs(currentAutonomousState.getTurnRadians()) * Settings.Key.AUTO_MS_PER_RADIANS_TURNING.getDouble();
             } else {
                 time = 1;
             }
