@@ -66,7 +66,7 @@ public class AutonomousTemplate extends TimedCommand {
     @Override
     protected ExecuteResult startState(final int state) {
         if (state == 0) {
-            for (PIDSteer steer : Subsystems.driveBase.steerSystem){
+            for (PIDSteer steer : Subsystems.driveBase.steerSystem) {
                 steer.enable();
             }
             Subsystems.driveBase.drive(0, 0, 0);
@@ -86,12 +86,21 @@ public class AutonomousTemplate extends TimedCommand {
         double forward, strafe, turn;
         if (currentAutonomousState.forwardFeet != 0) {
             forward = Settings.Key.AUTO_FWD_STR_SPEED.getDouble();
+            if (currentAutonomousState.forwardFeet < 0) {
+                forward *= -1;
+            }
             strafe = turn = 0;
         } else if (currentAutonomousState.strafeFeet != 0) {
             strafe = Settings.Key.AUTO_FWD_STR_SPEED.getDouble();
+            if (currentAutonomousState.strafeFeet < 0) {
+                strafe *= -1;
+            }
             forward = turn = 0;
         } else if (currentAutonomousState.turnRadians != 0) {
             turn = Settings.Key.AUTO_TURN_SPEED.getDouble();
+            if (currentAutonomousState.turnRadians < 0) {
+                turn *= -1;
+            }
             forward = strafe = 0;
         } else {
             System.out.println("Skipping empty state?");
@@ -121,11 +130,11 @@ public class AutonomousTemplate extends TimedCommand {
             AutonomousState currentAutonomousState = autoStates[i];
             double time;
             if (currentAutonomousState.forwardFeet != 0) {
-                time = currentAutonomousState.forwardFeet * Settings.Key.AUTO_MS_PER_FOOT_FORWARD.getDouble();
+                time = Math.abs(currentAutonomousState.forwardFeet) * Settings.Key.AUTO_MS_PER_FOOT_FORWARD.getDouble();
             } else if (currentAutonomousState.strafeFeet != 0) {
-                time = currentAutonomousState.strafeFeet * Settings.Key.AUTO_MS_PER_FOOT_FORWARD.getDouble();
+                time = Math.abs(currentAutonomousState.strafeFeet) * Settings.Key.AUTO_MS_PER_FOOT_FORWARD.getDouble();
             } else if (currentAutonomousState.turnRadians != 0) {
-                time = currentAutonomousState.turnRadians * Settings.Key.AUTO_MS_PER_RADIANS_TURNING.getDouble();
+                time = Math.abs(currentAutonomousState.turnRadians) * Settings.Key.AUTO_MS_PER_RADIANS_TURNING.getDouble();
             } else {
                 time = 1;
             }

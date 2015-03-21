@@ -25,7 +25,7 @@ public class AutonomousRoutine extends TimedCommand {
 
     @Override
     protected long[] getWaitTimes() {
-        return new long[Settings.Key.AUTO_ROUTINE_TIME.getInt()];
+        return new long[Settings.Key.OLD_AUTO_ROUTINE_TIME.getInt()];
     }
 
     @Override
