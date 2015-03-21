@@ -74,6 +74,10 @@ public class DriveBase extends Subsystem {
      * @param rcw Rotating movement, -1 to 1
      */
     public void prepareWheelAnglesFor(double fwd, double str, double rcw) {
+        // Flipping FWD/STR.
+        double fwdTemp = str;
+        str = fwd;
+        fwd = fwdTemp;
         Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
         Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
         Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
