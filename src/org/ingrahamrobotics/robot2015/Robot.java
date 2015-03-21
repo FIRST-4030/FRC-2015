@@ -32,7 +32,6 @@ public class Robot extends IterativeRobot {
         startupTime = System.currentTimeMillis();
         lastNetworkCheck = System.currentTimeMillis();
         Output.initInstance();
-        new Settings(Output.getRobotTables()).subscribeAndPublishDefaults();
         Subsystems.init();
         oi = new OI();
         // instantiate the command used for the autonomous period
