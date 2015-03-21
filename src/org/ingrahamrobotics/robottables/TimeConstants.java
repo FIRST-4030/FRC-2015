@@ -10,7 +10,7 @@ public class TimeConstants {
     /**
      * Time between full updates sent.
      */
-    public static final long UPDATE_INTERVAL = 15000l;
+    public static final long UPDATE_INTERVAL = 10000l;
 
     /**
      * How long we should wait between update messages during a table update before we assume the update is finished. If

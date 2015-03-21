@@ -12,19 +12,18 @@ import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.
 
 public class PIDSteer extends PIDSubsystem {
 
-    //private static final double tickesPerDegree = (497.0 + 66.0 / 56.0) / something;
+    private static final double ticksPerRadian = (611 - 35) / (Math.PI * 2);
     public Talon steerMotor;
     public Encoder steerEncoder;
     public PossiblyFlippedDigitalInput resetSwitch;
 
-    private double ticksPerRadian = (611 - 35) / (Math.PI * 2);
     boolean pResetState = false;
 
     // Initialize your subsystem here
     public PIDSteer(int wheelNum) {
         super("PIDSteer" + wheelNum, 1, 0, 0);
-        //getPIDController().setInputRange(-Math.PI, Math.PI);
-        //getPIDController().setContinuous(true);
+//        getPIDController().setContinuous(true);
+//        getPIDController().setInputRange(-Math.PI, Math.PI);
 
         steerMotor = new Talon(STEER_MOTORS[wheelNum - 1]);
         steerEncoder = new Encoder(STEER_ENCODERS_A[wheelNum - 1], STEER_ENCODERS_B[wheelNum - 1]);
@@ -39,7 +38,7 @@ public class PIDSteer extends PIDSubsystem {
         // setDefaultCommand(new MySpecialCommand());
     }
 
-    protected double returnPIDInput() {
+    public double returnPIDInput() {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
@@ -75,7 +74,6 @@ public class PIDSteer extends PIDSubsystem {
     }
 
     public void resetEncoder() {
-        return;
         //steerEncoder.reset();
     }
 
