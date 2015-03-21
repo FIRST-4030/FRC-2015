@@ -154,8 +154,8 @@ public class DriveBase extends Subsystem {
     private double[] getWheelSpeeds(double[] frontQuad, double[] backQuad) {
         double ws1 = Math.sqrt(Math.pow(frontQuad[1], 2) + Math.pow(frontQuad[2], 2));
         double ws2 = Math.sqrt(Math.pow(frontQuad[1], 2) + Math.pow(frontQuad[3], 2));
-        double ws3 = Math.sqrt(Math.pow(backQuad[0], 2) + backQuad[3]);
-        double ws4 = Math.sqrt(Math.pow(backQuad[0], 2) + backQuad[2]);
+        double ws3 = Math.sqrt(Math.pow(backQuad[0], 2) + Math.pow(backQuad[3], 2));
+        double ws4 = Math.sqrt(Math.pow(backQuad[0], 2) + Math.pow(backQuad[2], 2));
 
         // Binds the wheel speeds to [0, +1]
         double max = ws1;
