@@ -1,16 +1,14 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.POD_RESET_SWITCHES;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_A;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_B;
-import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.STEER_MOTORS;
-
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
 import org.ingrahamrobotics.robot2015.utils.PossiblyFlippedDigitalInput;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_A;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts.STEER_ENCODERS_B;
+import static org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts.STEER_MOTORS;
 
 public class PIDSteer extends PIDSubsystem {
 
@@ -46,15 +44,15 @@ public class PIDSteer extends PIDSubsystem {
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
         //ticksPerRadian = Settings.Key.STEER_PID_TICKS_PER_RADIAN.getDouble();
-    	double pidInput = (steerEncoder.getDistance() / ticksPerRadian);// % Math.PI;
-    	Output.output(OutputLevel.SWERVE_DEBUG, getName() + "pid input", pidInput);
+        double pidInput = (steerEncoder.getDistance() / ticksPerRadian);// % Math.PI;
+        Output.output(OutputLevel.SWERVE_DEBUG, getName() + "-pid-input", pidInput);
         return pidInput;
     }
 
     protected void usePIDOutput(double output) {
         // Use output to drive your system, like a motor
         // e.g. yourMotor.set(output);
-    	Output.output(OutputLevel.RAW_MOTORS, getName() + " Motor Speed", output);
+        Output.output(OutputLevel.RAW_MOTORS, getName() + "-motor-speed", output);
         steerMotor.set(output);
     }
 
@@ -77,7 +75,7 @@ public class PIDSteer extends PIDSubsystem {
     }
 
     public void resetEncoder() {
-    	return;
+        return;
         //steerEncoder.reset();
     }
 

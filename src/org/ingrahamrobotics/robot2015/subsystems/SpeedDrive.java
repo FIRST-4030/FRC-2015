@@ -20,7 +20,7 @@ public class SpeedDrive extends Subsystem {
     }
 
     public void setSetpoint(double speed) {
-        Output.output(OutputLevel.RAW_MOTORS, "OutputSpeed-" + wheelNum, speed);
+        Output.output(OutputLevel.RAW_MOTORS, "SpeedDrive-" + wheelNum + "-speed", speed);
         driveMotor.set(speed);
     }
 
