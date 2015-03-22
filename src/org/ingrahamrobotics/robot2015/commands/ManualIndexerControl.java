@@ -24,11 +24,11 @@ public class ManualIndexerControl extends Command {
     protected void execute() {
         double y = -IAxis.manualControl.get();
 
-        if (y > 0 && (Subsystems.toggleSwitches.getIndexerTop()
-                || Subsystems.indexerEncoder.get() > Settings.Key.INDEXER_MAX_HEIGHT.getInt())) {
-            Subsystems.toteIndexer.setSpeed(0);
-            return;
-        }
+//        if (y > 0 && (Subsystems.toggleSwitches.getIndexerTop()
+//                || Subsystems.indexerEncoder.get() > Settings.Key.INDEXER_MAX_HEIGHT.getInt())) {
+//            Subsystems.toteIndexer.setSpeed(0);
+//            return;
+//        }
         if (y < 0 && Subsystems.toggleSwitches.getIndexerBottom()) {
             Subsystems.toteIndexer.setSpeed(0);
             return;
