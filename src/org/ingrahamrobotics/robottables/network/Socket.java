@@ -5,21 +5,15 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
 
 public class Socket {
 
-    private static final boolean IGNORE_LOCAL = false;
     private static final int MAX_MESSAGE_SIZE = 65535;
 
     private final DatagramSocket conn;
     private final InetAddress addr;
     private final int port;
-    private final HashSet<String> lAddrs = new HashSet<String>();
 
     public Socket(InetAddress addr, int port) throws IOException {
         this.addr = addr;
@@ -29,9 +23,6 @@ public class Socket {
             conn.setReuseAddress(true);
             conn.bind(new InetSocketAddress(port));
             conn.setBroadcast(true);
-            if (IGNORE_LOCAL) {
-                getLocalAddrs();
-            }
         } catch (SocketException ex) {
             throw new IOException("Unable to initialize: " + ex.toString());
         }
@@ -39,22 +30,6 @@ public class Socket {
 
     public int getPort() {
         return port;
-    }
-
-    /*
-     * Load our list of all local IP addresses, sans the loopback and broadcast
-     */
-    private void getLocalAddrs() throws SocketException {
-        Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
-        for (NetworkInterface iface : Collections.list(ifaces)) {
-            Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
-            for (InetAddress inetAddr : Collections.list(inetAddrs)) {
-                if (inetAddr.isLoopbackAddress() || inetAddr.isAnyLocalAddress()) {
-                    continue;
-                }
-                lAddrs.add(inetAddr.getHostAddress());
-            }
-        }
     }
 
     public boolean isOpen() {
