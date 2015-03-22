@@ -57,8 +57,8 @@ public class HardwarePorts {
         public static final int FRONT_RIGHT_RESET_SWITCH = 12;
         public static final int BACK_RIGHT_RESET_SWITCH = 13;
 
-        public static final int INDEXER_ENCODER_A = 9;
-        public static final int INDEXER_ENCODER_B = 8;
+        public static final int INDEXER_ENCODER_A = 8;
+        public static final int INDEXER_ENCODER_B = 9;
 
         public static final int CONTAINER_ENCODER_A = 22;
         public static final int CONTAINER_ENCODER_B = 23;

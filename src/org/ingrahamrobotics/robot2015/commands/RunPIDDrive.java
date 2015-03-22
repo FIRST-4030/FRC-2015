@@ -12,8 +12,8 @@ import org.ingrahamrobotics.robot2015.output.Settings;
  */
 public class RunPIDDrive extends Command {
 
-    private double FWD;
-    private double STR;
+//    private double FWD;
+//    private double STR;
 
     public RunPIDDrive() {
         // Use requires() here to declare subsystem dependencies
@@ -25,34 +25,42 @@ public class RunPIDDrive extends Command {
     protected void initialize() {
 //        Subsystems.driveBase.stop();
 
-        FWD = 0;
-        STR = 0;
+//        FWD = 0;
+//        STR = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        double multiplier = Settings.Key.DRIVE_SPEED_MULTIPLIER.getDouble();
         double turnMultiplier = Settings.Key.TURN_SPEED_MULTIPLIER.getDouble();
-        double x = IAxis.driveX.get() * IAxis.driveX.get() * multiplier;
-        double y = IAxis.driveY.get() * IAxis.driveY.get() * multiplier;
-        double RCW = -IAxis.steer.get() * turnMultiplier;
+        double turn = -IAxis.steer.get() * Math.abs(IAxis.steer.get()) * turnMultiplier;
+        double multiplier = Settings.Key.DRIVE_SPEED_MULTIPLIER.getDouble();
+        double x = IAxis.driveX.get();
+        double y = -IAxis.driveY.get();
+        double movementDirection = Math.atan2(y, x);
+        double movementSpeed = multiplier * Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         Output.output(OutputLevel.SWERVE_DEBUG, "input-x", x);
         Output.output(OutputLevel.SWERVE_DEBUG, "input-y", y);
-        Output.output(OutputLevel.SWERVE_DEBUG, "input-steer", RCW);
+        Output.output(OutputLevel.SWERVE_DEBUG, "input-direction", x);
+        Output.output(OutputLevel.SWERVE_DEBUG, "input-speed", y);
+        Output.output(OutputLevel.SWERVE_DEBUG, "input-steer", turn);
 
-        double fieldAngle = Math.PI / 2;
-
-
-        FWD = -y;
-        STR = x;
-
-        double temp = FWD * Math.cos(fieldAngle) + STR * Math.sin(fieldAngle);
-        STR = -1 * FWD * Math.sin(fieldAngle) + STR * Math.cos(fieldAngle);
-        FWD = temp;
+        // This code was being used as a possible use of a field angle, but what it was doing is basically
+        // flipping FWD and STR - it also assigned FWD and STR to class-level variables, which is just done in this
+        // non-commented block now.
+//        FWD = x;
+//        STR = y;
+//        double fieldAngle = Math.PI / 2;
+//
+//        FWD = -y;
+//        STR = x;
+//
+//        double temp = FWD * Math.cos(fieldAngle) + STR * Math.sin(fieldAngle);
+//        STR = -1 * FWD * Math.sin(fieldAngle) + STR * Math.cos(fieldAngle);
+//        FWD = temp;
 
         Subsystems.driveBase.updateSteerPID();
 
-        Subsystems.driveBase.drive(FWD, STR, RCW);
+        Subsystems.driveBase.driveWithAngle(movementDirection, movementSpeed, turn);
     }
 
     // Make this return true when this Command no longer needs to run execute()

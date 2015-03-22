@@ -30,6 +30,7 @@ public class Output {
             levelMap.put(level, client.publishTable(level.networkName));
             levelTable.set(level.networkName, level.name);
         }
+        new Settings(client).subscribeAndPublishDefaults();
         robotTables.run();
         successfullyInitialized = true;
     }

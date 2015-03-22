@@ -18,24 +18,31 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
      * Possible keys for input settings
      */
     public static enum Key {
-        INDEXER_LEVEL_MAX_WAIT_TIME("Indexer one-up max time", "3000"),
+        INDEXER_LEVEL_MAX_WAIT_TIME("Indexer one-up max time", "10000", false),
         INDEXER_LEVEL_USE_ENCODER("Indexer one-up use encoder?", "y", false),
-        INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "350"),
-        INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1"),
-        INDEXER_MAX_HEIGHT("Indexer max height", "9000"),
-        TOTE_CLEARANCE_ADDITION("Indexer tote clearance addition", "500"),
-        INDEXER_INITIAL_CLEARANCE_UP("Indexer initial upwards movement", "200"),
-        VERTICAL_CLAW_MAX_CMD_SPEED("Claw auto-max speed", "1"),
-        STEER_PID_P("Steer PID: P", "3.2", false),
-        STEER_PID_I("Steer PID: I", "0.8", false),
-        STEER_PID_D("Steer PID: D", "0", false),
+        INDEXER_LEVEL_ENCODER_TICKS("Indexer one-up encoder ticks", "700", false),
+        INDEXER_FIXED_SPEED("Indexer collapse/shift speed", "1", false),
+        INDEXER_MAX_HEIGHT("Indexer max height", "6800"),
+        TOTE_CLEARANCE_ADDITION("Indexer tote clearance addition", "500", false),
+        INDEXER_INITIAL_CLEARANCE_UP("Indexer initial upwards movement", "200", false),
+        TOTE_INTAKE_IN_SPEED("Tote intake in-speed", "1", false),
+        TOTE_INTAKE_OUT_SPEED("Tote intake out-speed", "-1", false),
+        STEER_PID_P("Steer PID: P", "3.2"),
+        STEER_PID_I("Steer PID: I", "0.8"),
+        STEER_PID_D("Steer PID: D", "0"),
         DRIVE_SPEED_MULTIPLIER("drive-speed-multiplier", "0.65"),
         TURN_SPEED_MULTIPLIER("turn-speed-multiplier", "0.1"),
-        TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60)),
+        TURNING_SLOP("slop in gearbox (radians)", String.valueOf(Math.PI / 60), false),
         DRIVE_RESET_ENCODERS_ON_ENABLE("Reset swerve encoders on enable", "n", false),
-        AUTO_ROUTINE_TIME("Autonomous routine time", "700"),
-        AUTO_ROUTINE_FWD("Autonomous forward", "-0.4"),
-        AUTO_ROUTINE_STR("Autonomous strafe", "0");
+        OLD_AUTO_ROUTINE_TIME("Autonomous time", "1000", false),
+        AUTO_WHEEL_ANGLE_ALLOWANCE_BEFORE_RUNNING_MOTORS("Autonomous wheel angle difference allowance before starting motors", "0.2", false),
+        AUTO_MS_PER_RADIANS_TURNING("Autonomous ms per radians turning", "1000", false),
+        AUTO_MS_PER_FOOT_FORWARD("Autonomous ms per foot forward", "1000", false),
+        AUTO_FWD_STR_SPEED("Autonomous strafe/forward speed", "0.5"),
+        INDEXER_SPEED("Manual indexer control modifier", "-0.75"),
+        AUTO_TURN_SPEED("Autonomous turn speed", "0.2", false),
+        AUTO_ROUTINE_FWD("Autonomous forward", "-1"), // would be in `ms` once we have ms per radians configured
+        AUTO_ROUTINE_STR("Autonomous strafe", "0"); // would be in `ms` once we have ms per radians configured
 
         /**
          * this is just so we can easily change this, rather than commenting out values.

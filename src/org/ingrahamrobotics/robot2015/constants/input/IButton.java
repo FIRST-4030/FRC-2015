@@ -6,14 +6,13 @@ import org.ingrahamrobotics.robot2015.constants.JMap;
 
 public enum IButton {
     steerReset(IJoystick.driveJoystick, 1),
-    manualClawHold(IJoystick.attackJoystick, JMap.Button.JoystickStand.LEFT_TOP),
     manualIndexerHold(IJoystick.attackJoystick, JMap.Button.JoystickStand.LEFT_BOTTOM),
     indexerUpOneLevel(IJoystick.attackJoystick, JMap.Button.JoystickTop.MIDDLE),
     indexerDownAndUp(IJoystick.attackJoystick, JMap.Button.JoystickTop.BOTTOM),
     indexerDownOneLevel(IJoystick.attackJoystick, JMap.Button.JoystickStand.RIGHT_TOP),
     indexerCollapseAll(IJoystick.attackJoystick, JMap.Button.JoystickTop.TRIGGER),
-    clawVerticalMaxUp(IJoystick.attackJoystick, JMap.Button.JoystickStand.RIGHT_TOP),
-    clawVerticalMaxDown(IJoystick.attackJoystick, JMap.Button.JoystickStand.RIGHT_BOTTOM),;
+    toteIntakeIn(IJoystick.attackJoystick, JMap.Button.JoystickStand.BOTTOM_LEFT),
+    toteIntakeOut(IJoystick.attackJoystick, JMap.Button.JoystickStand.BOTTOM_RIGHT),;
 
     private Button button;
 

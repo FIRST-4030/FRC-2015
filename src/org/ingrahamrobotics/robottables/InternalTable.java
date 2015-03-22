@@ -103,8 +103,8 @@ public class InternalTable implements RobotTable, ProtocolTable {
 
     public void updatedNow() {
         lastUpdate = System.currentTimeMillis();
-        double updateInterval = Double.parseDouble(getAdmin("UPDATE_INTERVAL"));
-        staleRunnable.delayUntil(System.currentTimeMillis() + (int) (updateInterval * 2.1));
+        long updateInterval = Long.parseLong(getAdmin("UPDATE_INTERVAL"));
+        staleRunnable.delayUntil(System.currentTimeMillis() + (long) (updateInterval * 1.7));
         if (currentlyPubliclyStale) {
             currentlyPubliclyStale = false;
             robotTables.fireStaleEvent(this, false);
@@ -113,8 +113,8 @@ public class InternalTable implements RobotTable, ProtocolTable {
 
     public void subscriberRepliedNow() {
         lastSubscriberReply = System.currentTimeMillis();
-        double updateInterval = Double.parseDouble(getAdmin("UPDATE_INTERVAL"));
-        subscriberStaleRunnable.delayUntil(System.currentTimeMillis() + (int) (updateInterval * 2.1));
+        long updateInterval = Long.parseLong(getAdmin("UPDATE_INTERVAL"));
+        subscriberStaleRunnable.delayUntil(System.currentTimeMillis() + (long) (updateInterval * 1.7));
         if (currentlySubscriberPubliclyStale) {
             currentlySubscriberPubliclyStale = false;
             robotTables.fireSubscriberStaleEvent(this, false);

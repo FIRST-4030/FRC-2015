@@ -1,13 +1,13 @@
 package org.ingrahamrobotics.robot2015.output;
 
 public enum OutputLevel {
-    SWERVE_DEBUG(0, "Swerve", true),
+    SWERVE_DEBUG(0, "Swerve", false),
     DEBUG(0, "Debug", false),
-    POWER(0, "Power", true),
+    POWER(0, "Power", false),
     INITIALIZED_SYSTEMS(1, "Initialized", false),
-    RAW_MOTORS(2, "Raw Motors", true),
+    RAW_MOTORS(2, "Raw Motors", false),
     RAW_SENSORS(3, "Raw Sensors", true),
-    AUTO(4, "Autonomous", true),
+    AUTO(4, "Autonomous", false),
     HIGH(5, "Important", true);
 
     public final boolean enabled;

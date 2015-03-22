@@ -18,9 +18,12 @@ public class DriveBase extends Subsystem {
     public final PIDSteer[] steerSystem;
     public final SpeedDrive[] driveSystem;
 
-    private final int trackWidth = 37;
-    private final int wheelBase = 21;
-    private final double radius = Math.sqrt(trackWidth ^ 2 + wheelBase ^ 2);
+    private final int frontTrackWidth = 37;
+    private final int backTrackWidth = 37;
+    private final int frontWheelBase = 22;
+    private final int backWheelBase = 22;
+    private final double frontRadius = Math.sqrt(frontTrackWidth ^ 2 + frontWheelBase ^ 2);
+    private final double backRadius = Math.sqrt(backTrackWidth ^ 2 + backWheelBase ^ 2);
 
     public DriveBase() {
         driveSystem = new SpeedDrive[]{
@@ -39,35 +42,89 @@ public class DriveBase extends Subsystem {
     }
 
     /**
+     * @param movementDirection Direction to move in in radians
+     * @param speed             Speed to move at
+     * @param turn              Turn speed to move at
+     */
+    public void driveWithAngle(double movementDirection, double speed, double turn) {
+        double fwd = speed * Math.sin(movementDirection);
+        double str = speed * Math.cos(movementDirection);
+        drive(fwd, str, turn);
+    }
+
+    /**
      * @param fwd Forward movement, -1 to 1
      * @param str Strafing movement, -1 to 1
      * @param rcw Rotating movement, -1 to 1
      */
     public void drive(double fwd, double str, double rcw) {
-        Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
-        Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
-        Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
-        boolean isStill = fwd == 0 && str == 0 && rcw == 0;
-        double a = str - rcw * (wheelBase / radius);
-        double b = str + rcw * (wheelBase / radius);
-        double c = fwd - rcw * (trackWidth / radius);
-        double d = fwd + rcw * (trackWidth / radius);
+        // Flipping FWD/STR.
+        double fwdTemp = str;
+        str = fwd;
+        fwd = fwdTemp;
+        Output.output(OutputLevel.SWERVE_DEBUG, "drive-input-fwd", fwd);
+        Output.output(OutputLevel.SWERVE_DEBUG, "drive-input-str", str);
+        Output.output(OutputLevel.SWERVE_DEBUG, "drive-input-rcw", rcw);
+        prepareWheelAnglesFor(str, fwd, rcw); // flip fwd/str again for this because they also flip fwd/str
+        double[] frontTanQuad = {
+                (str - rcw * (frontWheelBase / frontRadius)),
+                (str + rcw * (frontWheelBase / frontRadius)),
+                (fwd - rcw * (frontTrackWidth / frontRadius)),
+                (fwd + rcw * (frontTrackWidth / frontRadius)),
+        };
+        double[] backTanQuad = {
+                (str - rcw * (backWheelBase / backRadius)),
+                (str + rcw * (backWheelBase / backRadius)),
+                (fwd - rcw * (backTrackWidth / backRadius)),
+                (fwd + rcw * (backTrackWidth / backRadius)),
+        };
 
-        double[] wheelSpeeds = getWheelSpeeds(a, b, c, d);
-        double[] wheelAngles = getWheelAngles(a, b, c, d);
+        double[] wheelSpeeds = getWheelSpeeds(frontTanQuad, backTanQuad);
 
-        // This should work...?
-        for (int i = 0; i < wheelAngles.length; i++) {
-            // Angles are -PI to PI
-            double pAngle = steerSystem[i].returnPIDInput();
-            double travel = Math.abs(wheelAngles[i] - pAngle);
-            // Reverse the wheel if the angle is greater than 90, but less than 270
-            // Allows shortest path to still function over the -PI -> PI wrap-around 
-            if ((Math.PI * 3) / 2 > travel && travel > Math.PI / 2 * 1.2) {
-                wheelSpeeds[i] *= -1;
-                travel -= Math.PI / 2;
-            }
+        for (int i = 0; i < 4; i++) {
+            driveSystem[i].setSetpoint(wheelSpeeds[i]);
         }
+    }
+
+    /**
+     * @param fwd Forward movement, -1 to 1
+     * @param str Strafing movement, -1 to 1
+     * @param rcw Rotating movement, -1 to 1
+     */
+    public void prepareWheelAnglesFor(double fwd, double str, double rcw) {
+        // Flipping FWD/STR.
+        double fwdTemp = str;
+        str = fwd;
+        fwd = fwdTemp;
+        boolean isStill = Math.abs(fwd) < 0.05 && Math.abs(str) < 0.05 && Math.abs(rcw) < 0.05;
+        double[] frontTanQuad = {
+                (str - rcw * (frontWheelBase / frontRadius)),
+                (str + rcw * (frontWheelBase / frontRadius)),
+                (fwd - rcw * (frontTrackWidth / frontRadius)),
+                (fwd + rcw * (frontTrackWidth / frontRadius)),
+        };
+        double[] backTanQuad = {
+                (str - rcw * (backWheelBase / backRadius)),
+                (str + rcw * (backWheelBase / backRadius)),
+                (fwd - rcw * (backTrackWidth / backRadius)),
+                (fwd + rcw * (backTrackWidth / backRadius)),
+        };
+
+        double[] wheelAngles = getWheelAngles(frontTanQuad, backTanQuad);
+
+        // this was kind of broken and not doing anything (travel was not used afterwards), so just commenting it out is ok.
+//        // This should work...?
+//        for (int i = 0; i < wheelAngles.length; i++) {
+//            // Angles are -PI to PI
+//            double pAngle = steerSystem[i].returnPIDInput();
+//            double travel = Math.abs(wheelAngles[i] - pAngle);
+//            // Reverse the wheel if the angle is greater than 90, but less than 270
+//            // Allows shortest path to still function over the -PI -> PI wrap-around
+//            if ((Math.PI * 3) / 2 > travel && travel > Math.PI / 2 * 1.2) {
+//                wheelSpeeds[i] *= -1;
+//                travel -= Math.PI / 2;
+//            }
+//        }
 //            if (pAngle * wheelAngles[i] < 0) {
 //                wheelAngles[i] += Settings.Key.TURNING_SLOP.getDouble();
 //            }
@@ -89,7 +146,6 @@ public class DriveBase extends Subsystem {
         }
 
         for (int i = 0; i < 4; i++) {
-            driveSystem[i].setSetpoint(wheelSpeeds[i]);
             steerSystem[i].setSetpoint(wheelAngles[i]);
         }
 
@@ -110,11 +166,29 @@ public class DriveBase extends Subsystem {
 //        }
     }
 
-    private double[] getWheelSpeeds(double a, double b, double c, double d) {
-        double ws1 = Math.sqrt(b * b + c * c);
-        double ws2 = Math.sqrt(b * b + d * d);
-        double ws3 = Math.sqrt(a * a + d * d);
-        double ws4 = Math.sqrt(a * a + c * c);
+    /**
+     * Returns whether the wheels are turned to the angle last set, allowing allowanceRadians difference
+     *
+     * @param allowanceRadians Radian difference to allow for each wheel - must be positive
+     */
+    public boolean areWheelAnglesReady(double allowanceRadians) {
+        for (PIDSteer pidSteer : steerSystem) {
+            if (Math.abs(pidSteer.getSetpoint() - pidSteer.getPosition()) > allowanceRadians) {
+//                System.out.println("Wheels not ready!");
+                return false;
+            } else {
+                System.out.println("Wheel is good! Setpoint: " + pidSteer.getSetpoint() + " Position: " + pidSteer.getPosition() + " Allowance: " + allowanceRadians);
+            }
+        }
+        System.out.println("Wheels ready!");
+        return true;
+    }
+
+    private double[] getWheelSpeeds(double[] frontQuad, double[] backQuad) {
+        double ws1 = Math.sqrt(Math.pow(frontQuad[1], 2) + Math.pow(frontQuad[2], 2));
+        double ws2 = Math.sqrt(Math.pow(frontQuad[1], 2) + Math.pow(frontQuad[3], 2));
+        double ws3 = Math.sqrt(Math.pow(backQuad[0], 2) + Math.pow(backQuad[3], 2));
+        double ws4 = Math.sqrt(Math.pow(backQuad[0], 2) + Math.pow(backQuad[2], 2));
 
         // Binds the wheel speeds to [0, +1]
         double max = ws1;
@@ -134,12 +208,12 @@ public class DriveBase extends Subsystem {
         return new double[]{ws1, ws2, ws3, ws4};
     }
 
-    private double[] getWheelAngles(double a, double b, double c, double d) {
+    private double[] getWheelAngles(double[] frontQuad, double[] backQuad) {
         // Wheel angles -180 to 180. 0 is straight forward
-        double wa1 = Math.atan2(b, c);
-        double wa2 = Math.atan2(b, d);
-        double wa3 = Math.atan2(a, d);
-        double wa4 = Math.atan2(a, c);
+        double wa1 = Math.atan2(frontQuad[1], frontQuad[2]);
+        double wa2 = Math.atan2(frontQuad[1], frontQuad[3]);
+        double wa3 = Math.atan2(backQuad[0], backQuad[3]);
+        double wa4 = Math.atan2(backQuad[0], backQuad[2]);
 
         return new double[]{wa1, wa2, wa3, wa4};
     }

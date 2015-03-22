@@ -3,6 +3,7 @@ package org.ingrahamrobotics.robot2015.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.output.Settings;
+import org.ingrahamrobotics.robot2015.utils.ExecuteResult;
 import org.ingrahamrobotics.robot2015.utils.TimedCommand;
 
 public class IndexerDownAndUp extends TimedCommand {
@@ -13,39 +14,41 @@ public class IndexerDownAndUp extends TimedCommand {
 
     public IndexerDownAndUp() {
         requires(Subsystems.toteIndexer);
+        requires(Subsystems.intakeWheels);
     }
 
     public ButtonReleasedTrigger getReleasedCommand() {
         return new ButtonReleasedTrigger();
     }
 
-    @Override
     /**
      * Is executed continuously until it returns true or the time runs out.
      */
-    protected boolean executeState(final int state) {
+    @Override
+    protected ExecuteResult executeState(final int state) {
         int encoderValue = Subsystems.indexerEncoder.get();
         if (state == 0) {// 0 is down, 1 is up
             if (Subsystems.toggleSwitches.getIndexerBottom()) {
-                return true;
+                return ExecuteResult.DONE;
             }
         } else {
             if (Subsystems.toggleSwitches.getIndexerTop() || encoderValue > Settings.Key.INDEXER_MAX_HEIGHT.getInt()) {
-                return true;
+                return ExecuteResult.DONE;
             }
         }
         if (!Settings.Key.INDEXER_LEVEL_USE_ENCODER.getBoolean()) {
-            return false;
+            return ExecuteResult.NOT_DONE;
         }
+
         if (state == 0) {
-            return encoderValue <= currentTargetEncoderValue;
+            return encoderValue <= currentTargetEncoderValue ? ExecuteResult.DONE : ExecuteResult.NOT_DONE;
         } else {
-            return encoderValue >= currentTargetEncoderValue;
+            return encoderValue >= currentTargetEncoderValue ? ExecuteResult.DONE : ExecuteResult.NOT_DONE;
         }
     }
 
     @Override
-    protected boolean startState(final int state) {
+    protected ExecuteResult startState(final int state) {
         if (state == 0) {
             buttonReleased = false;
             firstFinished = false;
@@ -53,7 +56,7 @@ public class IndexerDownAndUp extends TimedCommand {
             firstFinished = true;
             if (!buttonReleased) {
                 setNextStartState(1);
-                return true;
+                return ExecuteResult.DONE;
             }
         }
         boolean goingUp = state != 0;
@@ -106,7 +109,8 @@ public class IndexerDownAndUp extends TimedCommand {
         } else {
             Subsystems.toteIndexer.setSpeed(speed);
         }
-        return false;
+
+        return ExecuteResult.NOT_DONE;
     }
 
     @Override
@@ -147,12 +151,10 @@ public class IndexerDownAndUp extends TimedCommand {
 
         @Override
         protected void end() {
-
         }
 
         @Override
         protected void interrupted() {
-
         }
     }
 }

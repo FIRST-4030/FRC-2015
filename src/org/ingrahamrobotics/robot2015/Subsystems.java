@@ -1,14 +1,13 @@
 package org.ingrahamrobotics.robot2015;
 
-import org.ingrahamrobotics.robot2015.constants.HardwarePorts.SolenoidPorts;
 import org.ingrahamrobotics.robot2015.subsystems.DriveBase;
 import org.ingrahamrobotics.robot2015.subsystems.IndexerEncoder;
+import org.ingrahamrobotics.robot2015.subsystems.IntakeWheels;
 import org.ingrahamrobotics.robot2015.subsystems.PIDSteer;
 import org.ingrahamrobotics.robot2015.subsystems.PowerBoard;
 import org.ingrahamrobotics.robot2015.subsystems.SpeedDrive;
 import org.ingrahamrobotics.robot2015.subsystems.ToggleSwitches;
 import org.ingrahamrobotics.robot2015.subsystems.ToteIndexer;
-import org.ingrahamrobotics.robot2015.subsystems.IntakeWheels;
 
 public class Subsystems {
 
