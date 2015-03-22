@@ -37,7 +37,7 @@ public class ProtocolHandler implements RobotProtocol {
     }
 
     public void sendFullUpdate(final ProtocolTable table) {
-        table.getProtocolData().getFullUpdateRunnable().delayUntil(System.currentTimeMillis() + TimeConstants.UPDATE_INTERVAL);
+        table.getProtocolData().getFullUpdateRunnable().delayUntil(System.currentTimeMillis() + Long.parseLong(table.getAdmin("UPDATE_INTERVAL")));
         int generationCount;
         String generationString = table.getAdmin("GENERATION_COUNT");
         if (generationString == null) {
