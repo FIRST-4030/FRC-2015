@@ -12,7 +12,10 @@ public enum IButton {
     indexerDownOneLevel(IJoystick.attackJoystick, JMap.Button.JoystickStand.RIGHT_TOP),
     indexerCollapseAll(IJoystick.attackJoystick, JMap.Button.JoystickTop.TRIGGER),
     toteIntakeIn(IJoystick.attackJoystick, JMap.Button.JoystickStand.BOTTOM_LEFT),
-    toteIntakeOut(IJoystick.attackJoystick, JMap.Button.JoystickStand.BOTTOM_RIGHT),;
+    toteIntakeOut(IJoystick.attackJoystick, JMap.Button.JoystickStand.BOTTOM_RIGHT),
+    enableWfwWhileHeld(IJoystick.driveJoystick, JMap.DualAction.LEFT_TOP_BUMPER),
+    // Comment to keep ; on new line
+    ;
 
     private Button button;
 

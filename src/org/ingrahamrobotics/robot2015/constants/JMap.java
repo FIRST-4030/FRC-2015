@@ -37,4 +37,9 @@ public class JMap {
             public static final int RIGHT_TOP = 11;
         }
     }
+
+    public static class DualAction {
+
+        public static final int LEFT_TOP_BUMPER = 5;
+    }
 }

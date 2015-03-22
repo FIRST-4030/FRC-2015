@@ -6,6 +6,7 @@ import org.ingrahamrobotics.robot2015.constants.input.IAxis;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
 import org.ingrahamrobotics.robot2015.output.Settings;
+import org.ingrahamrobotics.robot2015.state.DriveState;
 
 /**
  *
@@ -62,7 +63,7 @@ public class RunPIDDrive extends Command {
 
         Subsystems.driveBase.driveWithAngle(movementDirection, movementSpeed, turn);
 
-        if (Settings.Key.DRIVE_WFW_ENABLED.getBoolean()) {
+        if (DriveState.isWaitForWheelsEnabled()) {
             // This will make the wheels not start moving until the angles are within DRIVE_WFW_ALLOWANCE radians of the target angle.
             if (!Subsystems.driveBase.areWheelAnglesReady(Settings.Key.DRIVE_WFW_ALLOWANCE.getDouble())) {
                 Subsystems.driveBase.stopDriving();
