@@ -61,6 +61,13 @@ public class RunPIDDrive extends Command {
         Subsystems.driveBase.updateSteerPID();
 
         Subsystems.driveBase.driveWithAngle(movementDirection, movementSpeed, turn);
+
+        if (Settings.Key.DRIVE_WFW_ENABLED.getBoolean()) {
+            // This will make the wheels not start moving until the angles are within DRIVE_WFW_ALLOWANCE radians of the target angle.
+            if (!Subsystems.driveBase.areWheelAnglesReady(Settings.Key.DRIVE_WFW_ALLOWANCE.getDouble())) {
+                Subsystems.driveBase.stopDriving();
+            }
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()

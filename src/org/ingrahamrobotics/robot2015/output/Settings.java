@@ -42,7 +42,11 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         INDEXER_SPEED("Manual indexer control modifier", "-0.75"),
         AUTO_TURN_SPEED("Autonomous turn speed", "0.2", false),
         AUTO_ROUTINE_FWD("Autonomous forward", "-1"), // would be in `ms` once we have ms per radians configured
-        AUTO_ROUTINE_STR("Autonomous strafe", "0"); // would be in `ms` once we have ms per radians configured
+        AUTO_ROUTINE_STR("Autonomous strafe", "0"), // would be in `ms` once we have ms per radians configured
+        DRIVE_WFW_ENABLED("drive-wait-for-wheels-enabled?", "no"),
+        DRIVE_WFW_ALLOWANCE("drive-wait-for-wheels-angle-allowance-radians", "0.4"),
+        // Comment to let ; be on new line
+        ;
 
         /**
          * this is just so we can easily change this, rather than commenting out values.
