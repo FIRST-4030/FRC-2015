@@ -21,7 +21,9 @@ public class ToteIndexer extends Subsystem {
 
     public void setSpeed(double value) {
         motor.set(value);
-        if (value > 0.1) {
+        // We can get away with using -0.1 as well because if the switch was pressed and we were going down, setSpeed would never have been called.
+        // In any case, we need this just to make sure that any direction reversals for the motors *are* taken into account.
+        if (Math.abs(value) > 0.1) {
             Subsystems.toggleSwitches.indexerHasGoneUp();
         }
         Output.output(OutputLevel.RAW_MOTORS, "ToteIndexer:Speed", value);

@@ -34,7 +34,7 @@ public class ManualIndexerControl extends Command {
             return;
         }
 
-        Subsystems.toteIndexer.setSpeed(y);
+        Subsystems.toteIndexer.setSpeed(y * Settings.Key.INDEXER_SPEED.getDouble());
     }
 
     @Override
