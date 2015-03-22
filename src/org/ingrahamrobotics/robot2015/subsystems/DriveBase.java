@@ -47,8 +47,8 @@ public class DriveBase extends Subsystem {
      * @param turn              Turn speed to move at
      */
     public void driveWithAngle(double movementDirection, double speed, double turn) {
-        double fwd = speed * Math.cos(movementDirection);
-        double str = speed * Math.sin(movementDirection);
+        double fwd = speed * Math.sin(movementDirection);
+        double str = speed * Math.cos(movementDirection);
         drive(fwd, str, turn);
     }
 
@@ -58,7 +58,14 @@ public class DriveBase extends Subsystem {
      * @param rcw Rotating movement, -1 to 1
      */
     public void drive(double fwd, double str, double rcw) {
-        prepareWheelAnglesFor(fwd, str, rcw);
+        // Flipping FWD/STR.
+        double fwdTemp = str;
+        str = fwd;
+        fwd = fwdTemp;
+        Output.output(OutputLevel.SWERVE_DEBUG, "drive-input-fwd", fwd);
+        Output.output(OutputLevel.SWERVE_DEBUG, "drive-input-str", str);
+        Output.output(OutputLevel.SWERVE_DEBUG, "drive-input-rcw", rcw);
+        prepareWheelAnglesFor(str, fwd, rcw); // flip fwd/str again for this because they also flip fwd/str
         double[] frontTanQuad = {
                 (str - rcw * (frontWheelBase / frontRadius)),
                 (str + rcw * (frontWheelBase / frontRadius)),
@@ -89,10 +96,7 @@ public class DriveBase extends Subsystem {
         double fwdTemp = str;
         str = fwd;
         fwd = fwdTemp;
-        Output.output(OutputLevel.SWERVE_DEBUG, "fwd", fwd);
-        Output.output(OutputLevel.SWERVE_DEBUG, "str", str);
-        Output.output(OutputLevel.SWERVE_DEBUG, "rcw", rcw);
-        boolean isStill = fwd == 0 && str == 0 && rcw == 0;
+        boolean isStill = Math.abs(fwd) < 0.05 && Math.abs(str) < 0.05 && Math.abs(rcw) < 0.05;
         double[] frontTanQuad = {
                 (str - rcw * (frontWheelBase / frontRadius)),
                 (str + rcw * (frontWheelBase / frontRadius)),
