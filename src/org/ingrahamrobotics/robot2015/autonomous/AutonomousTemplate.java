@@ -29,17 +29,25 @@ public class AutonomousTemplate extends TimedCommand {
     protected ExecuteResult executeState(final int state) {
         AutonomousState currentAutonomousState = autoStates[state / 2];
 
-
         // TODO: Support diagonal movement
         double forward, strafe, turn;
         if (currentAutonomousState.getForwardFeet() != 0) {
             forward = Settings.Key.AUTO_FWD_STR_SPEED.getDouble();
+            if (currentAutonomousState.getForwardFeet() < 0) {
+                forward *= -1;
+            }
             strafe = turn = 0;
         } else if (currentAutonomousState.getStrafeFeet() != 0) {
             strafe = Settings.Key.AUTO_FWD_STR_SPEED.getDouble();
+            if (currentAutonomousState.getStrafeFeet() < 0) {
+                strafe *= -1;
+            }
             forward = turn = 0;
         } else if (currentAutonomousState.getTurnRadians() != 0) {
             turn = Settings.Key.AUTO_TURN_SPEED.getDouble();
+            if (currentAutonomousState.getTurnRadians() < 0) {
+                turn *= -1;
+            }
             forward = strafe = 0;
         } else {
             System.out.println("Skipping empty state?");

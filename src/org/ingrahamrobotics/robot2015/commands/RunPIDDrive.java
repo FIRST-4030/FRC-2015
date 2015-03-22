@@ -31,13 +31,17 @@ public class RunPIDDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        double multiplier = Settings.Key.DRIVE_SPEED_MULTIPLIER.getDouble();
         double turnMultiplier = Settings.Key.TURN_SPEED_MULTIPLIER.getDouble();
-        double x = IAxis.driveX.get() * Math.abs(IAxis.driveX.get()) * multiplier;
-        double y = -IAxis.driveY.get() * Math.abs(IAxis.driveY.get()) * multiplier;
         double turn = -IAxis.steer.get() * Math.abs(IAxis.steer.get()) * turnMultiplier;
+        double multiplier = Settings.Key.DRIVE_SPEED_MULTIPLIER.getDouble();
+        double x = IAxis.driveX.get();
+        double y = -IAxis.driveY.get();
+        double movementDirection = Math.atan2(y, x);
+        double movementSpeed = multiplier * Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         Output.output(OutputLevel.SWERVE_DEBUG, "input-x", x);
         Output.output(OutputLevel.SWERVE_DEBUG, "input-y", y);
+        Output.output(OutputLevel.SWERVE_DEBUG, "input-direction", x);
+        Output.output(OutputLevel.SWERVE_DEBUG, "input-speed", y);
         Output.output(OutputLevel.SWERVE_DEBUG, "input-steer", turn);
 
         // This code was being used as a possible use of a field angle, but what it was doing is basically
@@ -56,7 +60,7 @@ public class RunPIDDrive extends Command {
 
         Subsystems.driveBase.updateSteerPID();
 
-        Subsystems.driveBase.drive(y, x, turn);
+        Subsystems.driveBase.driveWithAngle(movementDirection, movementSpeed, turn);
     }
 
     // Make this return true when this Command no longer needs to run execute()
