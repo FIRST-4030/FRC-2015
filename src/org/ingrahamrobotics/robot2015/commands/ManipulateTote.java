@@ -32,9 +32,9 @@ public class ManipulateTote extends Command {
                 break;
             case OUT:
                 if (goingIn) {
-                    setDirection(IntakeDirection.STOPPED);
+                    setDirection(IntakeDirection.IN);
                 } else {
-                    setDirection(IntakeDirection.OUT);
+                    setDirection(IntakeDirection.STOPPED);
                 }
                 break;
             case STOPPED:

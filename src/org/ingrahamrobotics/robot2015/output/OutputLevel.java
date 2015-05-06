@@ -5,7 +5,7 @@ public enum OutputLevel {
     DEBUG(0, "Debug", false),
     POWER(0, "Power", false),
     INITIALIZED_SYSTEMS(1, "Initialized", false),
-    RAW_MOTORS(2, "Raw Motors", false),
+    RAW_MOTORS(2, "Raw Motors", true),
     RAW_SENSORS(3, "Raw Sensors", true),
     AUTO(4, "Autonomous", false),
     HIGH(5, "Important", true);
