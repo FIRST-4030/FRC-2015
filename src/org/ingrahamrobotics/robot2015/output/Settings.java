@@ -44,6 +44,7 @@ public class Settings implements ClientUpdateListener, TableUpdateListener {
         AUTO_ROUTINE_FWD("Autonomous forward", "-2.9"), // would be in `ms` once we have ms per radians configured
         AUTO_ROUTINE_STR("Autonomous strafe", "0"), // would be in `ms` once we have ms per radians configured
         DRIVE_WFW_ALLOWANCE("drive-wait-for-wheels-angle-allowance-radians", "0.3"),
+        WFW_ENABLED("drive-wait-for-wheels-enabled", "true", false),
         // Comment to let ; be on new line
         ;
 

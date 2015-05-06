@@ -4,9 +4,7 @@ import org.ingrahamrobotics.robot2015.commands.FixedIndexerShift;
 import org.ingrahamrobotics.robot2015.commands.FullIndexerCollapse;
 import org.ingrahamrobotics.robot2015.commands.IndexerDownAndUp;
 import org.ingrahamrobotics.robot2015.commands.ManipulateTote;
-import org.ingrahamrobotics.robot2015.commands.ManualIndexerControl;
 import org.ingrahamrobotics.robot2015.commands.ResetTurningMotors;
-import org.ingrahamrobotics.robot2015.commands.ToggleWaitForWheels;
 import org.ingrahamrobotics.robot2015.constants.input.IButton;
 import org.ingrahamrobotics.robot2015.output.Settings;
 
@@ -24,11 +22,8 @@ public class OI {
         IButton.indexerDownAndUp.getButton().whenPressed(downAndUp);
         IButton.indexerDownAndUp.getButton().whenReleased(downAndUp.getReleasedCommand());
         IButton.indexerCollapseAll.getButton().whenPressed(new FullIndexerCollapse(0));
-        IButton.manualIndexerHold.getButton().whileHeld(new ManualIndexerControl());
         IButton.toteIntakeIn.getButton().whenPressed(new ManipulateTote(true));
         IButton.toteIntakeOut.getButton().whenPressed(new ManipulateTote(false));
-        IButton.enableWfwWhileHeld.getButton().whenPressed(new ToggleWaitForWheels(true));
-        IButton.enableWfwWhileHeld.getButton().whenReleased(new ToggleWaitForWheels(false));
     }
 
     // // TRIGGERING COMMANDS WITH BUTTONS
