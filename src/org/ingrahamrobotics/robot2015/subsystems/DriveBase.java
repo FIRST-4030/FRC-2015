@@ -53,6 +53,19 @@ public class DriveBase extends Subsystem {
     }
 
     /**
+     * Note: there's no `speed` paramater like there is in driveWithAngle because the speed doesn't matter for getting
+     * turning directions!
+     *
+     * @param movementDirection Direction to move in in radians
+     * @param turn              Turn speed to move at
+     */
+    public void prepareWheelAnglesForWithAngle(double movementDirection, double turn) {
+        double fwd = Math.sin(movementDirection);
+        double str = Math.cos(movementDirection);
+        prepareWheelAnglesFor(fwd, str, turn);
+    }
+
+    /**
      * @param fwd Forward movement, -1 to 1
      * @param str Strafing movement, -1 to 1
      * @param rcw Rotating movement, -1 to 1
@@ -83,6 +96,16 @@ public class DriveBase extends Subsystem {
 
         for (int i = 0; i < 4; i++) {
             driveSystem[i].setSetpoint(wheelSpeeds[i]);
+        }
+    }
+
+    /**
+     * This stops drive wheels from driving, without affecting the wheel turn positions *at all*. Wheels will continue
+     * to turn to the last target angles.
+     */
+    public void stopDriving() {
+        for (int i = 0; i < 4; i++) {
+            driveSystem[i].setSetpoint(0);
         }
     }
 
