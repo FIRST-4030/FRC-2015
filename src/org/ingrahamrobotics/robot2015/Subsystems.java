@@ -8,6 +8,7 @@ import org.ingrahamrobotics.robot2015.subsystems.PowerBoard;
 import org.ingrahamrobotics.robot2015.subsystems.SpeedDrive;
 import org.ingrahamrobotics.robot2015.subsystems.ToggleSwitches;
 import org.ingrahamrobotics.robot2015.subsystems.ToteIndexer;
+import org.ingrahamrobotics.robot2015.subsystems.Counterb;
 
 public class Subsystems {
 
@@ -24,6 +25,7 @@ public class Subsystems {
     public static IntakeWheels intakeWheels;
     public static ToggleSwitches toggleSwitches;
     public static IndexerEncoder indexerEncoder;
+    public static Counterb counterb;
     public static PowerBoard powerBoard;
 
     public static void init() {
@@ -40,6 +42,7 @@ public class Subsystems {
         intakeWheels = new IntakeWheels();
         toggleSwitches = new ToggleSwitches();
         indexerEncoder = new IndexerEncoder();
+        counterb = new Counterb();
         powerBoard = new PowerBoard();
     }
 }

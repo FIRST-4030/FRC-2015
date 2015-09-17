@@ -11,6 +11,7 @@ public class ManualIndexerControl extends Command {
 
     public ManualIndexerControl() {
         requires(Subsystems.toteIndexer);
+        requires(Subsystems.indexerEncoder);
         Output.output(OutputLevel.HIGH, "ManualControlDevice", "None");
         Subsystems.toteIndexer.setSpeed(0);
     }
@@ -23,6 +24,9 @@ public class ManualIndexerControl extends Command {
     @Override
     protected void execute() {
         double y = -IAxis.manualControl.get();
+        Output.output(OutputLevel.RAW_SENSORS, "IndexerEncoder2", Subsystems.indexerEncoder.get());
+        int test = Subsystems.indexerEncoder.get();
+        Output.output(OutputLevel.RAW_SENSORS, "Counter", test);
 
 //        if (y > 0 && (Subsystems.toggleSwitches.getIndexerTop()
 //                || Subsystems.indexerEncoder.get() > Settings.Key.INDEXER_MAX_HEIGHT.getInt())) {
@@ -32,7 +36,7 @@ public class ManualIndexerControl extends Command {
         if (y < 0 && Subsystems.toggleSwitches.getIndexerBottom()) {
             Subsystems.toteIndexer.setSpeed(0);
             return;
-        }
+        } 
 
         Subsystems.toteIndexer.setSpeed(y * Settings.Key.INDEXER_SPEED.getDouble());
     }

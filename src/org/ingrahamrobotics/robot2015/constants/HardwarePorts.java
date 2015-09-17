@@ -43,8 +43,8 @@ public class HardwarePorts {
         public static final int BACK_RIGHT_STEER_ENCODER_B = 7;
 
         // Values below this line are unconfirmed.
-        public static final int FRONT_LEFT_DRIVE_ENCODER_A = 8;
-        public static final int FRONT_LEFT_DRIVE_ENCODER_B = 9;
+        public static final int FRONT_LEFT_DRIVE_ENCODER_A = 16;
+        public static final int FRONT_LEFT_DRIVE_ENCODER_B = 17;
         public static final int BACK_LEFT_DRIVE_ENCODER_A = 10;
         public static final int BACK_LEFT_DRIVE_ENCODER_B = 11;
         public static final int FRONT_RIGHT_DRIVE_ENCODER_A = 12;
