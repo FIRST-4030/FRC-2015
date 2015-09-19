@@ -10,11 +10,13 @@ import org.ingrahamrobotics.robot2015.output.OutputLevel;
 
 public class ToteIndexer extends Subsystem {
 
-    private final Talon motor = new Talon(MotorPorts.INDEXER_MOTORS);
+    public final int indexerHeight;
+	private final Talon motor = new Talon(MotorPorts.INDEXER_MOTORS);
 
     public ToteIndexer() {
         Output.initialized("ToteIndexer");
         setSpeed(0);
+        indexerHeight = 0;
     }
 
     public void initDefaultCommand() {

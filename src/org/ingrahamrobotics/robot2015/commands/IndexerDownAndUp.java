@@ -137,6 +137,7 @@ public class IndexerDownAndUp extends TimedCommand {
 
         @Override
         protected void execute() {
+        	
             buttonReleased = true;
             if (firstFinished) {
                 IndexerDownAndUp.this.start();

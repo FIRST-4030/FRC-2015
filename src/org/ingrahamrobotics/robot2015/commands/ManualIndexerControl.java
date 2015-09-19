@@ -25,8 +25,6 @@ public class ManualIndexerControl extends Command {
     protected void execute() {
         double y = -IAxis.manualControl.get();
         Output.output(OutputLevel.RAW_SENSORS, "IndexerEncoder2", Subsystems.indexerEncoder.get());
-        int test = Subsystems.indexerEncoder.get();
-        Output.output(OutputLevel.RAW_SENSORS, "Counter", test);
 
 //        if (y > 0 && (Subsystems.toggleSwitches.getIndexerTop()
 //                || Subsystems.indexerEncoder.get() > Settings.Key.INDEXER_MAX_HEIGHT.getInt())) {
@@ -39,6 +37,7 @@ public class ManualIndexerControl extends Command {
         } 
 
         Subsystems.toteIndexer.setSpeed(y * Settings.Key.INDEXER_SPEED.getDouble());
+        //some way to update the necessary position of the robot when driving
     }
 
     @Override
