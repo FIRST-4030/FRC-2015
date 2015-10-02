@@ -10,7 +10,8 @@ import org.ingrahamrobotics.robot2015.constants.input.IAxis;
 public class MaintainIndexerHeight extends Command {
 	
 	private int targetHeight;
-	//NOTE: This should probably be put into the Settings Key file, but I'm not sure how to work that.
+	private boolean atTargetHeight;
+	private boolean initialized = false;
 	private final int indexerDeadZone = 15;
 
 	public MaintainIndexerHeight() {
@@ -20,11 +21,10 @@ public class MaintainIndexerHeight extends Command {
 
 	@Override
 	protected void initialize() {
-		// TODO Auto-generated method stub
-
+		targetHeight = 0;
+		atTargetHeight = false;
 	}
 
-	//Need some way to disable this when the indexer is receiving a manual or automatic command
 	@Override
 	protected void execute() {
 		int indexerHeight = Subsystems.indexerEncoder.get();
@@ -35,6 +35,14 @@ public class MaintainIndexerHeight extends Command {
 		}
 		
 		
+	}
+	
+	public void changeTarget(int newHeight) {
+		if(newHeight < 0) {
+			targetHeight = 0;
+		} else {
+			targetHeight = newHeight;
+		}
 	}
 
 	@Override
@@ -50,8 +58,7 @@ public class MaintainIndexerHeight extends Command {
 
 	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-
+		this.end();
 	}
 
 }
