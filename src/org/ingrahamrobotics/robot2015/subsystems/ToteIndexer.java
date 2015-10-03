@@ -1,22 +1,27 @@
 package org.ingrahamrobotics.robot2015.subsystems;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
+
+import org.ingrahamrobotics.robot2015.Robot;
 import org.ingrahamrobotics.robot2015.Subsystems;
 import org.ingrahamrobotics.robot2015.commands.ManualIndexerControl;
+import org.ingrahamrobotics.robot2015.constants.HardwarePorts.DigitalIoPorts;
 import org.ingrahamrobotics.robot2015.constants.HardwarePorts.MotorPorts;
 import org.ingrahamrobotics.robot2015.output.Output;
 import org.ingrahamrobotics.robot2015.output.OutputLevel;
 
-public class ToteIndexer extends Subsystem {
+public class ToteIndexer extends PIDSubsystem {
 
-    public final int indexerHeight;
+	private static final double ticksPerRadian = (611 - 35) / (Math.PI * 2);
 	private final Talon motor = new Talon(MotorPorts.INDEXER_MOTORS);
+	private final Encoder encoder = new Encoder(DigitalIoPorts.INDEXER_ENCODER_A, DigitalIoPorts.INDEXER_ENCODER_B);
 
     public ToteIndexer() {
+    	super("ToteIndexer", 1.0, 0.0, 0.0);
         Output.initialized("ToteIndexer");
         setSpeed(0);
-        indexerHeight = 0;
     }
 
     public void initDefaultCommand() {
@@ -32,4 +37,24 @@ public class ToteIndexer extends Subsystem {
         }
         Output.output(OutputLevel.RAW_MOTORS, "ToteIndexer:Speed", value);
     }
+    
+    public double getSpeed() {
+        return motor.get();
+    }
+
+	@Override
+	protected double returnPIDInput() {
+		double pidInput = (encoder.getDistance() / ticksPerRadian);// % Math.PI;
+        return pidInput;
+	}
+
+	@Override
+	protected void usePIDOutput(double output) {
+		motor.set(output);
+	}
+	
+	public void setPID(double p, double i, double d) {
+        getPIDController().setPID(p, i, d);
+    }
+	
 }

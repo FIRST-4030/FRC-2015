@@ -10,9 +10,9 @@ import org.ingrahamrobotics.robot2015.output.Settings;
 
 public class MoveIndexer extends Command {
 	
-	private int targetHeight;
-	private boolean atTargetHeight;
-	private boolean lockOnTarget = false;
+	private int setpoint;
+	private boolean atSetpoint;
+	private boolean lockOn = false;
 	private final int indexerDeadZone = 15;
 
 	public MoveIndexer() {
@@ -23,10 +23,10 @@ public class MoveIndexer extends Command {
 	
 	@Override
 	protected void initialize() {
-		targetHeight = 0;
-		atTargetHeight = false;
+		setpoint = 0;
+		atSetpoint = false;
 		this.reset();
-		atTargetHeight = true;
+		atSetpoint = true;
 	}
 	
 	public void reset() {
@@ -40,15 +40,15 @@ public class MoveIndexer extends Command {
 	@Override
 	protected void execute() {
 		//PID Loop here
-		atTargetHeight = Math.abs(targetHeight - Subsystems.indexerEncoder.get()) < indexerDeadZone;
-		if(lockOnTarget) {
-			lockOnTarget = !atTargetHeight;
+		atSetpoint = Math.abs(setpoint - Subsystems.indexerEncoder.get()) < indexerDeadZone;
+		if(lockOn) {
+			lockOn = !atSetpoint;
 		}
 		
 	}
 	
-	public boolean isAtTarget() {
-		return atTargetHeight;
+	public boolean isAtSetpoint() {
+		return atSetpoint;
 	}
 	
 	/* Here are replacement commands:
@@ -56,28 +56,28 @@ public class MoveIndexer extends Command {
 	 * FullIndexerCollapse: reset();
 	 */
 	
-	public void adjustTarget(int adjustment) {
-		this.changeTarget(targetHeight + adjustment);
+	public void adjustSetpoint(int adjustment) {
+		this.changeSetpoint(setpoint + adjustment);
 	}
 	
-	public void changeTarget(int newHeight) {
+	public void changeSetpoint(int newHeight) {
 		int max = Settings.Key.INDEXER_MAX_HEIGHT.getInt();
 		if(newHeight < 0) {
-			targetHeight = 0;
+			setpoint = 0;
 		} else if(newHeight > max) {
-			targetHeight = max;
+			setpoint = max;
 		} else {
-			targetHeight = newHeight;
+			setpoint = newHeight;
 		}
 	}
 	
-	public void changeTargetLock(int newHeight) {
-		this.changeTarget(newHeight);
-		lockOnTarget = true;
+	public void changeSetpointLock(int newHeight) {
+		this.changeSetpoint(newHeight);
+		lockOn = true;
 	}
 	
 	public int getTarget() {
-		return targetHeight;
+		return setpoint;
 	}
 
 	@Override
@@ -98,14 +98,19 @@ public class MoveIndexer extends Command {
 	
 	public class ManualControl extends Command {
 		
+		private final int per50MSAdjust = 2;
+		
 		@Override
 		protected void initialize() {
 			
 		}
 
+		//TODO: See if negative value for y and INDEXER_SPEED makes sense.
 		@Override
 		protected void execute() {
-			
+			double y = -IAxis.manualControl.get();
+			adjustSetpoint((int) y * per50MSAdjust);
+			//Subsystems.toteIndexer.setSpeed(y * Settings.Key.INDEXER_SPEED.getDouble());
 		}
 
 		@Override
@@ -142,14 +147,14 @@ public class MoveIndexer extends Command {
 		@Override
 		protected void execute() {
 			if(!firstFinished & !commandSent) {
-				//changeTargetLock(GO DOWN);
+				//changeSetpointLock(GO DOWN);
 				commandSent = true;
 			}
 			if(!firstFinished) {
-				firstFinished = atTargetHeight && !lockOnTarget;
+				firstFinished = atSetpoint && !lockOn;
 			}
 			if(firstFinished) {
-				//changeTargetLock(GO UP);
+				//changeSetpointLock(GO UP);
 				executed = true;
 			}
 		}
