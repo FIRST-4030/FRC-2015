@@ -38,10 +38,10 @@ public class Subsystems {
         pidDrive3 = new SpeedDrive(3);
         pidDrive4 = new SpeedDrive(4);
         driveBase = new DriveBase();
+        indexerEncoder = new IndexerEncoder();
         toteIndexer = new ToteIndexer();
         intakeWheels = new IntakeWheels();
         toggleSwitches = new ToggleSwitches();
-        indexerEncoder = new IndexerEncoder();
         counterb = new Counterb();
         powerBoard = new PowerBoard();
     }

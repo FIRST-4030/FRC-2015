@@ -10,10 +10,8 @@ import org.ingrahamrobotics.robot2015.output.Settings;
 
 public class MoveIndexer extends Command {
 	
-	private int setpoint;
 	private boolean atSetpoint;
 	private boolean lockOn = false;
-	private final int indexerDeadZone = 15;
 
 	public MoveIndexer() {
 		requires(Subsystems.toteIndexer);
@@ -23,7 +21,6 @@ public class MoveIndexer extends Command {
 	
 	@Override
 	protected void initialize() {
-		setpoint = 0;
 		atSetpoint = false;
 		this.reset();
 		atSetpoint = true;
@@ -39,8 +36,7 @@ public class MoveIndexer extends Command {
 
 	@Override
 	protected void execute() {
-		//PID Loop here
-		atSetpoint = Math.abs(setpoint - Subsystems.indexerEncoder.get()) < indexerDeadZone;
+		atSetpoint = Subsystems.toteIndexer.isAtSetpoint();
 		if(lockOn) {
 			lockOn = !atSetpoint;
 		}
@@ -57,17 +53,17 @@ public class MoveIndexer extends Command {
 	 */
 	
 	public void adjustSetpoint(int adjustment) {
-		this.changeSetpoint(setpoint + adjustment);
+		this.changeSetpoint(Subsystems.toteIndexer.getSetpoint() + adjustment);
 	}
 	
-	public void changeSetpoint(int newHeight) {
+	public void changeSetpoint(double newHeight) {
 		int max = Settings.Key.INDEXER_MAX_HEIGHT.getInt();
 		if(newHeight < 0) {
-			setpoint = 0;
+			Subsystems.toteIndexer.setSetpoint(0);
 		} else if(newHeight > max) {
-			setpoint = max;
+			Subsystems.toteIndexer.setSetpoint(max);
 		} else {
-			setpoint = newHeight;
+			Subsystems.toteIndexer.setSetpoint(newHeight);
 		}
 	}
 	
@@ -76,9 +72,6 @@ public class MoveIndexer extends Command {
 		lockOn = true;
 	}
 	
-	public int getTarget() {
-		return setpoint;
-	}
 
 	@Override
 	protected boolean isFinished() {
@@ -143,7 +136,7 @@ public class MoveIndexer extends Command {
 			executed = false;
 			
 		}
-
+		//20 ms
 		@Override
 		protected void execute() {
 			if(!firstFinished & !commandSent) {

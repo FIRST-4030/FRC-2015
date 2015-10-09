@@ -21,4 +21,8 @@ public class IndexerEncoder extends Subsystem {
     public int get() {
         return encoder.get();
     }
+    
+    public double getDistance() {
+    	return encoder.getDistance();
+    }
 }
