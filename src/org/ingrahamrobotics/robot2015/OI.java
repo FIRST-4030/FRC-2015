@@ -16,6 +16,7 @@ public class OI {
 
     public OI() {
         IButton.steerReset.getButton().whenPressed(new ResetTurningMotors());
+        /*
         //These commands here are a last priority to down and up
         IButton.indexerDownOneLevel.getButton().whenPressed(new FixedIndexerShift(null, false));
         IButton.indexerUpOneLevel.getButton().whenPressed(new FixedIndexerShift(Settings.Key.TOTE_CLEARANCE_ADDITION, true));
@@ -24,6 +25,7 @@ public class OI {
         IButton.indexerDownAndUp.getButton().whenPressed(downAndUp);
         IButton.indexerDownAndUp.getButton().whenReleased(downAndUp.getReleasedCommand());
         IButton.indexerCollapseAll.getButton().whenPressed(new FullIndexerCollapse(0));
+        */
         IButton.toteIntakeIn.getButton().whenPressed(new ManipulateTote(true));
         IButton.toteIntakeOut.getButton().whenPressed(new ManipulateTote(false));
     }
