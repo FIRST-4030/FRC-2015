@@ -22,7 +22,7 @@ public class ToteIndexer extends PIDSubsystem {
     	super("ToteIndexer", 1.0, 0.0, 0.0);
         Output.initialized("ToteIndexer");
         setSpeed(0);
-        setSetpoint(0.0);
+        //setSetpoint(0.0);
     }
 
     public void initDefaultCommand() {
